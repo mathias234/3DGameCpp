@@ -1,1 +1,0 @@
- -LG:/dev/BrickSmashing3D/BrickSmashing3D/../Dependencies/GLFW/lib-mingw-w64  -LG:/dev/BrickSmashing3D/BrickSmashing3D/../Dependencies/glew-2.1.0/lib -Wl,-Bstatic -lglew32 -lglfw3 -Wl,-Bdynamic -lopengl32 -lUser32 -lGdi32 -lShell32 -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 

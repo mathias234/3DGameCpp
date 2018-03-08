@@ -9,6 +9,7 @@
 #include "Camera.h"
 #include "Shader.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <lighting/DirectionalLight.h>
 #include "Texture.h"
 #include "Player.h"
 #include "vendor/physics/q3.h"
@@ -44,7 +45,7 @@ int main()
 	int winHeight = 720;
 
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(winWidth, winHeight, "Brick Smashing game", NULL, NULL);
+	window = glfwCreateWindow(winWidth, winHeight, "Brick Smashing game", nullptr, nullptr);
 	if (!window)
 	{
 		glfwTerminate();
@@ -58,10 +59,6 @@ int main()
 		std::cout << "ERROR!" << std::endl;
 
 	std::cout << glGetString(GL_VERSION) << std::endl;
-
-
-
-	/* setup physics */
 
 
 	Camera camera;
@@ -85,6 +82,8 @@ int main()
 	InputManager::Init(window);
 
     bool editorMode = false;
+
+	DirectionalLight dirLight({1,1,1}, {0.0f, -0.4f, -0.5f}, 0.7f, 0.6f);
 
 	std::cout << "Loaded " << platforms.size() << " platforms" << std::endl;
 
@@ -126,13 +125,10 @@ int main()
 		shader.SetUniform4fv("u_ViewMatrix", camera.GetViewMatrix());
 		shader.SetUniform4fv("u_ProjMatrix", glm::perspective(glm::radians(60.0f), winWidth / (float)winHeight, 0.1f, 100.0f));
 
-
-		shader.SetUniform3f("u_DirectionalLight.Color", { 1,1,1 });
-		shader.SetUniform3f("u_DirectionalLight.Direction", { 0,-0.4f,-0.5 });
-		shader.SetUniform1f("u_DirectionalLight.AmbientIntensity", 0.7f);
-		shader.SetUniform1f("u_DirectionalLight.DiffuseIntensity", 0.60f);
+        dirLight.Bind(shader);
 
 		platformTex.Bind(0);
+
 		for (int i = 0; i < platforms.size(); i++)
 		{
 			shader.SetUniform4fv("u_ModelMatrix", platforms[i]->GetModelMatrix());

@@ -1,3 +1,0 @@
-"C:\Program Files\JetBrains\CLion 2017.3\bin\cmake\bin\cmake.exe" -E remove -f CMakeFiles\example3.dir/objects.a
-C:\PROGRA~2\MINGW-~1\I686-7~1.0-P\mingw32\bin\ar.exe cr CMakeFiles\example3.dir/objects.a @CMakeFiles\example3.dir\objects1.rsp
-C:\PROGRA~2\MINGW-~1\I686-7~1.0-P\mingw32\bin\G__~1.EXE -fvisibility=hidden  -Wall -Wextra -std=c++14 -flto -fno-fat-lto-objects -O3 -DNDEBUG   -flto -Wl,--whole-archive CMakeFiles\example3.dir/objects.a -Wl,--no-whole-archive  -o example3.exe -Wl,--out-implib,libexample3.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\example3.dir\linklibs.rsp

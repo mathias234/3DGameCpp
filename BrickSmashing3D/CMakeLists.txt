@@ -22,6 +22,7 @@ set(CPP_DIR_8 Src/vendor/physics/debug)
 set(CPP_DIR_9 Src/vendor/physics/dynamics)
 set(CPP_DIR_10 Src/vendor/physics/math)
 set(CPP_DIR_11 Src/vendor/physics/scene)
+set(CPP_DIR_12 Src/lighting)
 
 
 ############## CMake Project ################
@@ -60,6 +61,7 @@ file(GLOB SRC_FILES
     ${CPP_DIR_9}/*.*
     ${CPP_DIR_10}/*.*
     ${CPP_DIR_11}/*.*
+    ${CPP_DIR_12}/*.*
 )
 
 # Add executable to build.
@@ -72,9 +74,7 @@ include_directories(../Dependencies/glm-0.9.9-a2)
 link_directories(../Dependencies/GLFW/lib-mingw-w64)
 link_directories(../Dependencies/glew-2.1.0/lib)
 
-add_executable(${PROJECT_NAME}
-        ${SRC_FILES}
-        )
+add_executable(${PROJECT_NAME} ${SRC_FILES})
 
 
 # Link with other dependencies.
