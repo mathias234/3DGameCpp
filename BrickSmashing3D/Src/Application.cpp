@@ -4,7 +4,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "Common.h"
-#include <iostream>
 #include "Platform.h"
 #include "Camera.h"
 #include "Shader.h"
@@ -12,7 +11,6 @@
 #include <lighting/DirectionalLight.h>
 #include "Texture.h"
 #include "Player.h"
-#include "vendor/physics/q3.h"
 #include "LevelLoader.h"
 #include "InputManager.h"
 
