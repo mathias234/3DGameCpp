@@ -18,8 +18,10 @@ public:
     const Vector3f &GetColor() const;
     void SetColor(const Vector3f &m_Color);
 
-    const Vector3f &GetDirection() const;
-    void SetDirection(const Vector3f &m_Direction);
+    const Vector3f GetDirection() const;
+
+    const Vector3f &GetRotation() const;
+    void SetRotation(const Vector3f &m_Rotation);
 
     float GetAmbientIntensity() const;
     void SetAmbientIntensity(float m_AmbientIntensity);
@@ -31,7 +33,7 @@ public:
 
 private:
     Vector3f m_Color;
-    Vector3f m_Direction;
+    Vector3f m_Rotation;
     float m_AmbientIntensity;
     float m_DiffuseIntensity;
 };

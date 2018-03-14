@@ -1,13 +1,16 @@
 #pragma once
 #include "Common.h"
 #include "vendor/physics/q3.h"
+#include "Model.h"
+
 class Shader;
 
 class Platform
 {
 private:
 	float m_Length, m_Height;
-	unsigned int m_Vbo, m_Ibo, m_Tbo, m_Nbo, m_IndexCount;
+
+	Model* m_Model;
 
 	Vector3f m_rotation;
 	Vector3f m_position;

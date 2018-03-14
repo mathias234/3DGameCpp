@@ -9,35 +9,15 @@
 #include "vendor/physics/q3.h"
 #include "Raycast.h"
 #include "InputManager.h"
+#include "Model.h"
 
 void Player::Create(const std::string& path)
 {
-	auto model = ObjReader::Read(path);
-
-
-	GLCall(glGenBuffers(1, &m_Vbo));
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_Vbo));
-	GLCall(glBufferData(GL_ARRAY_BUFFER, model.positions.size() * sizeof(model.positions[1]), &model.positions.front(), GL_STATIC_DRAW));
-
-
-	GLCall(glGenBuffers(1, &m_Tbo));
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_Tbo));
-	GLCall(glBufferData(GL_ARRAY_BUFFER, model.texCoords.size() * sizeof(model.texCoords[1]), &model.texCoords.front(), GL_STATIC_DRAW));
-
-	GLCall(glGenBuffers(1, &m_Nbo));
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_Nbo));
-	GLCall(glBufferData(GL_ARRAY_BUFFER, model.normals.size() * sizeof(model.normals[1]), &model.normals.front(), GL_STATIC_DRAW));
-
-
-	GLCall(glGenBuffers(1, &m_Ibo));
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ibo));
-	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, model.indices.size() * sizeof(unsigned int), &model.indices.front(), GL_STATIC_DRAW));
-
-	m_IndexCount = model.indices.size();
+	m_Model = Model::GetModel(path);
 }
 
 
-Player::Player(q3Scene& physicsScene) : m_Vbo(0), m_Ibo(0), m_Tbo(0)
+Player::Player(q3Scene& physicsScene)
 {
     m_editorMode = false;
 	m_physicsScene = &physicsScene;
@@ -63,42 +43,17 @@ Player::Player(q3Scene& physicsScene) : m_Vbo(0), m_Ibo(0), m_Tbo(0)
 Player::~Player()
 {
 	std::cout << "Deleting player";
-	glDeleteBuffers(1, &m_Vbo);
-	glDeleteBuffers(1, &m_Tbo);
-	glDeleteBuffers(1, &m_Ibo);
 }
 
 void Player::Reload()
 {
-	glDeleteBuffers(1, &m_Vbo);
-	glDeleteBuffers(1, &m_Tbo);
-	glDeleteBuffers(1, &m_Ibo);
 	Create("res/player.obj");
 }
 
 void Player::Draw(Shader& shader)
 {
 	shader.SetUniform2f("u_Tiling", { 1,1 });
-	GLCall(glEnableVertexAttribArray(0));
-	GLCall(glEnableVertexAttribArray(1));
-	GLCall(glEnableVertexAttribArray(2));
-
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_Vbo));
-	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), NULL));
-
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_Tbo));
-	GLCall(glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), NULL));
-
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_Nbo));
-	GLCall(glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), NULL));
-
-
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ibo));
-	GLCall(glDrawElements(GL_TRIANGLES, m_IndexCount, GL_UNSIGNED_INT, nullptr));
-
-	GLCall(glDisableVertexAttribArray(0));
-	GLCall(glDisableVertexAttribArray(1));
-	GLCall(glDisableVertexAttribArray(2));
+	m_Model->Draw();
 
 }
 
@@ -106,12 +61,12 @@ Matrix4f Player::GetModelMatrix()
 {
 	Matrix4f matrix;
 
-	matrix = glm::translate(matrix, { m_body->GetTransform().position.x, m_body->GetTransform().position.y, m_body->GetTransform().position.z });
-	matrix = glm::scale(matrix, { 1,1,1 });
-
 	matrix = glm::rotate(matrix, glm::radians(0.0f), { 1, 0, 0 });
 	matrix = glm::rotate(matrix, glm::radians(0.0f), { 0, 1, 0 });
 	matrix = glm::rotate(matrix, glm::radians(0.0f), { 0, 0, 1 });
+
+    matrix = glm::translate(matrix, { m_body->GetTransform().position.x, m_body->GetTransform().position.y, m_body->GetTransform().position.z });
+    matrix = glm::scale(matrix, { 1,1,1 });
 
 	return matrix;
 }

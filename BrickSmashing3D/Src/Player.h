@@ -2,13 +2,14 @@
 #include <string>
 #include "Camera.h"
 #include "vendor/physics/q3.h"
+#include "Model.h"
 
 class Shader;
 
 class Player
 {
 private:
-	unsigned int m_Vbo, m_Ibo, m_Tbo, m_Nbo, m_IndexCount;
+	Model* m_Model;
     bool m_editorMode;
 
 	Vector3f m_position;

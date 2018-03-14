@@ -20,7 +20,7 @@ bool InputManager::GetKeyUp(int GLFWKeyCode)
 
 bool InputManager::GetKey(int GLFWKeyCode)
 {
-	return glfwGetKey(m_window, GLFWKeyCode);
+	return static_cast<bool>(glfwGetKey(m_window, GLFWKeyCode));
 }
 
 bool InputManager::GetMouseDown(int GLFWKeyCode)
@@ -35,7 +35,7 @@ bool InputManager::GetMouseUp(int GLFWKeyCode)
 
 bool InputManager::GetMouse(int GLFWKeyCode)
 {
-	return glfwGetMouseButton(m_window, GLFWKeyCode);
+	return static_cast<bool>(glfwGetMouseButton(m_window, GLFWKeyCode));
 
 }
 
