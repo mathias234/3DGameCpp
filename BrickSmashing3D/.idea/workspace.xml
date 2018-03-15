@@ -31,18 +31,18 @@
       <file leaf-file-name="Application.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Src/Application.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="78" column="0" lean-forward="false" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
+            <state relative-caret-position="408">
+              <caret line="98" column="46" lean-forward="false" selection-start-line="98" selection-start-column="46" selection-end-line="98" selection-end-column="46" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Main.shader" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Main.shader" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/res/Main.shader">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+            <state relative-caret-position="484">
+              <caret line="105" column="83" lean-forward="false" selection-start-line="105" selection-start-column="56" selection-end-line="105" selection-end-column="83" />
               <folding />
             </state>
           </provider>
@@ -88,11 +88,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DirectionalLight.cpp" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DirectionalLight.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Src/lighting/DirectionalLight.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="35" column="64" lean-forward="false" selection-start-line="35" selection-start-column="64" selection-end-line="35" selection-end-column="64" />
+            <state relative-caret-position="255">
+              <caret line="36" column="67" lean-forward="false" selection-start-line="36" selection-start-column="67" selection-end-line="36" selection-end-column="67" />
               <folding />
             </state>
           </provider>
@@ -175,8 +175,8 @@
         <option value="$PROJECT_DIR$/Src/DepthMap.h" />
         <option value="$PROJECT_DIR$/Src/Camera.cpp" />
         <option value="$PROJECT_DIR$/Src/Application.cpp" />
-        <option value="$PROJECT_DIR$/Src/lighting/DirectionalLight.cpp" />
         <option value="$PROJECT_DIR$/res/Main.shader" />
+        <option value="$PROJECT_DIR$/Src/lighting/DirectionalLight.cpp" />
       </list>
     </option>
   </component>
@@ -317,12 +317,12 @@
       <workItem from="1521033682562" duration="8446000" />
       <workItem from="1521082988245" duration="1183000" />
       <workItem from="1521116245614" duration="1555000" />
-      <workItem from="1521120400264" duration="1654000" />
+      <workItem from="1521120400264" duration="3149000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="61105000" />
+    <option name="totallyTimeSpent" value="62600000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
@@ -591,14 +591,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Src/Application.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="78" column="0" lean-forward="false" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Src/Camera.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="527">
@@ -639,18 +631,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Src/lighting/DirectionalLight.cpp">
+    <entry file="file://$PROJECT_DIR$/res/Main.shader">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="35" column="64" lean-forward="false" selection-start-line="35" selection-start-column="64" selection-end-line="35" selection-end-column="64" />
+        <state relative-caret-position="484">
+          <caret line="105" column="83" lean-forward="false" selection-start-line="105" selection-start-column="56" selection-end-line="105" selection-end-column="83" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/res/Main.shader">
+    <entry file="file://$PROJECT_DIR$/Src/Application.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+        <state relative-caret-position="408">
+          <caret line="98" column="46" lean-forward="false" selection-start-line="98" selection-start-column="46" selection-end-line="98" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Src/lighting/DirectionalLight.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="36" column="67" lean-forward="false" selection-start-line="36" selection-start-column="67" selection-end-line="36" selection-end-column="67" />
           <folding />
         </state>
       </provider>

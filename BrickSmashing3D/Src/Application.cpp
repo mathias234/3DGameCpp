@@ -90,16 +90,10 @@ int main()
 
     DepthMap depthBuffer = DepthMap();
 
-    float i = 0;
-
-	float xVal = 0;
+	float xVal = 90.0f;
 	while (!glfwWindowShouldClose(window))
 	{
-        i += 1;
-        if(i >= 360)
-            i = -360;
-
-        dirLight.SetRotation({glm::radians(45.0f), glm::radians(i), glm::radians(0.0f)});
+        dirLight.SetRotation({glm::radians(xVal), glm::radians(0.0f), glm::radians(0.0f)});
 
 
 		if(InputManager::GetKey(GLFW_KEY_C)) {
@@ -137,7 +131,7 @@ int main()
 		player->Input();
 
 		auto playerPos = player->GetPosition();
-		camera.SetPosition({ playerPos.x, playerPos.y + 3, 5 });
+		camera.SetPosition({ playerPos.x, playerPos.y + 7, 10 });
 
 
 
