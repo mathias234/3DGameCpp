@@ -99,7 +99,7 @@ int main()
         if(i >= 360)
             i = -360;
 
-        dirLight.SetRotation({glm::radians(xVal), glm::radians(i), glm::radians(0.0f)});
+        dirLight.SetRotation({glm::radians(45.0f), glm::radians(i), glm::radians(0.0f)});
 
 
 		if(InputManager::GetKey(GLFW_KEY_C)) {
