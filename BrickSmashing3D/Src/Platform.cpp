@@ -47,7 +47,7 @@ Matrix4f Platform::GetModelMatrix()
 	matrix = glm::rotate(matrix, glm::radians(m_rotation.y), { 0, 1, 0 });
 	matrix = glm::rotate(matrix, glm::radians(m_rotation.z), { 0, 0, 1 });
     matrix = glm::translate(matrix,  {m_body->GetTransform().position.x, m_body->GetTransform().position.y + 1, m_body->GetTransform().position.z});
-    matrix = glm::scale(matrix, { m_Length,m_Height, 10 });
+    matrix = glm::scale(matrix, { m_Length,m_Height, 5 });
 	return matrix;
 }
 

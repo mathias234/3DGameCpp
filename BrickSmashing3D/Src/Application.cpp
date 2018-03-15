@@ -15,7 +15,7 @@
 #include "vendor/physics/q3.h"
 #include "LevelLoader.h"
 #include "InputManager.h"
-#include "RenderTarget.h"
+#include "DepthMap.h"
 
 std::vector<Platform*> platforms;
 Player* player;
@@ -78,25 +78,36 @@ int main()
 	platforms = file.platforms;
 
 	glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
 
 	InputManager::Init(window);
 
     bool editorMode = false;
 
-	DirectionalLight dirLight({1,1,1}, { glm::radians(40.0f), glm::radians(0.0f), glm::radians(0.0f) }, 0.7f, 0.6f);
+	DirectionalLight dirLight({1,1,1}, { glm::radians(50.0f), glm::radians(-45.0f), glm::radians(0.0f) }, 0.5f, 0.6f);
 
 	std::cout << "Loaded " << platforms.size() << " platforms" << std::endl;
 
-    RenderTarget depthBuffer = RenderTarget();
+    DepthMap depthBuffer = DepthMap();
 
     float i = 0;
 
+	float xVal = 0;
 	while (!glfwWindowShouldClose(window))
 	{
         i += 1;
         if(i >= 360)
             i = -360;
 
+        dirLight.SetRotation({glm::radians(xVal), glm::radians(i), glm::radians(0.0f)});
+
+
+		if(InputManager::GetKey(GLFW_KEY_C)) {
+			xVal--;
+		}
+		if(InputManager::GetKey(GLFW_KEY_V)) {
+			xVal++;
+		}
 
 		if(!editorMode)
 		    scene.Step();
@@ -126,7 +137,7 @@ int main()
 		player->Input();
 
 		auto playerPos = player->GetPosition();
-		camera.SetPosition({ playerPos.x, playerPos.y + 7, 10 });
+		camera.SetPosition({ playerPos.x, playerPos.y + 3, 5 });
 
 
 
@@ -134,7 +145,7 @@ int main()
         depthBuffer.Bind();
         glClear(GL_DEPTH_BUFFER_BIT);
 
-        float nearPlane = -7.5f, farPlane = 7.5f;
+        float nearPlane = -20, farPlane = 20;
         glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, nearPlane, farPlane);
         Matrix4f lightView;
         lightView = glm::rotate(lightView, dirLight.GetRotation().x, { 1, 0, 0 });
@@ -160,6 +171,7 @@ int main()
 
 
         /* Render Normal */
+        glCullFace(GL_BACK);
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glViewport(0, 0, winWidth, winHeight);
