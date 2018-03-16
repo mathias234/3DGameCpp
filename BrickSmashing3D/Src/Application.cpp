@@ -186,11 +186,10 @@ int main()
 
         dirLight.Bind(shader);
 
-		platformTex.Bind(0);
-        depthBuffer.BindTexture(1);
 
-        shader.SetUniform1i("u_Diffuse", 0);
-        shader.SetUniform1i("u_ShadowMap", 1);
+
+        shader.BindTexture("u_Diffuse", platformTex);
+        shader.BindTexture("u_ShadowMap", depthBuffer);
 
 		for (int i = 0; i < platforms.size(); i++)
 		{
@@ -201,7 +200,7 @@ int main()
 
 
 		shader.SetUniform4fv("u_ModelMatrix", player->GetModelMatrix());
-		playerTex.Bind();
+		shader.BindTexture("u_Diffuse", playerTex);
 		player->Draw(shader);
 
 

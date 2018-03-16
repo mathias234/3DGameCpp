@@ -9,11 +9,19 @@
 #include "Common.h"
 
 
-
 Shader::Shader(const std::string & filepath) : m_FilePath(filepath), m_RendererID(0)
 {
 	ShaderProgramSource source = ParseShader(filepath);
 	m_RendererID = CreateShader(source.VertexSource, source.FragmentSource);
+
+	Bind();
+
+	for (int i = 0; i < m_SamplerIds.size(); ++i) {
+		auto sampler = this->m_SamplerIds[i];
+		this->SetUniform1i(sampler.UniformName, sampler.SamplerId);
+	}
+
+	Unbind();
 }
 
 Shader::~Shader()
@@ -43,6 +51,7 @@ ShaderProgramSource Shader::ParseShader(const std::string& filepath)
 	std::stringstream ss[2];
 	ShaderType type = static_cast<ShaderType>(ShaderType::NONE);
 
+	int currentSamplerPos = 0;
 	while (getline(stream, line))
 	{
 		if (line.find("#shader") != std::string::npos)
@@ -55,6 +64,25 @@ ShaderProgramSource Shader::ParseShader(const std::string& filepath)
 		else
 		{
 			ss[(int)type] << line << '\n';
+		}
+
+
+		if(line.find("uniform sampler2D") != std::string::npos) {
+			char currentChar = line[18]; // 18 is length of uniform sampler2D
+			int index = 0;
+			std::stringstream uniformName;
+			while(currentChar != ';')
+			{
+				uniformName << currentChar;
+				index++;
+				currentChar = line[18+index];
+			}
+
+			std::cout << "Parsed sampler with name: " << uniformName.str() << ", assigning it the id " << currentSamplerPos << std::endl;
+
+			m_SamplerIds.push_back({ uniformName.str(), currentSamplerPos });
+			m_SamplerIdsMap.emplace(uniformName.str(), currentSamplerPos);
+			currentSamplerPos++;
 		}
 	}
 
@@ -107,6 +135,17 @@ unsigned int Shader::CreateShader(const std::string& vertexShader, const std::st
 
 	return program;
 }
+
+void Shader::BindTexture(const std::string& uniformName, Texture& texture) {
+	int id = m_SamplerIdsMap[uniformName];
+	texture.Bind(id);
+}
+
+void Shader::BindTexture(const std::string& uniformName, DepthMap& texture) {
+	int id = m_SamplerIdsMap[uniformName];
+	texture.BindTexture(id);
+}
+
 
 void Shader::Bind() const
 {
