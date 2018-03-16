@@ -67,7 +67,9 @@ int main()
     Shader depthMapShader("res/DepthMap.shader");
     Texture platformTex("res/container2.png");
     Texture specularMap("res/container2_specular.png");
+	Texture containerNrm("res/container2_normal.png");
 	Texture playerTex("res/player.jpg");
+	Texture brickNrm("res/brickNrm.png");
 
     player = new Player(scene);
 
@@ -95,7 +97,7 @@ int main()
     float yVal = 0.0f;
 	while (!glfwWindowShouldClose(window))
 	{
-        yVal++;
+        yVal += 0.2f;
 
         dirLight.SetRotation({glm::radians(xVal), glm::radians(yVal), glm::radians(0.0f)});
 
@@ -187,11 +189,11 @@ int main()
 
         shader.BindTexture("u_Diffuse", platformTex);
         shader.BindTexture("u_ShadowMap", depthBuffer);
+        shader.BindTexture("u_NormalMap", containerNrm);
         shader.BindTexture("u_SpecMap", specularMap);
         shader.SetUniform1i("u_UseSpecMap", true);
-		shader.SetUniform1f("u_SpecPow", 8);
-		shader.SetUniform1f("u_SpecStrength", 20);
-
+		shader.SetUniform1f("u_SpecPow", 32);
+		shader.SetUniform1f("u_SpecStrength", 2);
 
         for (int i = 0; i < platforms.size(); i++)
 		{
@@ -207,6 +209,7 @@ int main()
 
 		shader.SetUniform4fv("u_ModelMatrix", player->GetModelMatrix());
 		shader.BindTexture("u_Diffuse", playerTex);
+		shader.BindTexture("u_NormalMap", brickNrm);
 		player->Draw(shader);
 
 

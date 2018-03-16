@@ -2,7 +2,6 @@
 #include <fstream>
 #include <sstream>
 #include <unordered_map>
-#include <map>
 #include <iostream>
 
 std::map<std::string, IndexedModel> ObjReader::modelCache;
@@ -38,16 +37,15 @@ ObjReader::ObjReader(const std::string& filename)
 		auto tokens = split(line, ' ');
 
 		if (tokens[0] == "v") {
-			vertices.push_back({ std::stof(tokens[1]) ,std::stof(tokens[2]) ,std::stof(tokens[3]) });
+			vertices.emplace_back(std::stof(tokens[1]) ,std::stof(tokens[2]) ,std::stof(tokens[3]));
 		}
 		if (tokens[0] == "vt")
 		{
-			texCoords.push_back({ std::stof(tokens[1]), std::stof(tokens[2]) });
+			texCoords.emplace_back(std::stof(tokens[1]), std::stof(tokens[2]));
 		}
 		if (tokens[0] == "vn")
 		{
-			normals.push_back({ std::stof(tokens[1]) ,std::stof(tokens[2]) ,std::stof(tokens[3]) });
-
+			normals.emplace_back(std::stof(tokens[1]) ,std::stof(tokens[2]) ,std::stof(tokens[3]));
 		}
 		if (tokens[0] == "f") {
 			for (int i = 0; i < tokens.size() - 3; i++)
@@ -113,14 +111,15 @@ IndexedModel ObjReader::ToIndexModel()
 			normalModel.positions.push_back(currentPosition);
 			normalModel.texCoords.push_back(currentTexCoord);
 			normalModel.normals.push_back(currentNormal);
+			normalModel.tangents.emplace_back(1.0f, 1.0f, 1.0f);
 		}
 		else
 		{
 			normalModelVertexIndex = normalData->second;
 		}
 
-		result.indices.push_back(modelVertexIndex);
-		normalModel.indices.push_back(normalModelVertexIndex);
+		result.indices.push_back(static_cast<unsigned int &&>(modelVertexIndex));
+		normalModel.indices.push_back(static_cast<unsigned int &&>(normalModelVertexIndex));
 
 		if (indexMap.find(modelVertexIndex) == indexMap.end())
 		{
@@ -131,15 +130,22 @@ IndexedModel ObjReader::ToIndexModel()
 		}
 	}
 
+
 	for (size_t i = 0; i < result.positions.size(); i++)
 	{
 		auto indexMapData = indexMap.find(i);
-		result.normals.push_back(normalModel.normals.at(indexMapData->second));
-
+		result.normals.push_back(normalModel.normals.at(static_cast<unsigned int>(indexMapData->second)));
 		result.texCoords[i] = { result.texCoords[i].x, -result.texCoords[i].y };
 	}
 
-	return result;
+    normalModel.CalculateTangents();
+
+    for (size_t i = 0; i < result.positions.size(); i++)
+    {
+        result.tangents.push_back(normalModel.tangents[(int) indexMap[i]]);
+    }
+
+    return result;
 }
 
 

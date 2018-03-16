@@ -52,7 +52,7 @@ void Player::Reload()
 
 void Player::Draw(Shader& shader)
 {
-	shader.SetUniform2f("u_Tiling", { 1,1 });
+	shader.SetUniform2f("u_Tiling", { 0.5f,0.5f });
 	m_Model->Draw();
 
 }

@@ -38,6 +38,13 @@ Model *Model::GetModel(const std::string &filepath) {
         GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->m_Ibo));
         GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexedModel.indices.size() * sizeof(unsigned int),
                             &indexedModel.indices.front(), GL_STATIC_DRAW));
+
+        GLCall(glGenBuffers(1, &model->m_Tanbo));
+        GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->m_Tanbo));
+        GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexedModel.tangents.size() * sizeof(indexedModel.tangents[1]),
+                            &indexedModel.tangents.front(), GL_STATIC_DRAW));
+
+
         model->m_IndexCount = indexedModel.indices.size();
 
         m_ModelCache.emplace(filepath, model);
@@ -48,15 +55,18 @@ Model *Model::GetModel(const std::string &filepath) {
 
 Model::~Model() {
     std::cout << "Deleting model" << std::endl;
-    glDeleteBuffers(1, &m_Vbo);
-    glDeleteBuffers(1, &m_Tbo);
-    glDeleteBuffers(1, &m_Ibo);
+    GLCall(glDeleteBuffers(1, &m_Vbo));
+    GLCall(glDeleteBuffers(1, &m_Tbo));
+    GLCall(glDeleteBuffers(1, &m_Ibo));
+    GLCall(glDeleteBuffers(1, &m_Tanbo));
+
 }
 
 void Model::Draw() const {
     GLCall(glEnableVertexAttribArray(0));
     GLCall(glEnableVertexAttribArray(1));
     GLCall(glEnableVertexAttribArray(2));
+    GLCall(glEnableVertexAttribArray(3));
 
     GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_Vbo));
     GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), NULL));
@@ -67,12 +77,16 @@ void Model::Draw() const {
     GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_Nbo));
     GLCall(glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), NULL));
 
+    GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_Tanbo));
+    GLCall(glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), NULL));
+
     GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Ibo));
     GLCall(glDrawElements(GL_TRIANGLES, m_IndexCount, GL_UNSIGNED_INT, nullptr));
 
     GLCall(glDisableVertexAttribArray(0));
     GLCall(glDisableVertexAttribArray(1));
     GLCall(glDisableVertexAttribArray(2));
+    GLCall(glDisableVertexAttribArray(3));
 }
 
 

@@ -4,6 +4,7 @@
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec2 texCoord;
 layout(location = 2) in vec3 normal;
+layout(location = 3) in vec3 tangent;
 
 uniform mat4 u_ProjMatrix;
 uniform mat4 u_ViewMatrix;
@@ -14,6 +15,7 @@ out vec2 texCoord0;
 out vec3 normal0;
 out vec3 fragPos;
 out vec4 fragPosLightSpace;
+out mat3 tbnMatrix;
 
 void main()
 {
@@ -25,6 +27,12 @@ void main()
 	normal0 = mat3(transpose(inverse(u_ModelMatrix))) * normal;
     fragPos = vec3(u_ModelMatrix * vec4(position, 1.0));
     fragPosLightSpace = u_LightSpaceMatrix * vec4(fragPos, 1.0);
+
+    vec3 n = normalize((u_ModelMatrix * vec4(normal, 0.0)).xyz);
+    vec3 t = normalize((u_ModelMatrix * vec4(tangent, 0.0)).xyz);
+    t = normalize(t - dot(t, n) * n);
+    vec3 biTangent = cross(t, n);
+    tbnMatrix = mat3(t, biTangent, n);
 };
 
 #shader fragment
@@ -51,6 +59,9 @@ uniform sampler2D u_SpecMap;
 uniform float u_SpecStrength;
 uniform float u_SpecPow;
 
+uniform sampler2D u_NormalMap;
+
+
 uniform vec2 u_Tiling;
 uniform vec3 u_ViewPos;
 
@@ -58,6 +69,7 @@ in vec2 texCoord0;
 in vec3 normal0;
 in vec3 fragPos;
 in vec4 fragPosLightSpace;
+in mat3 tbnMatrix;
 
 float ShadowCalculation(vec4 fragPosLightSpace)
 {
@@ -88,12 +100,15 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 
 void main()
 {
-	vec4 tex = texture2D(u_Diffuse, texCoord0.xy * u_Tiling);
-    vec4 specTex = texture2D(u_SpecMap, texCoord0.xy * u_Tiling);
+    vec2 texCoord = texCoord0.xy * u_Tiling;
+
+	vec4 tex = texture2D(u_Diffuse, texCoord);
+    vec4 specTex = texture2D(u_SpecMap, texCoord);
+    vec3 normal = normalize(tbnMatrix * (255.0/128.0 * texture2D(u_NormalMap, texCoord).xyz - 1));
 
 	vec3 AmbientColor = vec3(u_DirectionalLight.AmbientIntensity);
 
-	float DiffuseFactor = clamp(dot(normal0, -u_DirectionalLight.Direction), 0.0, 1.0);
+	float DiffuseFactor = clamp(dot(normal, -u_DirectionalLight.Direction), 0.0, 1.0);
 	
 	vec3 DiffuseColor = vec3(0,0,0);
 	
@@ -104,11 +119,9 @@ void main()
     float SpecularStrength = 200;
 
     vec3 ViewDir = normalize(u_ViewPos - fragPos);
-    vec3 ReflectDir = reflect(u_DirectionalLight.Direction, normal0);
+    vec3 ReflectDir = reflect(u_DirectionalLight.Direction, normal);
 
     float spec = pow(max(dot(ViewDir, ReflectDir), 0.0), u_SpecPow);
-
-
 
     vec3 specular = (u_SpecStrength * spec) * (u_UseSpecMap == true ? vec3(specTex) : vec3(1.0f, 1.0f, 1.0f));
 

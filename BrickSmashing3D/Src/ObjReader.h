@@ -1,9 +1,9 @@
 #pragma once
 #include <vector>
-#include <gl/glew.h>
 #include <glm/glm.hpp>
 #include <tuple>
 #include <map>
+#include "IndexModel.h"
 
 
 struct ObjIndex
@@ -23,17 +23,6 @@ inline bool operator< (const ObjIndex& lhs, const ObjIndex& rhs)
 	return std::tie(lhs.VertexIndex, lhs.NormalIndex, lhs.TexCoordIndex) <  std::tie(rhs.VertexIndex, rhs.NormalIndex, rhs.TexCoordIndex);
 }
 
-struct IndexedModel
-{
-public:
-	std::vector<glm::vec3> normals;
-	std::vector<glm::vec2> texCoords;
-	std::vector<glm::vec3> positions;
-	std::vector<GLuint> indices;
-
-
-};
-
 class ObjReader
 {
 public:
@@ -48,6 +37,7 @@ private:
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec3> normals;
 	std::vector<glm::vec2> texCoords;
+	std::vector<glm::vec3> tangents;
 	std::vector<ObjIndex> indices;
 
 
