@@ -91,9 +91,12 @@ int main()
     DepthMap depthBuffer = DepthMap();
 
 	float xVal = 90.0f;
+    float yVal = 0.0f;
 	while (!glfwWindowShouldClose(window))
 	{
-        dirLight.SetRotation({glm::radians(xVal), glm::radians(0.0f), glm::radians(0.0f)});
+        yVal++;
+
+        dirLight.SetRotation({glm::radians(xVal), glm::radians(yVal), glm::radians(0.0f)});
 
 
 		if(InputManager::GetKey(GLFW_KEY_C)) {
