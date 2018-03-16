@@ -184,7 +184,6 @@ int main()
         dirLight.Bind(shader);
 
 
-
         shader.BindTexture("u_Diffuse", platformTex);
         shader.BindTexture("u_ShadowMap", depthBuffer);
 

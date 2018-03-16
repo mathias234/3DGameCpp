@@ -137,11 +137,21 @@ unsigned int Shader::CreateShader(const std::string& vertexShader, const std::st
 }
 
 void Shader::BindTexture(const std::string& uniformName, Texture& texture) {
+	if(m_SamplerIdsMap.find(uniformName) == m_SamplerIdsMap.end()){
+		std::cout << "Unable to find sampler with name: " << uniformName << std::endl;
+		return;
+	}
+
 	int id = m_SamplerIdsMap[uniformName];
 	texture.Bind(id);
 }
 
 void Shader::BindTexture(const std::string& uniformName, DepthMap& texture) {
+	if(m_SamplerIdsMap.find(uniformName) == m_SamplerIdsMap.end()){
+		std::cout << "Unable to find sampler with name: " << uniformName << std::endl;
+		return;
+	}
+
 	int id = m_SamplerIdsMap[uniformName];
 	texture.BindTexture(id);
 }
