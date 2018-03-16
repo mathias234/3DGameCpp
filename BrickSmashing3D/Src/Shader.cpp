@@ -31,11 +31,22 @@ Shader::~Shader()
 
 void Shader::Reload()
 {
+    m_SamplerIdsMap.clear();
+    m_SamplerIds.clear();
 	m_UniformLocationCache.clear();
 	GLCall(glDeleteProgram(m_RendererID));
 
 	ShaderProgramSource source = ParseShader(m_FilePath);
 	m_RendererID = CreateShader(source.VertexSource, source.FragmentSource);
+
+	Bind();
+
+	for (int i = 0; i < m_SamplerIds.size(); ++i) {
+		auto sampler = this->m_SamplerIds[i];
+		this->SetUniform1i(sampler.UniformName, sampler.SamplerId);
+	}
+
+	Unbind();
 }
 
 ShaderProgramSource Shader::ParseShader(const std::string& filepath)

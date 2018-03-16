@@ -53,7 +53,7 @@ Matrix4f Platform::GetModelMatrix()
 
 void Platform::Draw(Shader& shader)
 {
-	shader.SetUniform2f("u_Tiling", { m_Length / 2, m_Height / 2 });
+	shader.SetUniform2f("u_Tiling", { 1,1 });
 	m_Model->Draw();
 }
 
