@@ -33,11 +33,12 @@ void DirectionalLight::SetColor(const Vector3f &m_Color) {
 }
 
 const Vector3f DirectionalLight::GetDirection() const {
-    Vector3f transformedRotation = {m_Rotation.x, m_Rotation.y + 360, m_Rotation.z};
+    /* Do some hacks to get it in the correct direction, idk why plz help */
+    Vector3f transformedRotation = {-(m_Rotation.x+glm::radians(180.0f)), -m_Rotation.y, m_Rotation.z};
 
     Quaternion finalOrientation = Quaternion(transformedRotation);
 
-    Vector3f forwardDirection = glm::rotate(finalOrientation, {0,0,-1});
+    Vector3f forwardDirection = finalOrientation * Vector3f(0,0,1);
 
     return forwardDirection;
 }

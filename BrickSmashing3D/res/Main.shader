@@ -5,7 +5,6 @@ layout(location = 0) in vec3 position;
 layout(location = 1) in vec2 texCoord;
 layout(location = 2) in vec3 normal;
 
-
 uniform mat4 u_ProjMatrix;
 uniform mat4 u_ViewMatrix;
 uniform mat4 u_ModelMatrix;
@@ -15,6 +14,7 @@ out vec2 texCoord0;
 out vec3 normal0;
 out vec3 fragPos;
 out vec4 fragPosLightSpace;
+
 void main()
 {
 	mat4 mvp = u_ProjMatrix * u_ViewMatrix * u_ModelMatrix;
@@ -79,10 +79,9 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 
 void main()
 {
-
 	vec3 AmbientColor = vec3(u_DirectionalLight.AmbientIntensity);
 
-	float DiffuseFactor = clamp(dot(normal0, u_DirectionalLight.Direction), 0.0, 1.0);
+	float DiffuseFactor = clamp(dot(normal0, -u_DirectionalLight.Direction), 0.0, 1.0);
 	
 	vec3 DiffuseColor = vec3(0,0,0);
 	
@@ -90,11 +89,10 @@ void main()
 		DiffuseColor = vec3(u_DirectionalLight.DiffuseIntensity * DiffuseFactor);
 	}
 
-
     float SpecularStrength = 1;
 
     vec3 ViewDir = normalize(u_ViewPos - fragPos);
-    vec3 ReflectDir = reflect(-u_DirectionalLight.Direction, normal0);
+    vec3 ReflectDir = reflect(u_DirectionalLight.Direction, normal0);
 
     float spec = pow(max(dot(ViewDir, ReflectDir), 0.0), 32);
 
@@ -104,7 +102,6 @@ void main()
 
     // calc shadows
     float shadow = ShadowCalculation(fragPosLightSpace);
-
 
 	color = (tex) * vec4((AmbientColor + (1.0 - shadow) * (DiffuseColor + specular)), 1.0);
 };
