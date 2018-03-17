@@ -2,8 +2,8 @@
 #version 330 core
 
 layout(location = 0) in vec3 position;
-layout(location = 1) in vec2 texCoord;
-layout(location = 2) in vec3 normal;
+layout(location = 1) in vec3 normal;
+layout(location = 2) in vec2 texCoord;
 layout(location = 3) in vec3 tangent;
 
 uniform mat4 u_ProjMatrix;
@@ -100,7 +100,7 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 
 void main()
 {
-    vec2 texCoord = texCoord0.xy * u_Tiling;
+    vec2 texCoord = texCoord0.xy;// * u_Tiling;
 
 	vec4 tex = texture2D(u_Diffuse, texCoord);
     vec4 specTex = texture2D(u_SpecMap, texCoord);
@@ -129,5 +129,5 @@ void main()
     // calc shadows
     float shadow = ShadowCalculation(fragPosLightSpace);
 
-	color = vec4((AmbientColor + (1.0 - shadow) * (DiffuseColor)), 1.0);
+	color = tex; //+ vec4((AmbientColor + (1.0 - shadow) * (DiffuseColor)), 1.0);
 };

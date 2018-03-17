@@ -2,6 +2,8 @@
 #include <GL/glew.h>
 #include <iostream>
 #include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 
 #define ASSERT(x) if(!(x)) __debugbreak();

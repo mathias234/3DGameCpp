@@ -6,9 +6,35 @@
 #include <vector>
 #include <map>
 #include "Common.h"
+#include "Texture.h"
+#include "Shader.h"
+
+struct Vertex {
+public:
+    Vector3f Position;
+    Vector3f Normal;
+    Vector2f TexCoord;
+    Vector3f Tangent;
+    Vertex(Vector3f position, Vector3f normal, Vector2f texCoord, Vector3f Tangent);
+};
+
+struct Material {
+public:
+    Vector2f DiffuseTiling;
+    Texture* Diffuse;
+    Texture* NormalMap;
+    Texture* SpecMap;
+};
 
 struct Submesh {
+public:
     unsigned int m_Vbo, m_Ibo, m_IndexCount;
+    Material Material;
+    std::vector<Vertex> Vertices;
+    std::vector<unsigned int> Indices;
+
+
+    void RecalculateTangents();
 };
 
 class Model {
@@ -21,6 +47,6 @@ public:
 
     static Model* GetModel(const std::string& path);
 
-    void Draw() const;
+    void Draw(Shader& shader) const;
 };
 

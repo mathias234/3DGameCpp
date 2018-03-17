@@ -23,6 +23,7 @@ set(CPP_DIR_9 Src/vendor/physics/dynamics)
 set(CPP_DIR_10 Src/vendor/physics/math)
 set(CPP_DIR_11 Src/vendor/physics/scene)
 set(CPP_DIR_12 Src/lighting)
+set(CPP_DIR_13 Src/vendor/tinyobjloader)
 
 
 ############## CMake Project ################
@@ -62,6 +63,7 @@ file(GLOB SRC_FILES
     ${CPP_DIR_10}/*.*
     ${CPP_DIR_11}/*.*
     ${CPP_DIR_12}/*.*
+    ${CPP_DIR_13}/*.*
 )
 
 # Add executable to build.

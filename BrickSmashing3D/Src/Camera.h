@@ -5,16 +5,14 @@
 class Camera
 {
 private:
-	Vector3f m_position;
 public:
 	Camera();
 	~Camera();
 
 	Vector3f Rotation;
+	Vector3f Position;
 
 	Matrix4f GetViewMatrix();
-	void SetPosition(Vector3f position);
 	void Input(GLFWwindow* window);
-	Vector3f GetPosition();
 };
 

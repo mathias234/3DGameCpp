@@ -13,6 +13,7 @@
 #include "Renderer.h"
 #include "Model.h"
 
+
 q3Scene scene(1.0f / 60.0f);
 
 int main()
@@ -45,12 +46,12 @@ int main()
 
 
 	Camera camera;
-	camera.SetPosition({ 0, 5, 0 });
+	camera.Position = { 0, 5, 0 };
 
 	Shader shader("res/Main.shader");
     Shader depthMapShader("res/DepthMap.shader");
     Model* sponzaModel = Model::GetModel("res/sponza.obj");
-    Texture baseTex = Texture("res/textures/background.tga");
+    Texture* baseTex = new Texture("res/asd.jpg");
 
 
 	glEnable(GL_DEPTH_TEST);
@@ -78,25 +79,39 @@ int main()
 		}
 
         if(InputManager::GetKey(GLFW_KEY_Q)) {
-            camera.Rotation -= Vector3f(0, 0.5f, 0);
+            camera.Rotation -= Vector3f(0, 2, 0);
         }
         if(InputManager::GetKey(GLFW_KEY_E)) {
-            camera.Rotation += Vector3f(0, 0.5f, 0);
+            camera.Rotation += Vector3f(0, 2, 0);
         }
 
         if(InputManager::GetKeyDown(GLFW_KEY_R)) {
             shader.Reload();
         }
 
-
+        Vector3f change;
         if(InputManager::GetKey(GLFW_KEY_W))
-            camera.SetPosition({camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z - 0.5f});
+        {
+            change.x -= cos(glm::radians(camera.Rotation.y + 90));
+            change.z -= sin(glm::radians(camera.Rotation.y + 90));
+        }
         if(InputManager::GetKey(GLFW_KEY_S))
-            camera.SetPosition({camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z + 0.5f});
+        {
+            change.x += cos(glm::radians(camera.Rotation.y + 90));
+            change.z += sin(glm::radians(camera.Rotation.y + 90));
+        }
         if(InputManager::GetKey(GLFW_KEY_A))
-            camera.SetPosition({camera.GetPosition().x + 0.5f, camera.GetPosition().y, camera.GetPosition().z});
+        {
+            change.x += -cos(glm::radians(camera.Rotation.y));
+            change.z += -sin(glm::radians(camera.Rotation.y));
+        }
         if(InputManager::GetKey(GLFW_KEY_D))
-            camera.SetPosition({camera.GetPosition().x - 0.5f, camera.GetPosition().y, camera.GetPosition().z});
+        {
+            change.x += cos(glm::radians(camera.Rotation.y));
+            change.z += sin(glm::radians(camera.Rotation.y));
+        }
+        camera.Position += change;
+
 
 		scene.Step();
 
@@ -113,7 +128,7 @@ int main()
         lightView = glm::rotate(lightView, dirLight.GetRotation().x, { 1, 0, 0 });
         lightView = glm::rotate(lightView, dirLight.GetRotation().y, { 0, 1, 0 });
         lightView = glm::rotate(lightView, dirLight.GetRotation().z, { 0, 0, 1 });
-        lightView = glm::translate(lightView, -camera.GetPosition());
+        lightView = glm::translate(lightView, -camera.Position);
 
         glm::mat4 lightSpaceMatrix = (lightProjection * lightView);
 
@@ -122,10 +137,11 @@ int main()
 
         Matrix4f matrix;
         matrix = glm::translate(matrix, {0,0,0});
-        matrix = glm::scale(matrix, { 1,1,1 });
+        matrix = glm::scale(matrix, { 0.05f,0.05f,0.05f });
+        //matrix = glm::scale(matrix, { 1.0f,1.0f,1.0f });
         depthMapShader.SetUniform4fv("u_ModelMatrix", matrix);
 
-        sponzaModel->Draw();
+        sponzaModel->Draw(shader);
 
         /* Render Normal */
         glCullFace(GL_BACK);
@@ -138,20 +154,21 @@ int main()
         shader.Bind();
 		shader.SetUniform4fv("u_LightSpaceMatrix", lightSpaceMatrix);
 		shader.SetUniform4fv("u_ViewMatrix", camera.GetViewMatrix());
-		shader.SetUniform4fv("u_ProjMatrix", glm::perspective(glm::radians(60.0f), winWidth / (float)winHeight, 0.1f, 100.0f));
-		shader.SetUniform3f("u_ViewPos", camera.GetPosition());
+		shader.SetUniform4fv("u_ProjMatrix", glm::perspective(glm::radians(60.0f), winWidth / (float)winHeight, 0.1f, 10000.0f));
+		shader.SetUniform3f("u_ViewPos", camera.Position);
 
         dirLight.Bind(shader);
 
-
-
         shader.SetUniform1i("u_UseSpecMap", false);
+        shader.SetUniform1f("u_SpecStrength", 0.0f);
+        shader.SetUniform1f("u_SpecPow", 32);
+        shader.SetUniform2f("u_Tiling", {1,1});
         shader.BindTexture("u_ShadowMap", depthBuffer);
-        shader.BindTexture("u_Diffuse", baseTex);
 
         shader.SetUniform4fv("u_ModelMatrix", matrix);
+        shader.BindTexture("u_Diffuse", *baseTex);
 
-        sponzaModel->Draw();
+        sponzaModel->Draw(shader);
 
 		InputManager::Update();
 
