@@ -4,32 +4,16 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "Common.h"
-#include <iostream>
-#include "Platform.h"
 #include "Camera.h"
 #include "Shader.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <lighting/DirectionalLight.h>
-#include "Texture.h"
-#include "Player.h"
 #include "vendor/physics/q3.h"
-#include "LevelLoader.h"
 #include "InputManager.h"
-#include "DepthMap.h"
+#include "Renderer.h"
+#include "Model.h"
 
-std::vector<Platform*> platforms;
-Player* player;
 q3Scene scene(1.0f / 60.0f);
-LevelLoader lvl = LevelLoader();
-
-void UpdateEditorMode() {
-    if(InputManager::GetKeyDown(GLFW_KEY_F)) {
-        Platform* newPlat = new Platform(5, 1.2f, scene);
-		newPlat->SetPosition(player->GetPosition());
-        platforms.push_back(newPlat);
-        lvl.Write("./res/test.file", platforms);
-    }
-}
 
 int main()
 {
@@ -61,35 +45,20 @@ int main()
 
 
 	Camera camera;
-	camera.SetPosition({ 0, 50, 20 });
+	camera.SetPosition({ 0, 5, 0 });
 
 	Shader shader("res/Main.shader");
     Shader depthMapShader("res/DepthMap.shader");
-    Texture platformTex("res/container2.png");
-    Texture specularMap("res/container2_specular.png");
-	Texture containerNrm("res/container2_normal.png");
-	Texture playerTex("res/player.jpg");
-	Texture brickNrm("res/brickNrm.png");
+    Model* sponzaModel = Model::GetModel("res/sponza.obj");
+    Texture baseTex = Texture("res/textures/background.tga");
 
-    player = new Player(scene);
-
-	SceneFile file;
-
-	lvl.Load("./res/test.file", file, scene);
-
-
-	platforms = file.platforms;
 
 	glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
 	InputManager::Init(window);
 
-    bool editorMode = false;
-
 	DirectionalLight dirLight({1,1,1}, { glm::radians(50.0f), glm::radians(-45.0f), glm::radians(0.0f) }, 0.5f, 0.6f);
-
-	std::cout << "Loaded " << platforms.size() << " platforms" << std::endl;
 
     DepthMap depthBuffer = DepthMap();
 
@@ -97,9 +66,8 @@ int main()
     float yVal = 0.0f;
 	while (!glfwWindowShouldClose(window))
 	{
-        yVal += 0.2f;
 
-        dirLight.SetRotation({glm::radians(xVal), glm::radians(yVal), glm::radians(0.0f)});
+        dirLight.SetRotation({glm::radians(xVal), glm::radians(0.0f), glm::radians(0.0f)});
 
 
 		if(InputManager::GetKey(GLFW_KEY_C)) {
@@ -109,66 +77,55 @@ int main()
 			xVal++;
 		}
 
-		if(!editorMode)
-		    scene.Step();
-
-
-		if (InputManager::GetKeyDown(GLFW_KEY_R))
-		{
-			shader.Reload();
-			platformTex.Reload();
-			player->Reload();
-
-			for (int i = 0; i < platforms.size(); i++)
-			{
-				platforms[i]->Reload();
-			}
-		}
-
-
-        if(InputManager::GetKeyDown(GLFW_KEY_T)) {
-            editorMode = !editorMode;
-            player->SetEditorMode(editorMode);
+        if(InputManager::GetKey(GLFW_KEY_Q)) {
+            camera.Rotation -= Vector3f(0, 0.5f, 0);
+        }
+        if(InputManager::GetKey(GLFW_KEY_E)) {
+            camera.Rotation += Vector3f(0, 0.5f, 0);
         }
 
-        if(editorMode)
-            UpdateEditorMode();
-
-		player->Input();
-
-		auto playerPos = player->GetPosition();
-		camera.SetPosition({ playerPos.x, playerPos.y + 7, 10 });
+        if(InputManager::GetKeyDown(GLFW_KEY_R)) {
+            shader.Reload();
+        }
 
 
+        if(InputManager::GetKey(GLFW_KEY_W))
+            camera.SetPosition({camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z - 0.5f});
+        if(InputManager::GetKey(GLFW_KEY_S))
+            camera.SetPosition({camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z + 0.5f});
+        if(InputManager::GetKey(GLFW_KEY_A))
+            camera.SetPosition({camera.GetPosition().x + 0.5f, camera.GetPosition().y, camera.GetPosition().z});
+        if(InputManager::GetKey(GLFW_KEY_D))
+            camera.SetPosition({camera.GetPosition().x - 0.5f, camera.GetPosition().y, camera.GetPosition().z});
+
+		scene.Step();
+
+
+        Renderer::Start3D();
 
         /* Render Depth buffer */
         depthBuffer.Bind();
         glClear(GL_DEPTH_BUFFER_BIT);
 
-        float nearPlane = -20, farPlane = 20;
+        float nearPlane = 1, farPlane = 50;
         glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, nearPlane, farPlane);
         Matrix4f lightView;
         lightView = glm::rotate(lightView, dirLight.GetRotation().x, { 1, 0, 0 });
         lightView = glm::rotate(lightView, dirLight.GetRotation().y, { 0, 1, 0 });
         lightView = glm::rotate(lightView, dirLight.GetRotation().z, { 0, 0, 1 });
-        lightView = glm::translate(lightView, -player->GetPosition());
+        lightView = glm::translate(lightView, -camera.GetPosition());
 
         glm::mat4 lightSpaceMatrix = (lightProjection * lightView);
 
         depthMapShader.Bind();
         depthMapShader.SetUniform4fv("u_LightSpaceMatrix", lightSpaceMatrix);
 
+        Matrix4f matrix;
+        matrix = glm::translate(matrix, {0,0,0});
+        matrix = glm::scale(matrix, { 1,1,1 });
+        depthMapShader.SetUniform4fv("u_ModelMatrix", matrix);
 
-        for (int i = 0; i < platforms.size(); i++)
-        {
-            depthMapShader.SetUniform4fv("u_ModelMatrix", platforms[i]->GetModelMatrix());
-            platforms[i]->Update();
-            platforms[i]->Draw(depthMapShader);
-        }
-
-        depthMapShader.SetUniform4fv("u_ModelMatrix", player->GetModelMatrix());
-        player->Draw(depthMapShader);
-
+        sponzaModel->Draw();
 
         /* Render Normal */
         glCullFace(GL_BACK);
@@ -187,31 +144,14 @@ int main()
         dirLight.Bind(shader);
 
 
-        shader.BindTexture("u_Diffuse", platformTex);
-        shader.BindTexture("u_ShadowMap", depthBuffer);
-        shader.BindTexture("u_NormalMap", containerNrm);
-        shader.BindTexture("u_SpecMap", specularMap);
-        shader.SetUniform1i("u_UseSpecMap", true);
-		shader.SetUniform1f("u_SpecPow", 32);
-		shader.SetUniform1f("u_SpecStrength", 2);
 
-        for (int i = 0; i < platforms.size(); i++)
-		{
-			shader.SetUniform4fv("u_ModelMatrix", platforms[i]->GetModelMatrix());
-			platforms[i]->Update();
-			platforms[i]->Draw(shader);
-		}
-
-        specularMap.Unbind();
         shader.SetUniform1i("u_UseSpecMap", false);
-		shader.SetUniform1f("u_SpecPow", 32);
-		shader.SetUniform1f("u_SpecStrength", 0.5f);
+        shader.BindTexture("u_ShadowMap", depthBuffer);
+        shader.BindTexture("u_Diffuse", baseTex);
 
-		shader.SetUniform4fv("u_ModelMatrix", player->GetModelMatrix());
-		shader.BindTexture("u_Diffuse", playerTex);
-		shader.BindTexture("u_NormalMap", brickNrm);
-		player->Draw(shader);
+        shader.SetUniform4fv("u_ModelMatrix", matrix);
 
+        sponzaModel->Draw();
 
 		InputManager::Update();
 

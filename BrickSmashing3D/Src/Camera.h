@@ -10,6 +10,8 @@ public:
 	Camera();
 	~Camera();
 
+	Vector3f Rotation;
+
 	Matrix4f GetViewMatrix();
 	void SetPosition(Vector3f position);
 	void Input(GLFWwindow* window);

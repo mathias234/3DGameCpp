@@ -104,7 +104,7 @@ void main()
 
 	vec4 tex = texture2D(u_Diffuse, texCoord);
     vec4 specTex = texture2D(u_SpecMap, texCoord);
-    vec3 normal = normalize(tbnMatrix * (255.0/128.0 * texture2D(u_NormalMap, texCoord).xyz - 1));
+    vec3 normal = normal0;//normalize(tbnMatrix * (255.0/128.0 * texture2D(u_NormalMap, texCoord).xyz - 1));
 
 	vec3 AmbientColor = vec3(u_DirectionalLight.AmbientIntensity);
 
@@ -129,5 +129,5 @@ void main()
     // calc shadows
     float shadow = ShadowCalculation(fragPosLightSpace);
 
-	color = (tex) * vec4((AmbientColor + (1.0 - shadow) * (DiffuseColor + specular)), 1.0);
+	color = vec4((AmbientColor + (1.0 - shadow) * (DiffuseColor)), 1.0);
 };
