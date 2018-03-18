@@ -39,7 +39,7 @@ void main()
 #shader fragment
 #version 330 core
 
-layout(location = 0) out vec4 color;
+layout(location = 0) out vec4 outColor;
 
 struct DirectionalLight {
 	vec3 Color;
@@ -103,21 +103,19 @@ void main()
 {
     vec2 texCoord = texCoord0.xy;// * u_Tiling;
 
-	vec4 tex = texture2D(u_Diffuse, texCoord);
+	vec3 color = texture2D(u_Diffuse, texCoord).rgb;
+
     vec4 specTex = texture2D(u_SpecMap, texCoord);
-    vec3 normal = normal0;//normalize(tbnMatrix * (255.0/128.0 * texture2D(u_NormalMap, texCoord).xyz - 1));
+    vec3 normal = normalize(tbnMatrix * (255.0/128.0 * texture2D(u_NormalMap, texCoord).xyz - 1));
 
-	vec3 AmbientColor = vec3(u_DirectionalLight.AmbientIntensity);
+	vec3 ambient = u_DirectionalLight.AmbientIntensity * color;
 
-	float DiffuseFactor = clamp(dot(normal, -u_DirectionalLight.Direction), 0.0, 1.0);
+	float diffuseFact = clamp(dot(normal, -u_DirectionalLight.Direction), 0.0, 1.0);
+	vec3 diffuse = vec3(0,0,0);
 	
-	vec3 DiffuseColor = vec3(0,0,0);
-	
-	if (DiffuseFactor > 0) {
-		DiffuseColor = vec3(u_DirectionalLight.DiffuseIntensity * DiffuseFactor);
+	if (diffuseFact > 0) {
+		diffuse = vec3(u_DirectionalLight.DiffuseIntensity * diffuseFact);
 	}
-
-    float SpecularStrength = 200;
 
     vec3 ViewDir = normalize(u_ViewPos - fragPos);
     vec3 ReflectDir = reflect(u_DirectionalLight.Direction, normal);
@@ -126,9 +124,10 @@ void main()
 
     vec3 specular = (u_SpecStrength * spec) * (u_UseSpecMap == true ? vec3(specTex) : vec3(1.0f, 1.0f, 1.0f));
 
-
     // calc shadows
     float shadow = ShadowCalculation(fragPosLightSpace);
 
-	color = tex; //+ vec4((AmbientColor + (1.0 - shadow) * (DiffuseColor)), 1.0);
+    vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;
+
+	outColor = vec4(lighting, 1.0);
 };

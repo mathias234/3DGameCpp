@@ -78,6 +78,9 @@ Model *Model::GetModel(const std::string &filepath) {
 
             model->m_IndexCount = model->Indices.size();
 
+
+            model->RecalculateTangents();
+
             finalModel->m_Submeshes.push_back(model);
         }
 
