@@ -8,7 +8,7 @@
 
 class DepthMap {
 private:
-    const unsigned int SHADOW_WIDTH = 2048, SHADOW_HEIGHT = 2048;
+    const unsigned int SHADOW_WIDTH = 4096, SHADOW_HEIGHT = 4096;
     unsigned int m_RendererId;
     unsigned int m_FrameBuffer;
 

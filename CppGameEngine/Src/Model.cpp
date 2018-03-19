@@ -100,7 +100,7 @@ Model::~Model() {
 
 void Model::Draw(Shader& shader) const {
     for (int i = 0; i < m_Submeshes.size(); ++i) {
-        shader.BindTexture("u_Diffuse", *m_Submeshes[i]->Material.Diffuse);
+        //shader.BindTexture("u_Diffuse", *m_Submeshes[i]->Material.Diffuse);
         //shader.BindTexture("u_NormalMap", *m_Submeshes[i]->Material.Diffuse);
 
 

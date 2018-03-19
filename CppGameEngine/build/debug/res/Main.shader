@@ -62,6 +62,9 @@ uniform float u_SpecPow;
 
 uniform sampler2D u_NormalMap;
 
+uniform sampler2D u_DepthMap;
+uniform float u_HeightScale;
+
 
 uniform vec2 u_Tiling;
 uniform vec3 u_ViewPos;
@@ -71,6 +74,7 @@ in vec3 normal0;
 in vec3 fragPos;
 in vec4 fragPosLightSpace;
 in mat3 tbnMatrix;
+
 
 float ShadowCalculation(vec4 fragPosLightSpace)
 {
@@ -99,14 +103,25 @@ float ShadowCalculation(vec4 fragPosLightSpace)
     return shadow;
 }
 
+vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir) {
+    vec3 tbnViewDir = viewDir * tbnMatrix;
+
+    float height =  texture(u_DepthMap, texCoords).r;
+    vec2 p = tbnViewDir.xy / tbnViewDir.z * (height * 0.001);
+    return texCoords - p;
+}
+
+
 void main()
 {
-    vec2 texCoord = texCoord0.xy;// * u_Tiling;
+    vec3 ViewDir = normalize(u_ViewPos - fragPos);
+
+    vec2 texCoord = ParallaxMapping(texCoord0.xy * u_Tiling, ViewDir);
 
 	vec3 color = texture2D(u_Diffuse, texCoord).rgb;
 
     vec4 specTex = texture2D(u_SpecMap, texCoord);
-    vec3 normal = normalize(tbnMatrix * (255.0/128.0 * texture2D(u_NormalMap, texCoord).xyz - 1));
+    vec3 normal = normal0;// normalize(tbnMatrix * (255.0/128.0 * texture2D(u_NormalMap, texCoord).xyz - 1));
 
 	vec3 ambient = u_DirectionalLight.AmbientIntensity * color;
 
@@ -117,10 +132,9 @@ void main()
 		diffuse = vec3(u_DirectionalLight.DiffuseIntensity * diffuseFact);
 	}
 
-    vec3 ViewDir = normalize(u_ViewPos - fragPos);
     vec3 ReflectDir = reflect(u_DirectionalLight.Direction, normal);
 
-    float spec = pow(max(dot(ViewDir, ReflectDir), 0.0), u_SpecPow);
+    float spec = pow(max(dot( ViewDir, ReflectDir), 0.0), u_SpecPow);
 
     vec3 specular = (u_SpecStrength * spec) * (u_UseSpecMap == true ? vec3(specTex) : vec3(1.0f, 1.0f, 1.0f));
 

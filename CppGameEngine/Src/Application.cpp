@@ -46,12 +46,16 @@ int main()
 
 
 	Camera camera;
-	camera.Position = { 0, 5, 0 };
+	camera.Position = { 0, 3, 0 };
 
 	Shader shader("res/Main.shader");
     Shader depthMapShader("res/DepthMap.shader");
-    Model* sponzaModel = Model::GetModel("res/sponza.obj");
-    Texture* baseTex = new Texture("res/asd.jpg");
+    Model* sponzaModel = Model::GetModel("res/test.obj");
+
+    Texture* baseTex =  new Texture("res/rocks_diff.png");
+    Texture* specMap =  new Texture("res/rocks_spec.png");
+    Texture* nrmMap =   new Texture("res/rocks_nrm.png");
+    Texture* dispMap =  new Texture("res/rocks_depth.png");
 
 
 	glEnable(GL_DEPTH_TEST);
@@ -59,7 +63,7 @@ int main()
 
 	InputManager::Init(window);
 
-	DirectionalLight dirLight({1,1,1}, { glm::radians(50.0f), glm::radians(-45.0f), glm::radians(0.0f) }, 0.5f, 0.6f);
+	DirectionalLight dirLight({1,1,1}, { glm::radians(50.0f), glm::radians(0.0f), glm::radians(0.0f) }, 0.5f, 0.6f);
 
     DepthMap depthBuffer = DepthMap();
 
@@ -69,7 +73,7 @@ int main()
     float yVal = 0.0f;
 	while (!glfwWindowShouldClose(window))
 	{
-someNumber++;
+        someNumber++;
         dirLight.SetRotation({glm::radians(xVal), glm::radians(0.0f), glm::radians(0.0f)});
 
 
@@ -90,10 +94,6 @@ someNumber++;
         if(InputManager::GetKeyDown(GLFW_KEY_R)) {
             shader.Reload();
         }
-
-
-
-
 
         Vector3f change;
         if(InputManager::GetKey(GLFW_KEY_W))
@@ -118,9 +118,7 @@ someNumber++;
         }
         camera.Position += change;
 
-
 		scene.Step();
-
 
         Renderer::Start3D();
 
@@ -128,8 +126,9 @@ someNumber++;
         depthBuffer.Bind();
         glClear(GL_DEPTH_BUFFER_BIT);
 
-        float nearPlane = 1, farPlane = 50;
-        glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, nearPlane, farPlane);
+        float halfShadowArea = 100;
+
+        glm::mat4 lightProjection = glm::ortho(-halfShadowArea, halfShadowArea, -halfShadowArea, halfShadowArea, -halfShadowArea, halfShadowArea);
         Matrix4f lightView;
         lightView = glm::rotate(lightView, dirLight.GetRotation().x, { 1, 0, 0 });
         lightView = glm::rotate(lightView, dirLight.GetRotation().y, { 0, 1, 0 });
@@ -143,7 +142,7 @@ someNumber++;
 
         Matrix4f matrix;
         matrix = glm::translate(matrix, {0,0,0});
-        matrix = glm::scale(matrix, { 0.05f,0.05f,0.05f });
+        matrix = glm::scale(matrix, { 1.0f,1.0f,1.0f });
         //matrix = glm::scale(matrix, { 1.0f,1.0f,1.0f });
         depthMapShader.SetUniform4fv("u_ModelMatrix", matrix);
 
@@ -167,14 +166,18 @@ someNumber++;
 
         dirLight.Bind(shader);
 
-        shader.SetUniform1i("u_UseSpecMap", false);
-        shader.SetUniform1f("u_SpecStrength", 0.0f);
+        shader.SetUniform1i("u_UseSpecMap", true);
+        shader.SetUniform1f("u_SpecStrength", 0.5f);
         shader.SetUniform1f("u_SpecPow", 32);
-        shader.SetUniform2f("u_Tiling", {1,1});
+        shader.SetUniform2f("u_Tiling", {20,20});
         shader.BindTexture("u_ShadowMap", depthBuffer);
 
         shader.SetUniform4fv("u_ModelMatrix", matrix);
-        shader.BindTexture("u_Diffuse", *baseTex);
+
+        shader.BindTexture("u_Diffuse",   *baseTex);
+        shader.BindTexture("u_SpecMap",   *specMap);
+        shader.BindTexture("u_NormalMap", *nrmMap);
+        shader.BindTexture("u_DepthMap", *dispMap);
 
         /* TEMP */
         shader.SetUniform1f("u_SomeNumber", someNumber);
