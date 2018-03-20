@@ -48,15 +48,9 @@ int main()
 	Camera camera;
 	camera.Position = { 0, 3, 0 };
 
-	Shader shader("res/Main.shader");
-    Shader depthMapShader("res/DepthMap.shader");
+	Shader shader("res/Main.glsl");
+    Shader depthMapShader("res/DepthMap.glsl");
     Model* sponzaModel = Model::GetModel("res/test.obj");
-
-    Texture* baseTex =  new Texture("res/rocks_diff.png");
-    Texture* specMap =  new Texture("res/rocks_spec.png");
-    Texture* nrmMap =   new Texture("res/rocks_nrm.png");
-    Texture* dispMap =  new Texture("res/rocks_depth.png");
-
 
 	glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -96,25 +90,27 @@ int main()
         }
 
         Vector3f change;
+        float speed = 0.2f;
+
         if(InputManager::GetKey(GLFW_KEY_W))
         {
-            change.x -= cos(glm::radians(camera.Rotation.y + 90));
-            change.z -= sin(glm::radians(camera.Rotation.y + 90));
+            change.x -= cos(glm::radians(camera.Rotation.y + 90)) *speed;
+            change.z -= sin(glm::radians(camera.Rotation.y + 90)) *speed;
         }
         if(InputManager::GetKey(GLFW_KEY_S))
         {
-            change.x += cos(glm::radians(camera.Rotation.y + 90));
-            change.z += sin(glm::radians(camera.Rotation.y + 90));
+            change.x += cos(glm::radians(camera.Rotation.y + 90)) *speed;
+            change.z += sin(glm::radians(camera.Rotation.y + 90)) *speed;
         }
         if(InputManager::GetKey(GLFW_KEY_A))
         {
-            change.x += -cos(glm::radians(camera.Rotation.y));
-            change.z += -sin(glm::radians(camera.Rotation.y));
+            change.x += -cos(glm::radians(camera.Rotation.y)) *speed;
+            change.z += -sin(glm::radians(camera.Rotation.y)) *speed;
         }
         if(InputManager::GetKey(GLFW_KEY_D))
         {
-            change.x += cos(glm::radians(camera.Rotation.y));
-            change.z += sin(glm::radians(camera.Rotation.y));
+            change.x += cos(glm::radians(camera.Rotation.y)) *speed;
+            change.z += sin(glm::radians(camera.Rotation.y)) *speed;
         }
         camera.Position += change;
 
@@ -166,18 +162,13 @@ int main()
 
         dirLight.Bind(shader);
 
-        shader.SetUniform1i("u_UseSpecMap", true);
         shader.SetUniform1f("u_SpecStrength", 0.5f);
         shader.SetUniform1f("u_SpecPow", 32);
-        shader.SetUniform2f("u_Tiling", {20,20});
+        shader.SetUniform2f("u_Tiling", {1,1});
         shader.BindTexture("u_ShadowMap", depthBuffer);
 
         shader.SetUniform4fv("u_ModelMatrix", matrix);
 
-        shader.BindTexture("u_Diffuse",   *baseTex);
-        shader.BindTexture("u_SpecMap",   *specMap);
-        shader.BindTexture("u_NormalMap", *nrmMap);
-        shader.BindTexture("u_DepthMap", *dispMap);
 
         /* TEMP */
         shader.SetUniform1f("u_SomeNumber", someNumber);

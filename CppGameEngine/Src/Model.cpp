@@ -54,11 +54,28 @@ Model *Model::GetModel(const std::string &filepath) {
 
             }
 
+            auto material = materials[shapes[s].mesh.material_ids[0]];
 
+            if(materials[shapes[s].mesh.material_ids[0]].diffuse_texname != "") {
+                model->Material.Diffuse = new Texture("res/" + material.diffuse_texname);
+            }
+            else {
+                model->Material.Diffuse = new Texture("res/defaultDiffuse.jpg");
+            }
 
-            model->Material.Diffuse = new Texture("res/" + materials[shapes[s].mesh.material_ids[0]].diffuse_texname);
-            //model->Material.NormalMap = new Texture("res/" + materials[shapes[s].mesh.material_ids[0]].normal_texname);
-            //model->Material.SpecMap = new Texture("res/" + materials[shapes[s].mesh.material_ids[0]].specular_texname);
+            if(materials[shapes[s].mesh.material_ids[0]].normal_texname != "") {
+                model->Material.NormalMap = new Texture("res/" + material.normal_texname);
+            }
+            else {
+                model->Material.NormalMap = new Texture("res/defaultNrm.jpg");
+            }
+
+            if(materials[shapes[s].mesh.material_ids[0]].specular_texname != "") {
+                model->Material.SpecMap = new Texture("res/" + material.specular_texname);
+            }
+            else {
+                model->Material.SpecMap = new Texture("res/defaultSpec.jpg");
+            }
 
 
             GLCall(glGenBuffers(1, &model->m_Vbo));
@@ -100,8 +117,10 @@ Model::~Model() {
 
 void Model::Draw(Shader& shader) const {
     for (int i = 0; i < m_Submeshes.size(); ++i) {
-        //shader.BindTexture("u_Diffuse", *m_Submeshes[i]->Material.Diffuse);
-        //shader.BindTexture("u_NormalMap", *m_Submeshes[i]->Material.Diffuse);
+        shader.BindTexture("u_Diffuse", *m_Submeshes[i]->Material.Diffuse);
+        shader.BindTexture("u_NormalMap", *m_Submeshes[i]->Material.NormalMap);
+        shader.BindTexture("u_SpecMap", *m_Submeshes[i]->Material.SpecMap);
+
 
 
         GLCall(glEnableVertexAttribArray(0));

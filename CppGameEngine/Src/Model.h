@@ -21,8 +21,11 @@ public:
 struct Material {
 public:
     Vector2f DiffuseTiling;
+    bool HasDiffuseMap;
     Texture* Diffuse;
+    bool HasNormalMap;
     Texture* NormalMap;
+    bool HasSpecMap;
     Texture* SpecMap;
 };
 
