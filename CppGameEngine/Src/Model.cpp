@@ -60,21 +60,21 @@ Model *Model::GetModel(const std::string &filepath) {
                 model->Material.Diffuse = new Texture("res/" + material.diffuse_texname);
             }
             else {
-                model->Material.Diffuse = new Texture("res/defaultDiffuse.jpg");
+                model->Material.Diffuse = new Texture("res/defaultDiffuse.png");
             }
 
             if(materials[shapes[s].mesh.material_ids[0]].normal_texname != "") {
                 model->Material.NormalMap = new Texture("res/" + material.normal_texname);
             }
             else {
-                model->Material.NormalMap = new Texture("res/defaultNrm.jpg");
+                model->Material.NormalMap = new Texture("res/defaultNrm.png");
             }
 
             if(materials[shapes[s].mesh.material_ids[0]].specular_texname != "") {
                 model->Material.SpecMap = new Texture("res/" + material.specular_texname);
             }
             else {
-                model->Material.SpecMap = new Texture("res/defaultSpec.jpg");
+                model->Material.SpecMap = new Texture("res/defaultSpec.png");
             }
 
 

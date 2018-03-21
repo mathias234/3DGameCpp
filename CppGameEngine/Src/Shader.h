@@ -4,7 +4,7 @@
 #include <vector>
 #include "Common.h"
 #include "Texture.h"
-#include "DepthMap.h"
+#include "FrameBuffer.h"
 
 struct ShaderProgramSource
 {
@@ -21,16 +21,18 @@ private:
 	std::string m_FilePath;
 	unsigned int m_RendererID;
 	std::unordered_map<std::string, int> m_UniformLocationCache;
-	std::unordered_map<std::string, int> m_SamplerIdsMap; // Use this to get sampler slot from string name
+	std::unordered_map<std::string, unsigned int> m_SamplerIdsMap; // Use this to get sampler slot from string name
 	std::vector<ShaderSamplerId> m_SamplerIds;            // Use this only if you need to iterate over the sampler maps
+	float m_Loaded;
 
 public:
 	Shader(const std::string& filepath);
+	Shader();
 	~Shader();
 
 	void Reload();
 	void BindTexture(const std::string &uniformName, Texture& texture);
-	void BindTexture(const std::string &uniformName, DepthMap& texture);
+	void SetTexture(const std::string &uniformName, FrameBuffer &texture, int targetId);
 	void Bind() const;
 	void Unbind() const;
 

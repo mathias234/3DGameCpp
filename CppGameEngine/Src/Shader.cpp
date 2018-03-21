@@ -8,6 +8,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Common.h"
 
+Shader::Shader() {
+    m_Loaded = false;
+}
 
 Shader::Shader(const std::string & filepath) : m_FilePath(filepath), m_RendererID(0)
 {
@@ -22,11 +25,15 @@ Shader::Shader(const std::string & filepath) : m_FilePath(filepath), m_RendererI
 	}
 
 	Unbind();
+    m_Loaded = true;
 }
 
 Shader::~Shader()
 {
-	GLCall(glDeleteProgram(m_RendererID));
+    if(m_Loaded) {
+	    GLCall(glDeleteProgram(m_RendererID));
+        m_Loaded = false;
+    }
 }
 
 void Shader::Reload()
@@ -62,7 +69,7 @@ ShaderProgramSource Shader::ParseShader(const std::string& filepath)
 	std::stringstream ss[2];
 	ShaderType type = static_cast<ShaderType>(ShaderType::NONE);
 
-	int currentSamplerPos = 0;
+	unsigned int currentSamplerPos = 0;
 	while (getline(stream, line))
 	{
 		if (line.find("#shader") != std::string::npos)
@@ -153,24 +160,26 @@ void Shader::BindTexture(const std::string& uniformName, Texture& texture) {
 		return;
 	}
 
-	int id = m_SamplerIdsMap[uniformName];
+	unsigned int id = m_SamplerIdsMap[uniformName];
 	texture.Bind(id);
 }
 
-void Shader::BindTexture(const std::string& uniformName, DepthMap& texture) {
+void Shader::SetTexture(const std::string &uniformName, FrameBuffer &texture, int targetId) {
 	if(m_SamplerIdsMap.find(uniformName) == m_SamplerIdsMap.end()){
 		std::cout << "Unable to find sampler with name: " << uniformName << std::endl;
 		return;
 	}
 
 	int id = m_SamplerIdsMap[uniformName];
-	texture.BindTexture(id);
+    texture.BindAsTexture(targetId, id);
 }
 
 
 void Shader::Bind() const
 {
-	GLCall(glUseProgram(m_RendererID));
+    if(m_Loaded ) {
+	    GLCall(glUseProgram(m_RendererID));
+	}
 }
 
 void Shader::Unbind() const

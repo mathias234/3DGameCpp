@@ -10,6 +10,5 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-norm textures\\rocks_nrm.png
-map_Kd textures\\rocks_diff.png
-map_Ks textures\\rocks_spec.png
+norm textures\\bricks_nrm.jpg
+map_Kd textures\\bricks_diff.jpg

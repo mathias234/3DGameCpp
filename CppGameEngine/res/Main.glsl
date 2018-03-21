@@ -40,6 +40,7 @@ void main()
 #version 330 core
 
 layout(location = 0) out vec4 outColor;
+layout(location = 1) out vec4 brightColor;
 
 struct DirectionalLight {
 	vec3 Color;
@@ -143,4 +144,11 @@ void main()
     vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;
 
 	outColor = vec4(lighting, 1.0);
+
+
+    float brightness = dot(outColor.rgb, vec3(0.2126, 0.7152, 0.0722));
+    if(brightness > 0.5)
+        brightColor = vec4(outColor.rgb, 1.0);
+    else
+        brightColor = vec4(0.0, 0.0, 0.0, 1.0);
 }
