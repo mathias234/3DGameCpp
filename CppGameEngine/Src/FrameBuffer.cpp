@@ -18,7 +18,9 @@ void FrameBuffer::Create(int width, int height, int multiSampleCount, int Render
     GLCall(glGenTextures(RenderTargetCount, m_IntermidiateRendererId));
 
     GLCall(glGenFramebuffers(1, &m_FrameBuffer));
-    GLCall(glGenFramebuffers(1, &m_IntermdiateFrameBuffer));
+    if(multiSampleCount > 1)
+        GLCall(glGenFramebuffers(1, &m_IntermdiateFrameBuffer));
+
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_FrameBuffer));
 
     for (int i = 0; i < RenderTargetCount; i++) {
@@ -54,25 +56,28 @@ void FrameBuffer::Create(int width, int height, int multiSampleCount, int Render
         }
     }
 
-    GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_IntermdiateFrameBuffer));
-    for (int i = 0; i < RenderTargetCount; i++) {
-        GLenum targetType = GL_TEXTURE_2D;
+    if(multiSampleCount > 1)
+    {
+        GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_IntermdiateFrameBuffer));
+        for (int i = 0; i < RenderTargetCount; i++) {
+            GLenum targetType = GL_TEXTURE_2D;
 
-        GLCall(glBindTexture(targetType, m_IntermidiateRendererId[i]));
+            GLCall(glBindTexture(targetType, m_IntermidiateRendererId[i]));
 
 
-        GLCall(glTexImage2D(targetType, 0, internalFormats[i], width, height, 0, formats[i], types[i], nullptr));
-        GLCall(glTexParameteri(targetType, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-        GLCall(glTexParameteri(targetType, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+            GLCall(glTexImage2D(targetType, 0, internalFormats[i], width, height, 0, formats[i], types[i], nullptr));
+            GLCall(glTexParameteri(targetType, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+            GLCall(glTexParameteri(targetType, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 
-        GLCall(glTexParameteri(targetType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER));
-        GLCall(glTexParameteri(targetType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER));
+            GLCall(glTexParameteri(targetType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER));
+            GLCall(glTexParameteri(targetType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER));
 
-        GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, attachments[i], targetType, m_IntermidiateRendererId[i], 0));
+            GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, attachments[i], targetType, m_IntermidiateRendererId[i], 0));
 
-        if(borders[i] == true) {
-            float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-            GLCall(glTexParameterfv(targetType, GL_TEXTURE_BORDER_COLOR, borderColor));
+            if(borders[i] == true) {
+                float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+                GLCall(glTexParameterfv(targetType, GL_TEXTURE_BORDER_COLOR, borderColor));
+            }
         }
     }
 
