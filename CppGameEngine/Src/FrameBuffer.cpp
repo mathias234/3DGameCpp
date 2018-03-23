@@ -19,7 +19,9 @@ void FrameBuffer::Create(int width, int height, int multiSampleCount, int Render
 
     GLCall(glGenFramebuffers(1, &m_FrameBuffer));
     if(multiSampleCount > 1)
+    {
         GLCall(glGenFramebuffers(1, &m_IntermdiateFrameBuffer));
+    }
 
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_FrameBuffer));
 
@@ -50,33 +52,45 @@ void FrameBuffer::Create(int width, int height, int multiSampleCount, int Render
 
         GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, attachments[i], targetType, m_RendererId[i], 0));
 
-        if(borders[i] == true) {
+        if(borders[i]) {
             float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
             GLCall(glTexParameterfv(targetType, GL_TEXTURE_BORDER_COLOR, borderColor));
         }
     }
 
+    unsigned int rboDepth;
+    glGenRenderbuffers(1, &rboDepth);
+    glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
+
+    if(multiSampleCount > 1) {
+        glRenderbufferStorageMultisample(GL_RENDERBUFFER, multiSampleCount, GL_DEPTH24_STENCIL8, m_Width, m_Height);
+    }
+    else {
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, m_Width, m_Height);
+    }
+
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
+
+
     if(multiSampleCount > 1)
     {
         GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_IntermdiateFrameBuffer));
         for (int i = 0; i < RenderTargetCount; i++) {
-            GLenum targetType = GL_TEXTURE_2D;
-
-            GLCall(glBindTexture(targetType, m_IntermidiateRendererId[i]));
+            GLCall(glBindTexture(GL_TEXTURE_2D, m_IntermidiateRendererId[i]));
 
 
-            GLCall(glTexImage2D(targetType, 0, internalFormats[i], width, height, 0, formats[i], types[i], nullptr));
-            GLCall(glTexParameteri(targetType, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-            GLCall(glTexParameteri(targetType, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+            GLCall(glTexImage2D(GL_TEXTURE_2D, 0, internalFormats[i], width, height, 0, formats[i], types[i], nullptr));
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 
-            GLCall(glTexParameteri(targetType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER));
-            GLCall(glTexParameteri(targetType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER));
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER));
+            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER));
 
-            GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, attachments[i], targetType, m_IntermidiateRendererId[i], 0));
+            GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, attachments[i], GL_TEXTURE_2D, m_IntermidiateRendererId[i], 0));
 
-            if(borders[i] == true) {
+            if(borders[i]) {
                 float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-                GLCall(glTexParameterfv(targetType, GL_TEXTURE_BORDER_COLOR, borderColor));
+                GLCall(glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor));
             }
         }
     }
@@ -89,11 +103,11 @@ void FrameBuffer::Create(int width, int height, int multiSampleCount, int Render
 }
 
 FrameBuffer::FrameBuffer(int width, int height, int multiSampleCount, bool border, GLenum internalFormat, GLenum format, GLenum type, GLenum attachment) {
-    bool* borders = new bool[1] {border};
-    GLenum* internalFormats = new GLenum[1] {internalFormat};
-    GLenum* formats = new GLenum[1] {format};
-    GLenum* types = new GLenum[1] {type};
-    GLenum* attachments = new GLenum[1] {attachment};
+    auto * borders = new bool[1] {border};
+    auto * internalFormats = new GLenum[1] {internalFormat};
+    auto * formats = new GLenum[1] {format};
+    auto * types = new GLenum[1] {type};
+    auto * attachments = new GLenum[1] {attachment};
     Create(width, height, multiSampleCount, 1, borders, internalFormats, formats, types, attachments);
 
 }
@@ -120,7 +134,7 @@ void FrameBuffer::BindAsTexture(int frameBufferId, int slot)
         glBindFramebuffer(GL_READ_FRAMEBUFFER, m_FrameBuffer);
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_IntermdiateFrameBuffer);
         glBlitFramebuffer(0, 0, m_Width, m_Height, 0, 0, m_Width, m_Height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-        glBindFramebuffer(GL_FRAMEBUFFER,currentFbo);
+        glBindFramebuffer(GL_FRAMEBUFFER, static_cast<GLuint>(currentFbo));
         GLCall(glActiveTexture(GL_TEXTURE0 + slot));
         GLCall(glBindTexture(GL_TEXTURE_2D, m_IntermidiateRendererId[frameBufferId]));
     }

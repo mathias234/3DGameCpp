@@ -102,22 +102,21 @@ int main()
     Shader depthMapShader("res/DepthMap.glsl");
     Shader blurShader("res/BlurShader.glsl");
 
-    Model* sponzaModel = Model::GetModel("res/test.obj");
+    Model* testModel = Model::GetModel("res/test.obj");
 
 
 
     InputManager::Init(window);
 
-	DirectionalLight dirLight({1,1,1}, { glm::radians(170.0f), glm::radians(0.0f), glm::radians(0.0f) }, 0.5f, 0.6f);
 
 
     FrameBuffer depthBuffer = FrameBuffer(2048, 2048, 1, true, GL_DEPTH_COMPONENT , GL_DEPTH_COMPONENT, GL_FLOAT, GL_DEPTH_ATTACHMENT);
 
-    bool* borders = new bool[2] {false, false};
-    GLenum* internalFormats = new GLenum[2] {GL_RGBA16F, GL_RGBA16F};
-    GLenum* formats = new GLenum[2] {GL_RGB, GL_RGB};
-    GLenum* types = new GLenum[2] {GL_UNSIGNED_BYTE, GL_UNSIGNED_BYTE};
-    GLenum* attachments = new GLenum[2] {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
+    auto * borders = new bool[2] {false, false};
+    auto * internalFormats = new GLenum[2] {GL_RGBA16F, GL_RGBA16F};
+    auto * formats = new GLenum[2] {GL_RGB, GL_RGB};
+    auto * types = new GLenum[2] {GL_UNSIGNED_BYTE, GL_UNSIGNED_BYTE};
+    auto * attachments = new GLenum[2] {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
     FrameBuffer screenBuffer = FrameBuffer(winWidth, winHeight, multiSampleCount, 2, borders, internalFormats, formats, types, attachments);
 
     FrameBuffer* pingPongBuffers = new FrameBuffer[2]{
@@ -125,13 +124,19 @@ int main()
             FrameBuffer(winWidth, winHeight, 1, false, GL_RGB16F, GL_RGB, GL_FLOAT, GL_COLOR_ATTACHMENT0),
     };
 
-    float someNumber = 0;
-
-
     glEnable(GL_MULTISAMPLE);
+
+    DirectionalLight dirLight({1,1,1}, { glm::radians(170.0f), glm::radians(0.0f), glm::radians(0.0f) }, 0.5f, 0.6f);
 
     while (!glfwWindowShouldClose(window))
 	{
+
+        if(InputManager::GetKey(GLFW_KEY_C)) {
+            dirLight.SetRotation(dirLight.GetRotation() + Vector3f(0.05f, 0, 0));
+        }
+        if(InputManager::GetKey(GLFW_KEY_V)) {
+            dirLight.SetRotation(dirLight.GetRotation() - Vector3f(0.05f, 0, 0));
+        }
 
         if(InputManager::GetKey(GLFW_KEY_Q)) {
             camera.Rotation -= Vector3f(0, 2, 0);
@@ -199,7 +204,7 @@ int main()
         //matrix = glm::scale(matrix, { 1.0f,1.0f,1.0f });
         depthMapShader.SetUniform4fv("u_ModelMatrix", matrix);
 
-        sponzaModel->Draw(shader);
+        testModel->Draw(shader);
 
         /* Render Normal */
         screenBuffer.BindAsFrameBuffer();
@@ -225,20 +230,10 @@ int main()
 
 
         /* TEMP */
-        sponzaModel->Draw(shader);
+        testModel->Draw(shader);
 
 
         /* Post Processing */
-        glDisable(GL_DEPTH_TEST);
-
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glViewport(0, 0, winWidth, winHeight);
-        // clear all relevant buffers
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
-        glClear(GL_COLOR_BUFFER_BIT);
-
-
-
         bool horizontal = true, first_iteration = true;
         unsigned int amount = 10;
         blurShader.Bind();
@@ -247,16 +242,23 @@ int main()
             pingPongBuffers[horizontal].BindAsFrameBuffer();
             blurShader.SetUniform1i("u_Horizontal", horizontal);
             blurShader.SetTexture("u_Image", first_iteration ? screenBuffer : pingPongBuffers[!horizontal],
-                                  first_iteration ? 1 : 0);  // bind texture of other framebuffer (or scene if first iteration)
+                                  first_iteration ? 1 : 0);  // bind texture of other framebuffer (or screen if first iteration)
             RenderScreenQuad();
             horizontal = !horizontal;
             if (first_iteration)
                 first_iteration = false;
         }
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
         /* draw on screen */
+        glDisable(GL_DEPTH_TEST);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glViewport(0, 0, winWidth, winHeight);
+        // clear all relevant buffers
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
+        glClear(GL_COLOR_BUFFER_BIT);
+
+
         screenShader.Bind();
         screenShader.SetTexture("u_Scene", screenBuffer, 0);
         screenShader.SetTexture("u_BloomBlur", pingPongBuffers[!horizontal], 0);

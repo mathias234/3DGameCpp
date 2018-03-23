@@ -47,7 +47,12 @@ inline bool GLLogCall(const char* function, const char* file, int line)
 		case GL_OUT_OF_MEMORY:
 			errorCodeName = "GL_OUT_OF_MEMORY";
 			break;
-		default: ;
+        case GL_INVALID_FRAMEBUFFER_OPERATION:
+            errorCodeName = "GL_INVALID_FRAMEBUFFER_OPERATION";
+            break;
+		default:
+            errorCodeName = std::to_string(error).c_str();
+            break;
 		}
 
 		std::cout << "[OpenGL Error]: (" << errorCodeName << "): " << function << " " << file << ":" << line << std::endl;
