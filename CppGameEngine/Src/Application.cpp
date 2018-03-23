@@ -196,13 +196,13 @@ int main()
         glm::mat4 lightSpaceMatrix = (lightProjection * lightView);
 
         depthMapShader.Bind();
-        depthMapShader.SetUniform4fv("u_LightSpaceMatrix", lightSpaceMatrix);
+        depthMapShader.SetMatrix4("u_LightSpaceMatrix", lightSpaceMatrix);
 
         Matrix4f matrix;
         matrix = glm::translate(matrix, {0,0,0});
         matrix = glm::scale(matrix, { 1.0f,1.0f,1.0f });
         //matrix = glm::scale(matrix, { 1.0f,1.0f,1.0f });
-        depthMapShader.SetUniform4fv("u_ModelMatrix", matrix);
+        depthMapShader.SetMatrix4("u_ModelMatrix", matrix);
 
         testModel->Draw(shader);
 
@@ -212,21 +212,22 @@ int main()
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
         shader.Bind();
-		shader.SetUniform4fv("u_LightSpaceMatrix", lightSpaceMatrix);
-		shader.SetUniform4fv("u_ViewMatrix", camera.GetViewMatrix());
+        shader.SetMatrix4("u_LightSpaceMatrix", lightSpaceMatrix);
+        shader.SetMatrix4("u_ViewMatrix", camera.GetViewMatrix());
 
 
-		shader.SetUniform4fv("u_ProjMatrix", glm::perspective(glm::radians(60.0f), winWidth / (float)winHeight, 0.1f, 10000.0f));
-		shader.SetUniform3f("u_ViewPos", camera.Position);
+        shader.SetMatrix4("u_ProjMatrix",
+                          glm::perspective(glm::radians(60.0f), winWidth / (float) winHeight, 0.1f, 10000.0f));
+        shader.SetFloat3("u_ViewPos", camera.Position);
 
         dirLight.Bind(shader);
 
-        shader.SetUniform1f("u_SpecStrength", 0.5f);
-        shader.SetUniform1f("u_SpecPow", 32);
-        shader.SetUniform2f("u_Tiling", {0.4f,0.4f});
+        shader.SetFloat("u_SpecStrength", 0.5f);
+        shader.SetFloat("u_SpecPow", 32);
+        shader.SetFloat2("u_Tiling", {0.4f, 0.4f});
         shader.SetTexture("u_ShadowMap", depthBuffer, 0);
 
-        shader.SetUniform4fv("u_ModelMatrix", matrix);
+        shader.SetMatrix4("u_ModelMatrix", matrix);
 
 
         /* TEMP */
@@ -240,7 +241,7 @@ int main()
         for (unsigned int i = 0; i < amount; i++)
         {
             pingPongBuffers[horizontal].BindAsFrameBuffer();
-            blurShader.SetUniform1i("u_Horizontal", horizontal);
+            blurShader.SetInt("u_Horizontal", horizontal);
             blurShader.SetTexture("u_Image", first_iteration ? screenBuffer : pingPongBuffers[!horizontal],
                                   first_iteration ? 1 : 0);  // bind texture of other framebuffer (or screen if first iteration)
             RenderScreenQuad();
@@ -262,9 +263,9 @@ int main()
         screenShader.Bind();
         screenShader.SetTexture("u_Scene", screenBuffer, 0);
         screenShader.SetTexture("u_BloomBlur", pingPongBuffers[!horizontal], 0);
-        screenShader.SetUniform1i("u_Bloom", (int)bloom);
-        screenShader.SetUniform1f("u_Exposure", exposure);
-        screenShader.SetUniform1f("u_Gamma", gamma);
+        screenShader.SetInt("u_Bloom", (int) bloom);
+        screenShader.SetFloat("u_Exposure", exposure);
+        screenShader.SetFloat("u_Gamma", gamma);
         RenderScreenQuad();
 
 		InputManager::Update();

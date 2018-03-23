@@ -30,6 +30,6 @@ public:
 		data.t = r32(10000.0);
 		tfinal = FLT_MAX;
 		data.toi = data.t;
-		impactBody = NULL;
+		impactBody = nullptr;
 	}
 };

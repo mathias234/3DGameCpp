@@ -26,7 +26,7 @@ private:
 	float m_Loaded;
 
 public:
-	Shader(const std::string& filepath);
+    explicit Shader(const std::string& filepath);
 	Shader();
 	~Shader();
 
@@ -37,12 +37,12 @@ public:
 	void Unbind() const;
 
 	// Set uniforms
-	void SetUniform4fv(const std::string & name, Matrix4f value);
-	void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
-	void SetUniform3f(const std::string & name, Vector3f vec3);
-	void SetUniform1f(const std::string& name, float value);
-	void SetUniform1i(const std::string& name, int value);
-	void SetUniform2f(const std::string& name, Vector2f value);
+	void SetMatrix4(const std::string &name, Matrix4f value);
+	void SetFloat4(const std::string &name, Vector4f);
+	void SetFloat3(const std::string &name, Vector3f vec3);
+	void SetFloat2(const std::string &name, Vector2f value);
+	void SetFloat(const std::string &name, float value);
+	void SetInt(const std::string &name, int value);
 private:
 	ShaderProgramSource ParseShader(const std::string& filepath);
 	unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader);

@@ -12,6 +12,7 @@
     ASSERT(GLLogCall(#x, __FILE__, __LINE__))
 
 typedef glm::mat4 Matrix4f;
+typedef glm::vec4 Vector4f;
 typedef glm::vec3 Vector3f;
 typedef glm::vec2 Vector2f;
 typedef glm::quat Quaternion;

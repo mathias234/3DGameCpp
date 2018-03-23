@@ -12,7 +12,7 @@ private:
                             GLenum *internalFormats, GLenum *formats, GLenum *types, GLenum *attachments);
     int m_RenderTargetCount;
     unsigned int* m_RendererId;
-    unsigned int* m_IntermidiateRendererId;
+    unsigned int* m_IntermediateRendererId;
     GLenum* m_InternalFormats;
     GLenum* m_Formats;
     GLenum* m_Types;
@@ -20,7 +20,7 @@ private:
     int m_MultiSampleCount;
 
     unsigned int m_FrameBuffer;
-    unsigned int m_IntermdiateFrameBuffer;
+    unsigned int m_IntermediateFrameBuffer;
 
     int m_Width;
     int m_Height;
@@ -31,8 +31,6 @@ public:
 
     void BindAsFrameBuffer();
     void BindAsTexture(int frameBufferId, int slot);
-
-
 };
 
 

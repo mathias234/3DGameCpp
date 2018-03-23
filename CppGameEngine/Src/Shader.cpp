@@ -21,7 +21,7 @@ Shader::Shader(const std::string & filepath) : m_FilePath(filepath), m_RendererI
 
 	for (int i = 0; i < m_SamplerIds.size(); ++i) {
 		auto sampler = this->m_SamplerIds[i];
-		this->SetUniform1i(sampler.UniformName, sampler.SamplerId);
+        this->SetInt(sampler.UniformName, sampler.SamplerId);
 	}
 
 	Unbind();
@@ -50,7 +50,7 @@ void Shader::Reload()
 
 	for (int i = 0; i < m_SamplerIds.size(); ++i) {
 		auto sampler = this->m_SamplerIds[i];
-		this->SetUniform1i(sampler.UniformName, sampler.SamplerId);
+        this->SetInt(sampler.UniformName, sampler.SamplerId);
 	}
 
 	Unbind();
@@ -187,21 +187,21 @@ void Shader::Unbind() const
 	GLCall(glUseProgram(0));
 }
 
-void Shader::SetUniform4fv(const std::string & name, Matrix4f value)
+void Shader::SetMatrix4(const std::string &name, Matrix4f value)
 {
 	auto uniformLoc = GetUniformLocation(name);
 
 	GLCall(glUniformMatrix4fv(uniformLoc, 1, GL_FALSE, glm::value_ptr(value)));
 }
 
-void Shader::SetUniform4f(const std::string & name, float v0, float v1, float v2, float v3)
+void Shader::SetFloat4(const std::string &name, Vector4f vec4)
 {
 	auto uniformLoc = GetUniformLocation(name);
 
-	GLCall(glUniform4f(uniformLoc, v0, v1, v2, v3));
+	GLCall(glUniform4f(uniformLoc, vec4.x, vec4.y, vec4.z, vec4.w));
 }
 
-void Shader::SetUniform3f(const std::string & name, Vector3f vec3)
+void Shader::SetFloat3(const std::string &name, Vector3f vec3)
 {
 	auto uniformLoc = GetUniformLocation(name);
 
@@ -209,25 +209,26 @@ void Shader::SetUniform3f(const std::string & name, Vector3f vec3)
 }
 
 
-void Shader::SetUniform1f(const std::string& name, float value)
+void Shader::SetFloat2(const std::string &name, Vector2f value)
+{
+    auto uniformLoc = GetUniformLocation(name);
+
+    GLCall(glUniform2f(uniformLoc, value.x, value.y));
+}
+
+void Shader::SetFloat(const std::string &name, float value)
 {
 	auto uniformLoc = GetUniformLocation(name);
 
 	GLCall(glUniform1f(uniformLoc, value));
 }
 
-void Shader::SetUniform1i(const std::string& name, int value)
+
+void Shader::SetInt(const std::string &name, int value)
 {
 	auto uniformLoc = GetUniformLocation(name);
 
 	GLCall(glUniform1i(uniformLoc, value));
-}
-
-void Shader::SetUniform2f(const std::string& name, Vector2f value)
-{
-	auto uniformLoc = GetUniformLocation(name);
-
-	GLCall(glUniform2f(uniformLoc, value.x, value.y));
 }
 
 int Shader::GetUniformLocation(const std::string & name)

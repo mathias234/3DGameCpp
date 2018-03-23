@@ -18,10 +18,10 @@ DirectionalLight::DirectionalLight(Vector3f color, Vector3f rotation, float ambi
 DirectionalLight::DirectionalLight() = default;
 
 void DirectionalLight::Bind(Shader &shader) const {
-    shader.SetUniform3f("u_DirectionalLight.Color", m_Color);
-    shader.SetUniform3f("u_DirectionalLight.Direction", GetDirection());
-    shader.SetUniform1f("u_DirectionalLight.AmbientIntensity", m_AmbientIntensity);
-    shader.SetUniform1f("u_DirectionalLight.DiffuseIntensity", m_DiffuseIntensity);
+    shader.SetFloat3("u_DirectionalLight.Color", m_Color);
+    shader.SetFloat3("u_DirectionalLight.Direction", GetDirection());
+    shader.SetFloat("u_DirectionalLight.AmbientIntensity", m_AmbientIntensity);
+    shader.SetFloat("u_DirectionalLight.DiffuseIntensity", m_DiffuseIntensity);
 }
 
 const Vector3f &DirectionalLight::GetColor() const {
