@@ -1,7 +1,7 @@
 #include "FrameBuffer.h"
 
 
-void FrameBuffer::Create(int width, int height, int multiSampleCount, int RenderTargetCount,  bool* borders, GLenum* internalFormats, GLenum* formats, GLenum* types, GLenum* attachments) {
+void FrameBuffer::Create(int width, int height, bool useDepthRenderbuffer, int multiSampleCount, int RenderTargetCount,  bool* borders, GLenum* internalFormats, GLenum* formats, GLenum* types, GLenum* attachments) {
     m_RendererId = 0;
     m_FrameBuffer = 0;
     m_Width = width;
@@ -58,19 +58,20 @@ void FrameBuffer::Create(int width, int height, int multiSampleCount, int Render
         }
     }
 
-    unsigned int rboDepth;
-    glGenRenderbuffers(1, &rboDepth);
-    glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
+    if(useDepthRenderbuffer) {
+        unsigned int rboDepth;
+        glGenRenderbuffers(1, &rboDepth);
+        glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
 
-    if(multiSampleCount > 1) {
-        glRenderbufferStorageMultisample(GL_RENDERBUFFER, multiSampleCount, GL_DEPTH24_STENCIL8, m_Width, m_Height);
+        if(multiSampleCount > 1) {
+            glRenderbufferStorageMultisample(GL_RENDERBUFFER, multiSampleCount, GL_DEPTH24_STENCIL8, m_Width, m_Height);
+        }
+        else {
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, m_Width, m_Height);
+        }
+
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
     }
-    else {
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, m_Width, m_Height);
-    }
-
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
-
 
     if(multiSampleCount > 1)
     {
@@ -102,18 +103,18 @@ void FrameBuffer::Create(int width, int height, int multiSampleCount, int Render
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 
-FrameBuffer::FrameBuffer(int width, int height, int multiSampleCount, bool border, GLenum internalFormat, GLenum format, GLenum type, GLenum attachment) {
+FrameBuffer::FrameBuffer(int width, int height, bool useDepthRenderbuffer, int multiSampleCount, bool border, GLenum internalFormat, GLenum format, GLenum type, GLenum attachment) {
     auto * borders = new bool[1] {border};
     auto * internalFormats = new GLenum[1] {internalFormat};
     auto * formats = new GLenum[1] {format};
     auto * types = new GLenum[1] {type};
     auto * attachments = new GLenum[1] {attachment};
-    Create(width, height, multiSampleCount, 1, borders, internalFormats, formats, types, attachments);
+    Create(width, height,useDepthRenderbuffer, multiSampleCount, 1, borders, internalFormats, formats, types, attachments);
 
 }
 
-FrameBuffer::FrameBuffer(int width, int height, int multiSampleCount, int RenderTargetCount, bool* border, GLenum* internalFormat, GLenum* format, GLenum* type, GLenum* attachment) {
-    Create(width, height, multiSampleCount, RenderTargetCount, border, internalFormat, format, type, attachment);
+FrameBuffer::FrameBuffer(int width, int height, bool useDepthRenderbuffer, int multiSampleCount, int RenderTargetCount, bool* border, GLenum* internalFormat, GLenum* format, GLenum* type, GLenum* attachment) {
+    Create(width, height, useDepthRenderbuffer, multiSampleCount, RenderTargetCount, border, internalFormat, format, type, attachment);
 }
 
 

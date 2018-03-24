@@ -58,14 +58,7 @@ void RenderScreenQuad() {
 
 int main()
 {
-
-	GLFWwindow* window;
-
-	/* Initialize the library */
-	if (!glfwInit())
-		return -1;
-
-
+    /* Settings */
 	int winWidth = 1920;
 	int winHeight = 1080;
 
@@ -75,7 +68,16 @@ int main()
     float exposure = 1.0f;
     float gamma = 1.4f;
 
-	/* Create a windowed mode window and its OpenGL context */
+    float halfShadowArea = 50;
+
+
+    GLFWwindow* window;
+
+    /* Initialize the library */
+    if (!glfwInit())
+        return -1;
+
+    /* Create a windowed mode window and its OpenGL context */
 	window = glfwCreateWindow(winWidth, winHeight, "3DGameEngine", nullptr, nullptr);
 	if (!window)
 	{
@@ -97,8 +99,8 @@ int main()
 	Camera camera;
 	camera.Position = { 0, 3, 0 };
 
-    Shader screenShader("res/FinalScreen.glsl");
     Shader shader("res/Main.glsl");
+    Shader screenShader("res/FinalScreen.glsl");
     Shader depthMapShader("res/DepthMap.glsl");
     Shader blurShader("res/BlurShader.glsl");
 
@@ -110,18 +112,18 @@ int main()
 
 
 
-    FrameBuffer depthBuffer = FrameBuffer(2048, 2048, 1, true, GL_DEPTH_COMPONENT , GL_DEPTH_COMPONENT, GL_FLOAT, GL_DEPTH_ATTACHMENT);
+    FrameBuffer depthBuffer = FrameBuffer(4096, 4096, false, 0, true, GL_DEPTH_COMPONENT , GL_DEPTH_COMPONENT, GL_FLOAT, GL_DEPTH_ATTACHMENT);
 
     auto * borders = new bool[2] {false, false};
     auto * internalFormats = new GLenum[2] {GL_RGBA16F, GL_RGBA16F};
     auto * formats = new GLenum[2] {GL_RGB, GL_RGB};
     auto * types = new GLenum[2] {GL_UNSIGNED_BYTE, GL_UNSIGNED_BYTE};
     auto * attachments = new GLenum[2] {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
-    FrameBuffer screenBuffer = FrameBuffer(winWidth, winHeight, multiSampleCount, 2, borders, internalFormats, formats, types, attachments);
+    FrameBuffer screenBuffer = FrameBuffer(winWidth, winHeight, true, multiSampleCount, 2, borders, internalFormats, formats, types, attachments);
 
     FrameBuffer* pingPongBuffers = new FrameBuffer[2]{
-            FrameBuffer(winWidth, winHeight, 1, false, GL_RGB16F, GL_RGB, GL_FLOAT, GL_COLOR_ATTACHMENT0),
-            FrameBuffer(winWidth, winHeight, 1, false, GL_RGB16F, GL_RGB, GL_FLOAT, GL_COLOR_ATTACHMENT0),
+            FrameBuffer(winWidth, winHeight, false, 1, false, GL_RGB16F, GL_RGB, GL_FLOAT, GL_COLOR_ATTACHMENT0),
+            FrameBuffer(winWidth, winHeight, false, 1, false, GL_RGB16F, GL_RGB, GL_FLOAT, GL_COLOR_ATTACHMENT0),
     };
 
     glEnable(GL_MULTISAMPLE);
@@ -132,10 +134,10 @@ int main()
 	{
 
         if(InputManager::GetKey(GLFW_KEY_C)) {
-            dirLight.SetRotation(dirLight.GetRotation() + Vector3f(0.05f, 0, 0));
+            dirLight.SetRotation(dirLight.GetRotation() + Vector3f(0.01f, 0, 0));
         }
         if(InputManager::GetKey(GLFW_KEY_V)) {
-            dirLight.SetRotation(dirLight.GetRotation() - Vector3f(0.05f, 0, 0));
+            dirLight.SetRotation(dirLight.GetRotation() - Vector3f(0.01f, 0, 0));
         }
 
         if(InputManager::GetKey(GLFW_KEY_Q)) {
@@ -184,7 +186,6 @@ int main()
         depthBuffer.BindAsFrameBuffer();
         glClear(GL_DEPTH_BUFFER_BIT);
 
-        float halfShadowArea = 100;
 
         glm::mat4 lightProjection = glm::ortho(-halfShadowArea, halfShadowArea, -halfShadowArea, halfShadowArea, -halfShadowArea, halfShadowArea);
         Matrix4f lightView;

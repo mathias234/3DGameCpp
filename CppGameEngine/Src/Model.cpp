@@ -67,7 +67,7 @@ Model *Model::GetModel(const std::string &filepath) {
                 model->Material.NormalMap = new Texture("res/" + material.normal_texname);
             }
             else {
-                model->Material.NormalMap = new Texture("res/defaultNrm.png");
+                model->Material.NormalMap = new Texture("res/defaultNormal.png");
             }
 
             if(materials[shapes[s].mesh.material_ids[0]].specular_texname != "") {

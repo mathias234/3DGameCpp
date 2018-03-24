@@ -8,7 +8,7 @@
 
 class FrameBuffer {
 private:
-    void Create(int width, int height, int multiSampleCounts, int RenderTargetCount,  bool *borders,
+    void Create(int width, int height, bool useDepthRenderbuffer, int multiSampleCounts, int RenderTargetCount,  bool *borders,
                             GLenum *internalFormats, GLenum *formats, GLenum *types, GLenum *attachments);
     int m_RenderTargetCount;
     unsigned int* m_RendererId;
@@ -26,8 +26,8 @@ private:
     int m_Height;
 
 public:
-    FrameBuffer(int width, int height, int multiSampleCount, int RenderTargetCount,  bool* border, GLenum* internalFormat, GLenum* format, GLenum* type, GLenum* attachment);
-    FrameBuffer(int width, int height, int multiSampleCount,  bool border,  GLenum internalFormat,GLenum format, GLenum type, GLenum attachment);
+    FrameBuffer(int width, int height,bool useDepthRenderbuffer, int multiSampleCount, int RenderTargetCount,  bool* border, GLenum* internalFormat, GLenum* format, GLenum* type, GLenum* attachment);
+    FrameBuffer(int width, int height, bool useDepthRenderbuffer,int multiSampleCount,  bool border,  GLenum internalFormat,GLenum format, GLenum type, GLenum attachment);
 
     void BindAsFrameBuffer();
     void BindAsTexture(int frameBufferId, int slot);

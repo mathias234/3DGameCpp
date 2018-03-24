@@ -13,7 +13,7 @@ struct ShaderProgramSource
 };
 struct ShaderSamplerId {
 	std::string UniformName;
-	int SamplerId;
+	unsigned int SamplerId;
 };
 
 class Shader {
