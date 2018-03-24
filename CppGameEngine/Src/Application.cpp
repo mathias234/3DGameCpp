@@ -127,7 +127,7 @@ int main()
     screenBufferCreateInfo.Height = winHeight;
     screenBufferCreateInfo.UseDepthRenderBuffer = true;
     screenBufferCreateInfo.MultiSampleCount = multiSampleCount;
-    depthBufferCreateInfo.RenderTargetCount = 2;
+    screenBufferCreateInfo.RenderTargetCount = 2;
     screenBufferCreateInfo.Borders = new bool[2] {false, false};
     screenBufferCreateInfo.InternalFormats = new GLenum[2] {GL_RGBA16F, GL_RGBA16F};
     screenBufferCreateInfo.Formats = new GLenum[2] {GL_RGB, GL_RGB};
