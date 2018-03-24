@@ -106,24 +106,48 @@ int main()
 
     Model* testModel = Model::GetModel("res/test.obj");
 
-
-
     InputManager::Init(window);
 
 
 
-    FrameBuffer depthBuffer = FrameBuffer(4096, 4096, false, 0, true, GL_DEPTH_COMPONENT , GL_DEPTH_COMPONENT, GL_FLOAT, GL_DEPTH_ATTACHMENT);
+    FrameBufferCreateInfo depthBufferCreateInfo;
+    depthBufferCreateInfo.Width = 4096;
+    depthBufferCreateInfo.Height = 4096;
+    depthBufferCreateInfo.UseDepthRenderBuffer = false;
+    depthBufferCreateInfo.Borders = new bool[1] {true};
+    depthBufferCreateInfo.InternalFormats = new GLenum[1] {GL_DEPTH_COMPONENT};
+    depthBufferCreateInfo.Formats = new GLenum[1] {GL_DEPTH_COMPONENT};
+    depthBufferCreateInfo.Types = new GLenum[1] {GL_FLOAT};
+    depthBufferCreateInfo.Attachments = new GLenum[1] {GL_DEPTH_ATTACHMENT};
+    FrameBuffer depthBuffer = FrameBuffer(depthBufferCreateInfo);
 
-    auto * borders = new bool[2] {false, false};
-    auto * internalFormats = new GLenum[2] {GL_RGBA16F, GL_RGBA16F};
-    auto * formats = new GLenum[2] {GL_RGB, GL_RGB};
-    auto * types = new GLenum[2] {GL_UNSIGNED_BYTE, GL_UNSIGNED_BYTE};
-    auto * attachments = new GLenum[2] {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
-    FrameBuffer screenBuffer = FrameBuffer(winWidth, winHeight, true, multiSampleCount, 2, borders, internalFormats, formats, types, attachments);
+
+    FrameBufferCreateInfo screenBufferCreateInfo;
+    screenBufferCreateInfo.Width = winWidth;
+    screenBufferCreateInfo.Height = winHeight;
+    screenBufferCreateInfo.UseDepthRenderBuffer = true;
+    screenBufferCreateInfo.MultiSampleCount = multiSampleCount;
+    depthBufferCreateInfo.RenderTargetCount = 2;
+    screenBufferCreateInfo.Borders = new bool[2] {false, false};
+    screenBufferCreateInfo.InternalFormats = new GLenum[2] {GL_RGBA16F, GL_RGBA16F};
+    screenBufferCreateInfo.Formats = new GLenum[2] {GL_RGB, GL_RGB};
+    screenBufferCreateInfo.Types = new GLenum[2] {GL_UNSIGNED_BYTE, GL_UNSIGNED_BYTE};
+    screenBufferCreateInfo.Attachments = new GLenum[2] {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
+
+    FrameBuffer screenBuffer = FrameBuffer(screenBufferCreateInfo);
+
+    FrameBufferCreateInfo pingPongBuffersCreateInfo;
+    pingPongBuffersCreateInfo.Width = winWidth;
+    pingPongBuffersCreateInfo.Height = winHeight;
+    pingPongBuffersCreateInfo.UseDepthRenderBuffer = false;
+    pingPongBuffersCreateInfo.InternalFormats = new GLenum[1] {GL_RGB16F};
+    pingPongBuffersCreateInfo.Formats = new GLenum[1] {GL_RGB};
+    pingPongBuffersCreateInfo.Types = new GLenum[1] {GL_FLOAT};
+    pingPongBuffersCreateInfo.Attachments = new GLenum[1] {GL_COLOR_ATTACHMENT0};
 
     FrameBuffer* pingPongBuffers = new FrameBuffer[2]{
-            FrameBuffer(winWidth, winHeight, false, 1, false, GL_RGB16F, GL_RGB, GL_FLOAT, GL_COLOR_ATTACHMENT0),
-            FrameBuffer(winWidth, winHeight, false, 1, false, GL_RGB16F, GL_RGB, GL_FLOAT, GL_COLOR_ATTACHMENT0),
+            FrameBuffer(pingPongBuffersCreateInfo),
+            FrameBuffer(pingPongBuffersCreateInfo),
     };
 
     glEnable(GL_MULTISAMPLE);

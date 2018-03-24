@@ -6,28 +6,35 @@
 
 #include "Common.h"
 
+struct FrameBufferCreateInfo {
+public:
+    int Width;
+    int Height;
+    bool UseDepthRenderBuffer;
+    int MultiSampleCount;
+    int RenderTargetCount;
+    bool* Borders;
+    GLenum* InternalFormats;
+    GLenum* Formats;
+    GLenum* Types;
+    GLenum* Attachments;
+
+    FrameBufferCreateInfo();
+};
+
 class FrameBuffer {
 private:
-    void Create(int width, int height, bool useDepthRenderbuffer, int multiSampleCounts, int RenderTargetCount,  bool *borders,
-                            GLenum *internalFormats, GLenum *formats, GLenum *types, GLenum *attachments);
-    int m_RenderTargetCount;
+    void Create();
     unsigned int* m_RendererId;
     unsigned int* m_IntermediateRendererId;
-    GLenum* m_InternalFormats;
-    GLenum* m_Formats;
-    GLenum* m_Types;
-    GLenum* m_Attachments;
-    int m_MultiSampleCount;
 
     unsigned int m_FrameBuffer;
     unsigned int m_IntermediateFrameBuffer;
 
-    int m_Width;
-    int m_Height;
+    FrameBufferCreateInfo m_FrameBufferCreateInfo;
 
 public:
-    FrameBuffer(int width, int height,bool useDepthRenderbuffer, int multiSampleCount, int RenderTargetCount,  bool* border, GLenum* internalFormat, GLenum* format, GLenum* type, GLenum* attachment);
-    FrameBuffer(int width, int height, bool useDepthRenderbuffer,int multiSampleCount,  bool border,  GLenum internalFormat,GLenum format, GLenum type, GLenum attachment);
+    explicit FrameBuffer(FrameBufferCreateInfo frameBufferCreateInfo);
 
     void BindAsFrameBuffer();
     void BindAsTexture(int frameBufferId, int slot);
