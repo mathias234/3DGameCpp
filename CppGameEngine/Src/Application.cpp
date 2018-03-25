@@ -71,6 +71,8 @@ int main()
 
     float halfShadowArea = 50;
 
+    int shadowQuality = 1024;
+
 
     GLFWwindow* window;
 
@@ -92,7 +94,11 @@ int main()
 	if (glewInit() != GLEW_OK)
 		std::cout << "ERROR!" << std::endl;
 
-	std::cout << glGetString(GL_VERSION) << std::endl;
+	std::cout << glGetString(GL_VERSION) << " : " << glGetString(GL_VENDOR) << " : " << glGetString(GL_RENDERER) << std::endl;
+
+    std::string glVersion = (const char*)glGetString(GL_VERSION);
+    std::string glVendor = (const char*)glGetString(GL_VENDOR);
+    std::string glRenderer = (const char*)glGetString(GL_RENDERER);
 
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -126,8 +132,8 @@ int main()
 
 
     FrameBufferCreateInfo nearShadowBufferCreateInfo;
-    nearShadowBufferCreateInfo.Width = 4096;
-    nearShadowBufferCreateInfo.Height = 4096;
+    nearShadowBufferCreateInfo.Width = shadowQuality;
+    nearShadowBufferCreateInfo.Height = shadowQuality;
     nearShadowBufferCreateInfo.UseDepthRenderBuffer = false;
     nearShadowBufferCreateInfo.Borders = new bool[1] {true};
     nearShadowBufferCreateInfo.InternalFormats = new GLenum[1] {GL_DEPTH_COMPONENT};
@@ -137,8 +143,8 @@ int main()
     FrameBuffer nearShadowBuffer = FrameBuffer(nearShadowBufferCreateInfo);
 
     FrameBufferCreateInfo farShadowBufferCreateInfo;
-    farShadowBufferCreateInfo.Width = 2048;
-    farShadowBufferCreateInfo.Height = 2048;
+    farShadowBufferCreateInfo.Width = shadowQuality;
+    farShadowBufferCreateInfo.Height = shadowQuality;
     farShadowBufferCreateInfo.UseDepthRenderBuffer = false;
     farShadowBufferCreateInfo.Borders = new bool[1] {true};
     farShadowBufferCreateInfo.InternalFormats = new GLenum[1] {GL_DEPTH_COMPONENT};
@@ -337,11 +343,25 @@ int main()
 
         ImGui::Begin("Tool", &show_demo_window, ImGuiWindowFlags_NoNav);
         {
-            static float f = 0.0f;
-            static int counter = 0;
+            ImGui::Text("Device info: ");
+            ImGui::Text(("    Version: " + glVersion).c_str());
+            ImGui::Text(("    Device: " + glRenderer).c_str());
+            ImGui::Text(("    Vendor: " + glVendor).c_str());
+
+
             ImGui::SliderFloat("Shadow Half Area", &halfShadowArea, 0.0f, 200.0f);
             ImGui::SliderFloat3("Light Direction", (float*)&directionalLightDir, 0, 360);
+            ImGui::SliderInt("Shadow quality", &shadowQuality, 64, 8192);
+            if(ImGui::Button("Apply shadow quality"))
+            {
+                farShadowBuffer.FrameBufferSettings.Width = shadowQuality;
+                farShadowBuffer.FrameBufferSettings.Height = shadowQuality;
+                farShadowBuffer.Reload();
 
+                nearShadowBuffer.FrameBufferSettings.Width = shadowQuality;
+                nearShadowBuffer.FrameBufferSettings.Height = shadowQuality;
+                nearShadowBuffer.Reload();
+            }
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         }
         ImGui::End();

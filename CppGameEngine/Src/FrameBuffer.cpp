@@ -6,20 +6,20 @@ void FrameBuffer::Create() {
     m_FrameBuffer = 0;
     m_RendererId = new unsigned int[1];
     m_IntermediateRendererId = new unsigned int[1];
-    GLCall(glGenTextures(m_FrameBufferCreateInfo.RenderTargetCount, m_RendererId));
-    GLCall(glGenTextures(m_FrameBufferCreateInfo.RenderTargetCount, m_IntermediateRendererId));
+    GLCall(glGenTextures(FrameBufferSettings.RenderTargetCount, m_RendererId));
+    GLCall(glGenTextures(FrameBufferSettings.RenderTargetCount, m_IntermediateRendererId));
 
     GLCall(glGenFramebuffers(1, &m_FrameBuffer));
-    if(m_FrameBufferCreateInfo.MultiSampleCount > 1)
+    if(FrameBufferSettings.MultiSampleCount > 1)
     {
         GLCall(glGenFramebuffers(1, &m_IntermediateFrameBuffer));
     }
 
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_FrameBuffer));
 
-    for (int i = 0; i < m_FrameBufferCreateInfo.RenderTargetCount; i++) {
+    for (int i = 0; i < FrameBufferSettings.RenderTargetCount; i++) {
         GLenum targetType = 0;
-        if(m_FrameBufferCreateInfo.MultiSampleCount > 1)
+        if(FrameBufferSettings.MultiSampleCount > 1)
             targetType = GL_TEXTURE_2D_MULTISAMPLE;
         else
             targetType = GL_TEXTURE_2D;
@@ -27,26 +27,26 @@ void FrameBuffer::Create() {
         GLCall(glBindTexture(targetType, m_RendererId[i]));
 
 
-        if(m_FrameBufferCreateInfo.MultiSampleCount > 1) {
+        if(FrameBufferSettings.MultiSampleCount > 1) {
             GLCall(glTexImage2DMultisample(targetType,
-                                           m_FrameBufferCreateInfo.MultiSampleCount,
-                                           m_FrameBufferCreateInfo.InternalFormats[i],
-                                           m_FrameBufferCreateInfo.Width,
-                                           m_FrameBufferCreateInfo.Height,
+                                           FrameBufferSettings.MultiSampleCount,
+                                           FrameBufferSettings.InternalFormats[i],
+                                           FrameBufferSettings.Width,
+                                           FrameBufferSettings.Height,
                                            GL_TRUE));
         }
         else {
             GLCall(glTexImage2D(targetType, 0,
-                                m_FrameBufferCreateInfo.InternalFormats[i],
-                                m_FrameBufferCreateInfo.Width,
-                                m_FrameBufferCreateInfo.Height,
+                                FrameBufferSettings.InternalFormats[i],
+                                FrameBufferSettings.Width,
+                                FrameBufferSettings.Height,
                                 0,
-                                m_FrameBufferCreateInfo.Formats[i],
-                                m_FrameBufferCreateInfo.Types[i],
+                                FrameBufferSettings.Formats[i],
+                                FrameBufferSettings.Types[i],
                                 nullptr));
         }
 
-        if(m_FrameBufferCreateInfo.MultiSampleCount <= 1) {
+        if(FrameBufferSettings.MultiSampleCount <= 1) {
             GLCall(glTexParameteri(targetType, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
             GLCall(glTexParameteri(targetType, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 
@@ -55,47 +55,47 @@ void FrameBuffer::Create() {
         }
 
         GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER,
-                                      m_FrameBufferCreateInfo.Attachments[i],
+                                      FrameBufferSettings.Attachments[i],
                                       targetType,
                                       m_RendererId[i],
                                       0));
 
-        if(m_FrameBufferCreateInfo.Borders[i]) {
+        if(FrameBufferSettings.Borders[i]) {
             float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
             GLCall(glTexParameterfv(targetType, GL_TEXTURE_BORDER_COLOR, borderColor));
         }
     }
 
-    if(m_FrameBufferCreateInfo.UseDepthRenderBuffer) {
+    if(FrameBufferSettings.UseDepthRenderBuffer) {
         unsigned int rboDepth;
         glGenRenderbuffers(1, &rboDepth);
         glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
 
-        if(m_FrameBufferCreateInfo.MultiSampleCount > 1) {
-            glRenderbufferStorageMultisample(GL_RENDERBUFFER, m_FrameBufferCreateInfo.MultiSampleCount, GL_DEPTH24_STENCIL8, m_FrameBufferCreateInfo.Width, m_FrameBufferCreateInfo.Height);
+        if(FrameBufferSettings.MultiSampleCount > 1) {
+            glRenderbufferStorageMultisample(GL_RENDERBUFFER, FrameBufferSettings.MultiSampleCount, GL_DEPTH24_STENCIL8, FrameBufferSettings.Width, FrameBufferSettings.Height);
         }
         else {
-            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, m_FrameBufferCreateInfo.Width, m_FrameBufferCreateInfo.Height);
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, FrameBufferSettings.Width, FrameBufferSettings.Height);
         }
 
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
     }
 
-    if(m_FrameBufferCreateInfo.MultiSampleCount > 1)
+    if(FrameBufferSettings.MultiSampleCount > 1)
     {
         GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_IntermediateFrameBuffer));
-        for (int i = 0; i < m_FrameBufferCreateInfo.RenderTargetCount; i++) {
+        for (int i = 0; i < FrameBufferSettings.RenderTargetCount; i++) {
             GLCall(glBindTexture(GL_TEXTURE_2D, m_IntermediateRendererId[i]));
 
 
             GLCall(glTexImage2D(GL_TEXTURE_2D,
                                 0,
-                                m_FrameBufferCreateInfo.InternalFormats[i],
-                                m_FrameBufferCreateInfo.Width,
-                                m_FrameBufferCreateInfo.Height,
+                                FrameBufferSettings.InternalFormats[i],
+                                FrameBufferSettings.Width,
+                                FrameBufferSettings.Height,
                                 0,
-                                m_FrameBufferCreateInfo.Formats[i],
-                                m_FrameBufferCreateInfo.Types[i],
+                                FrameBufferSettings.Formats[i],
+                                FrameBufferSettings.Types[i],
                                 nullptr));
 
             GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
@@ -104,9 +104,9 @@ void FrameBuffer::Create() {
             GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER));
             GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER));
 
-            GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, m_FrameBufferCreateInfo.Attachments[i], GL_TEXTURE_2D, m_IntermediateRendererId[i], 0));
+            GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, FrameBufferSettings.Attachments[i], GL_TEXTURE_2D, m_IntermediateRendererId[i], 0));
 
-            if(m_FrameBufferCreateInfo.Borders[i]) {
+            if(FrameBufferSettings.Borders[i]) {
                 float borderColor[] = { 1.0f, 0, 0, 1.0f };
                 GLCall(glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor));
             }
@@ -120,28 +120,49 @@ void FrameBuffer::Create() {
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 
-FrameBuffer::FrameBuffer(FrameBufferCreateInfo createInfo) {
-    m_FrameBufferCreateInfo = createInfo;
+void FrameBuffer::Destroy() {
+    glDeleteFramebuffers(1, &m_FrameBuffer);
+    glDeleteTextures(FrameBufferSettings.RenderTargetCount, m_RendererId);
+
+    if(FrameBufferSettings.MultiSampleCount > 1) {
+        glDeleteFramebuffers(1, &m_IntermediateFrameBuffer);
+        glDeleteTextures(FrameBufferSettings.RenderTargetCount, m_IntermediateRendererId);
+    }
+}
+
+void FrameBuffer::Reload() {
+    Destroy();
+
+    // Recreate using the already stored FrameBufferCreateInfo
     Create();
+}
+
+FrameBuffer::FrameBuffer(FrameBufferCreateInfo createInfo) {
+    FrameBufferSettings = createInfo;
+    Create();
+}
+
+FrameBuffer::~FrameBuffer() {
+    Destroy();
 }
 
 
 void FrameBuffer::BindAsFrameBuffer() {
     GLCall(glViewport(0, 0,
-                      m_FrameBufferCreateInfo.Width,
-                      m_FrameBufferCreateInfo.Height));
+                      FrameBufferSettings.Width,
+                      FrameBufferSettings.Height));
 
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_FrameBuffer));
 
     glDrawBuffers(
-            m_FrameBufferCreateInfo.RenderTargetCount,
-            m_FrameBufferCreateInfo.Attachments);
+            FrameBufferSettings.RenderTargetCount,
+            FrameBufferSettings.Attachments);
 }
 
 void FrameBuffer::BindAsTexture(int frameBufferId, int slot)
 {
 
-    if(m_FrameBufferCreateInfo.MultiSampleCount > 1)
+    if(FrameBufferSettings.MultiSampleCount > 1)
     {
         GLint currentFbo;
         glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentFbo);
@@ -149,11 +170,11 @@ void FrameBuffer::BindAsTexture(int frameBufferId, int slot)
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_IntermediateFrameBuffer);
 
         glBlitFramebuffer(0, 0,
-                          m_FrameBufferCreateInfo.Width,
-                          m_FrameBufferCreateInfo.Height,
+                          FrameBufferSettings.Width,
+                          FrameBufferSettings.Height,
                           0, 0,
-                          m_FrameBufferCreateInfo.Width,
-                          m_FrameBufferCreateInfo.Height,
+                          FrameBufferSettings.Width,
+                          FrameBufferSettings.Height,
                           GL_COLOR_BUFFER_BIT, GL_NEAREST);
 
         glBindFramebuffer(GL_FRAMEBUFFER, static_cast<GLuint>(currentFbo));

@@ -24,20 +24,27 @@ public:
 
 class FrameBuffer {
 private:
-    void Create();
     unsigned int* m_RendererId;
     unsigned int* m_IntermediateRendererId;
 
     unsigned int m_FrameBuffer;
     unsigned int m_IntermediateFrameBuffer;
 
-    FrameBufferCreateInfo m_FrameBufferCreateInfo;
-
+    void Create();
+    void Destroy();
 public:
+    FrameBufferCreateInfo FrameBufferSettings;
+
+
     explicit FrameBuffer(FrameBufferCreateInfo frameBufferCreateInfo);
+    ~FrameBuffer();
 
     void BindAsFrameBuffer();
     void BindAsTexture(int frameBufferId, int slot);
+
+
+    void Reload();
+
 };
 
 
