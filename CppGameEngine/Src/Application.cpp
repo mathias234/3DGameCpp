@@ -109,18 +109,27 @@ int main()
     InputManager::Init(window);
 
 
+    FrameBufferCreateInfo nearShadowBufferCreateInfo;
+    nearShadowBufferCreateInfo.Width = 4096;
+    nearShadowBufferCreateInfo.Height = 4096;
+    nearShadowBufferCreateInfo.UseDepthRenderBuffer = false;
+    nearShadowBufferCreateInfo.Borders = new bool[1] {true};
+    nearShadowBufferCreateInfo.InternalFormats = new GLenum[1] {GL_DEPTH_COMPONENT};
+    nearShadowBufferCreateInfo.Formats = new GLenum[1] {GL_DEPTH_COMPONENT};
+    nearShadowBufferCreateInfo.Types = new GLenum[1] {GL_FLOAT};
+    nearShadowBufferCreateInfo.Attachments = new GLenum[1] {GL_DEPTH_ATTACHMENT};
+    FrameBuffer nearShadowBuffer = FrameBuffer(nearShadowBufferCreateInfo);
 
-    FrameBufferCreateInfo depthBufferCreateInfo;
-    depthBufferCreateInfo.Width = 4096;
-    depthBufferCreateInfo.Height = 4096;
-    depthBufferCreateInfo.UseDepthRenderBuffer = false;
-    depthBufferCreateInfo.Borders = new bool[1] {true};
-    depthBufferCreateInfo.InternalFormats = new GLenum[1] {GL_DEPTH_COMPONENT};
-    depthBufferCreateInfo.Formats = new GLenum[1] {GL_DEPTH_COMPONENT};
-    depthBufferCreateInfo.Types = new GLenum[1] {GL_FLOAT};
-    depthBufferCreateInfo.Attachments = new GLenum[1] {GL_DEPTH_ATTACHMENT};
-    FrameBuffer depthBuffer = FrameBuffer(depthBufferCreateInfo);
-
+    FrameBufferCreateInfo farShadowBufferCreateInfo;
+    farShadowBufferCreateInfo.Width = 2048;
+    farShadowBufferCreateInfo.Height = 2048;
+    farShadowBufferCreateInfo.UseDepthRenderBuffer = false;
+    farShadowBufferCreateInfo.Borders = new bool[1] {true};
+    farShadowBufferCreateInfo.InternalFormats = new GLenum[1] {GL_DEPTH_COMPONENT};
+    farShadowBufferCreateInfo.Formats = new GLenum[1] {GL_DEPTH_COMPONENT};
+    farShadowBufferCreateInfo.Types = new GLenum[1] {GL_FLOAT};
+    farShadowBufferCreateInfo.Attachments = new GLenum[1] {GL_DEPTH_ATTACHMENT};
+    FrameBuffer farShadowBuffer = FrameBuffer(farShadowBufferCreateInfo);
 
     FrameBufferCreateInfo screenBufferCreateInfo;
     screenBufferCreateInfo.Width = winWidth;
@@ -133,7 +142,6 @@ int main()
     screenBufferCreateInfo.Formats = new GLenum[2] {GL_RGB, GL_RGB};
     screenBufferCreateInfo.Types = new GLenum[2] {GL_UNSIGNED_BYTE, GL_UNSIGNED_BYTE};
     screenBufferCreateInfo.Attachments = new GLenum[2] {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
-
     FrameBuffer screenBuffer = FrameBuffer(screenBufferCreateInfo);
 
     FrameBufferCreateInfo pingPongBuffersCreateInfo;
@@ -144,7 +152,6 @@ int main()
     pingPongBuffersCreateInfo.Formats = new GLenum[1] {GL_RGB};
     pingPongBuffersCreateInfo.Types = new GLenum[1] {GL_FLOAT};
     pingPongBuffersCreateInfo.Attachments = new GLenum[1] {GL_COLOR_ATTACHMENT0};
-
     FrameBuffer* pingPongBuffers = new FrameBuffer[2]{
             FrameBuffer(pingPongBuffersCreateInfo),
             FrameBuffer(pingPongBuffersCreateInfo),
@@ -156,13 +163,28 @@ int main()
 
     while (!glfwWindowShouldClose(window))
 	{
-
         if(InputManager::GetKey(GLFW_KEY_C)) {
+            halfShadowArea -= 0.05f;
+        }
+
+        if(InputManager::GetKey(GLFW_KEY_V)) {
+            halfShadowArea += 0.05f;
+        }
+
+
+        if(InputManager::GetKey(GLFW_KEY_UP)) {
             dirLight.SetRotation(dirLight.GetRotation() + Vector3f(0.01f, 0, 0));
         }
-        if(InputManager::GetKey(GLFW_KEY_V)) {
+        if(InputManager::GetKey(GLFW_KEY_DOWN)) {
             dirLight.SetRotation(dirLight.GetRotation() - Vector3f(0.01f, 0, 0));
         }
+        if(InputManager::GetKey(GLFW_KEY_RIGHT)) {
+            dirLight.SetRotation(dirLight.GetRotation() + Vector3f(0, 0.01f, 0));
+        }
+        if(InputManager::GetKey(GLFW_KEY_LEFT)) {
+            dirLight.SetRotation(dirLight.GetRotation() - Vector3f(0, 0.01f, 0));
+        }
+
 
         if(InputManager::GetKey(GLFW_KEY_Q)) {
             camera.Rotation -= Vector3f(0, 2, 0);
@@ -180,23 +202,23 @@ int main()
 
         if(InputManager::GetKey(GLFW_KEY_W))
         {
-            change.x -= cos(glm::radians(camera.Rotation.y + 90)) *speed;
-            change.z -= sin(glm::radians(camera.Rotation.y + 90)) *speed;
+            change.x -= cos(glm::radians(camera.Rotation.y + 90)) * speed;
+            change.z -= sin(glm::radians(camera.Rotation.y + 90)) * speed;
         }
         if(InputManager::GetKey(GLFW_KEY_S))
         {
-            change.x += cos(glm::radians(camera.Rotation.y + 90)) *speed;
-            change.z += sin(glm::radians(camera.Rotation.y + 90)) *speed;
+            change.x += cos(glm::radians(camera.Rotation.y + 90)) * speed;
+            change.z += sin(glm::radians(camera.Rotation.y + 90)) * speed;
         }
         if(InputManager::GetKey(GLFW_KEY_A))
         {
-            change.x += -cos(glm::radians(camera.Rotation.y)) *speed;
-            change.z += -sin(glm::radians(camera.Rotation.y)) *speed;
+            change.x += -cos(glm::radians(camera.Rotation.y)) * speed;
+            change.z += -sin(glm::radians(camera.Rotation.y)) * speed;
         }
         if(InputManager::GetKey(GLFW_KEY_D))
         {
-            change.x += cos(glm::radians(camera.Rotation.y)) *speed;
-            change.z += sin(glm::radians(camera.Rotation.y)) *speed;
+            change.x += cos(glm::radians(camera.Rotation.y)) * speed;
+            change.z += sin(glm::radians(camera.Rotation.y)) * speed;
         }
         camera.Position += change;
 
@@ -207,21 +229,22 @@ int main()
         /* Render Depth buffer */
         glEnable(GL_DEPTH_TEST);
 
-        depthBuffer.BindAsFrameBuffer();
+        nearShadowBuffer.BindAsFrameBuffer();
         glClear(GL_DEPTH_BUFFER_BIT);
 
 
-        glm::mat4 lightProjection = glm::ortho(-halfShadowArea, halfShadowArea, -halfShadowArea, halfShadowArea, -halfShadowArea, halfShadowArea);
+        glm::mat4 nearLightProj = glm::ortho(-halfShadowArea, halfShadowArea, -halfShadowArea, halfShadowArea, -halfShadowArea, halfShadowArea);
         Matrix4f lightView;
         lightView = glm::rotate(lightView, dirLight.GetRotation().x, { 1, 0, 0 });
         lightView = glm::rotate(lightView, dirLight.GetRotation().y, { 0, 1, 0 });
         lightView = glm::rotate(lightView, dirLight.GetRotation().z, { 0, 0, 1 });
         lightView = glm::translate(lightView, -camera.Position);
 
-        glm::mat4 lightSpaceMatrix = (lightProjection * lightView);
+        glm::mat4 nearLightSpaceMatrix = (nearLightProj * lightView);
 
+        /* Draw Near shadows */
         depthMapShader.Bind();
-        depthMapShader.SetMatrix4("u_LightSpaceMatrix", lightSpaceMatrix);
+        depthMapShader.SetMatrix4("u_LightSpaceMatrix", nearLightSpaceMatrix);
 
         Matrix4f matrix;
         matrix = glm::translate(matrix, {0,0,0});
@@ -231,13 +254,27 @@ int main()
 
         testModel->Draw(shader);
 
+        /* Draw Far shadows */
+        farShadowBuffer.BindAsFrameBuffer();
+        glClear(GL_DEPTH_BUFFER_BIT);
+
+        glm::mat4 farightProj = glm::ortho(-halfShadowArea * 5, halfShadowArea* 5, -halfShadowArea*5, halfShadowArea* 5, -halfShadowArea*5, halfShadowArea* 5);
+        glm::mat4 farLightSpaceMatrix = (farightProj * lightView);
+
+
+        depthMapShader.SetMatrix4("u_LightSpaceMatrix", farLightSpaceMatrix);
+
+        testModel->Draw(shader);
+
+
         /* Render Normal */
         screenBuffer.BindAsFrameBuffer();
         glClearColor(0, 0.5, 0.8, 1);
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
         shader.Bind();
-        shader.SetMatrix4("u_LightSpaceMatrix", lightSpaceMatrix);
+        shader.SetMatrix4("u_NearLightSpaceMatrix", nearLightSpaceMatrix);
+        shader.SetMatrix4("u_FarLightSpaceMatrix", farLightSpaceMatrix);
         shader.SetMatrix4("u_ViewMatrix", camera.GetViewMatrix());
 
 
@@ -250,7 +287,8 @@ int main()
         shader.SetFloat("u_SpecStrength", 0.5f);
         shader.SetFloat("u_SpecPow", 32);
         shader.SetFloat2("u_Tiling", {0.4f, 0.4f});
-        shader.SetTexture("u_ShadowMap", depthBuffer, 0);
+        shader.SetTexture("u_NearShadowMap", nearShadowBuffer, 0);
+        shader.SetTexture("u_FarShadowMap", farShadowBuffer, 0);
 
         shader.SetMatrix4("u_ModelMatrix", matrix);
 
@@ -283,7 +321,6 @@ int main()
         // clear all relevant buffers
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
         glClear(GL_COLOR_BUFFER_BIT);
-
 
         screenShader.Bind();
         screenShader.SetTexture("u_Scene", screenBuffer, 0);

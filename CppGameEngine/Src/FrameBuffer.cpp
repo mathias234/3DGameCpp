@@ -107,7 +107,7 @@ void FrameBuffer::Create() {
             GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, m_FrameBufferCreateInfo.Attachments[i], GL_TEXTURE_2D, m_IntermediateRendererId[i], 0));
 
             if(m_FrameBufferCreateInfo.Borders[i]) {
-                float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+                float borderColor[] = { 1.0f, 0, 0, 1.0f };
                 GLCall(glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor));
             }
         }
