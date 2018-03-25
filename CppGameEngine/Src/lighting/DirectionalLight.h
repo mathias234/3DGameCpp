@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include <Common.h>
-#include <Shader.h>
+#include "../Common.h"
+#include "../Shader.h"
 
 class DirectionalLight {
 public:

@@ -154,7 +154,7 @@ unsigned int Shader::CreateShader(const std::string& vertexShader, const std::st
 	return program;
 }
 
-void Shader::BindTexture(const std::string& uniformName, Texture& texture) {
+void Shader::SetTexture(const std::string &uniformName, Texture &texture) {
 	if(m_SamplerIdsMap.find(uniformName) == m_SamplerIdsMap.end()){
 		std::cout << "Unable to find sampler with name: " << uniformName << std::endl;
 		return;
@@ -192,6 +192,13 @@ void Shader::SetMatrix4(const std::string &name, Matrix4f value)
 	auto uniformLoc = GetUniformLocation(name);
 
 	GLCall(glUniformMatrix4fv(uniformLoc, 1, GL_FALSE, glm::value_ptr(value)));
+}
+
+void Shader::SetMatrix4(const std::string &name, float* value)
+{
+	auto uniformLoc = GetUniformLocation(name);
+
+	GLCall(glUniformMatrix4fv(uniformLoc, 1, GL_FALSE, value));
 }
 
 void Shader::SetFloat4(const std::string &name, Vector4f vec4)

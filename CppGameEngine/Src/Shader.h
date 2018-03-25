@@ -31,13 +31,14 @@ public:
 	~Shader();
 
 	void Reload();
-	void BindTexture(const std::string &uniformName, Texture& texture);
+	void SetTexture(const std::string &uniformName, Texture &texture);
 	void SetTexture(const std::string &uniformName, FrameBuffer &texture, int targetId);
 	void Bind() const;
 	void Unbind() const;
 
 	// Set uniforms
 	void SetMatrix4(const std::string &name, Matrix4f value);
+	void SetMatrix4(const std::string &name, float* value);
 	void SetFloat4(const std::string &name, Vector4f);
 	void SetFloat3(const std::string &name, Vector3f vec3);
 	void SetFloat2(const std::string &name, Vector2f value);

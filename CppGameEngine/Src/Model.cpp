@@ -2,9 +2,8 @@
 // Created by matha on 08/03/2018.
 //
 
-#include <vendor/tinyobjloader/tiny_obj_loader.h>
-#include "Model.h"
 #include "vendor/tinyobjloader/tiny_obj_loader.h"
+#include "Model.h"
 #include "Texture.h"
 std::map<std::string, Model*> Model::m_ModelCache;
 
@@ -56,25 +55,27 @@ Model *Model::GetModel(const std::string &filepath) {
 
             auto material = materials[shapes[s].mesh.material_ids[0]];
 
+            model->Material = new Material();
+
             if(materials[shapes[s].mesh.material_ids[0]].diffuse_texname != "") {
-                model->Material.Diffuse = new Texture("res/" + material.diffuse_texname);
+                model->Material->Diffuse = new Texture("res/" + material.diffuse_texname);
             }
             else {
-                model->Material.Diffuse = new Texture("res/defaultDiffuse.png");
+                model->Material->Diffuse = new Texture("res/defaultDiffuse.png");
             }
 
             if(materials[shapes[s].mesh.material_ids[0]].normal_texname != "") {
-                model->Material.NormalMap = new Texture("res/" + material.normal_texname);
+                model->Material->NormalMap = new Texture("res/" + material.normal_texname);
             }
             else {
-                model->Material.NormalMap = new Texture("res/defaultNormal.png");
+                model->Material->NormalMap = new Texture("res/defaultNormal.png");
             }
 
             if(materials[shapes[s].mesh.material_ids[0]].specular_texname != "") {
-                model->Material.SpecMap = new Texture("res/" + material.specular_texname);
+                model->Material->SpecMap = new Texture("res/" + material.specular_texname);
             }
             else {
-                model->Material.SpecMap = new Texture("res/defaultSpec.png");
+                model->Material->SpecMap = new Texture("res/defaultSpec.png");
             }
 
 
@@ -117,9 +118,9 @@ Model::~Model() {
 
 void Model::Draw(Shader& shader) const {
     for (int i = 0; i < m_Submeshes.size(); ++i) {
-        shader.BindTexture("u_Diffuse", *m_Submeshes[i]->Material.Diffuse);
-        shader.BindTexture("u_NormalMap", *m_Submeshes[i]->Material.NormalMap);
-        shader.BindTexture("u_SpecMap", *m_Submeshes[i]->Material.SpecMap);
+        shader.SetTexture("u_Diffuse", *m_Submeshes[i]->Material->Diffuse);
+        shader.SetTexture("u_NormalMap", *m_Submeshes[i]->Material->NormalMap);
+        shader.SetTexture("u_SpecMap", *m_Submeshes[i]->Material->SpecMap);
 
 
 
@@ -147,6 +148,14 @@ void Model::Draw(Shader& shader) const {
         GLCall(glDisableVertexAttribArray(2));
         GLCall(glDisableVertexAttribArray(3));
     }
+}
+
+Material *Model::GetMaterial(int submesh) {
+    return m_Submeshes[submesh]->Material;
+}
+
+int Model::SubmeshCount() {
+    return m_Submeshes.size();
 }
 
 void Submesh::RecalculateTangents(){

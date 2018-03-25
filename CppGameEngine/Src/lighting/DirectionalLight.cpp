@@ -2,7 +2,7 @@
 // Created by matha on 08/03/2018.
 //
 
-#include "Common.h"
+#include "../Common.h"
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include "DirectionalLight.h"

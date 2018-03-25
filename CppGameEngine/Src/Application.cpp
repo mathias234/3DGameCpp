@@ -3,15 +3,16 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/gtc/matrix_transform.hpp>
 #include "Common.h"
 #include "Camera.h"
 #include "Shader.h"
-#include <glm/gtc/matrix_transform.hpp>
-#include <lighting/DirectionalLight.h>
+#include "lighting/DirectionalLight.h"
 #include "vendor/physics/q3.h"
 #include "InputManager.h"
 #include "Renderer.h"
 #include "Model.h"
+#include "UIRenderer.h"
 
 
 q3Scene scene(1.0f / 60.0f);
@@ -93,20 +94,35 @@ int main()
 
 	std::cout << glGetString(GL_VERSION) << std::endl;
 
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    UIRenderer uiRenderer{};
+    uiRenderer.Init(window);
+
+    // Setup style
+    ImGui::StyleColorsClassic();
 
 
 
 	Camera camera;
 	camera.Position = { 0, 3, 0 };
 
-    Shader shader("res/Main.glsl");
-    Shader screenShader("res/FinalScreen.glsl");
-    Shader depthMapShader("res/DepthMap.glsl");
-    Shader blurShader("res/BlurShader.glsl");
+    Shader* shader = new Shader("res/Main.glsl");
+    Shader* screenShader = new Shader("res/FinalScreen.glsl");
+    Shader* depthMapShader = new Shader("res/DepthMap.glsl");
+    Shader* blurShader = new Shader("res/BlurShader.glsl");
 
     Model* testModel = Model::GetModel("res/test.obj");
 
+    Texture* texture = new Texture("res/textures/bricks_diff.jpg");
+
+    for (int j = 0; j < testModel->SubmeshCount(); ++j) {
+        testModel->GetMaterial(j)->Diffuse = texture;
+    }
+
+
     InputManager::Init(window);
+
 
 
     FrameBufferCreateInfo nearShadowBufferCreateInfo;
@@ -161,29 +177,14 @@ int main()
 
     DirectionalLight dirLight({1,1,1}, { glm::radians(170.0f), glm::radians(0.0f), glm::radians(0.0f) }, 0.5f, 0.6f);
 
+    bool show_demo_window = true;
+    Vector3f directionalLightDir = { glm::radians(170.0f), glm::radians(0.0f), glm::radians(0.0f) };
+
     while (!glfwWindowShouldClose(window))
 	{
-        if(InputManager::GetKey(GLFW_KEY_C)) {
-            halfShadowArea -= 0.05f;
-        }
+        glfwPollEvents();
 
-        if(InputManager::GetKey(GLFW_KEY_V)) {
-            halfShadowArea += 0.05f;
-        }
-
-
-        if(InputManager::GetKey(GLFW_KEY_UP)) {
-            dirLight.SetRotation(dirLight.GetRotation() + Vector3f(0.01f, 0, 0));
-        }
-        if(InputManager::GetKey(GLFW_KEY_DOWN)) {
-            dirLight.SetRotation(dirLight.GetRotation() - Vector3f(0.01f, 0, 0));
-        }
-        if(InputManager::GetKey(GLFW_KEY_RIGHT)) {
-            dirLight.SetRotation(dirLight.GetRotation() + Vector3f(0, 0.01f, 0));
-        }
-        if(InputManager::GetKey(GLFW_KEY_LEFT)) {
-            dirLight.SetRotation(dirLight.GetRotation() - Vector3f(0, 0.01f, 0));
-        }
+        dirLight.SetRotation(glm::radians(directionalLightDir));
 
 
         if(InputManager::GetKey(GLFW_KEY_Q)) {
@@ -194,7 +195,7 @@ int main()
         }
 
         if(InputManager::GetKeyDown(GLFW_KEY_R)) {
-            shader.Reload();
+            shader->Reload();
         }
 
         Vector3f change;
@@ -243,16 +244,16 @@ int main()
         glm::mat4 nearLightSpaceMatrix = (nearLightProj * lightView);
 
         /* Draw Near shadows */
-        depthMapShader.Bind();
-        depthMapShader.SetMatrix4("u_LightSpaceMatrix", nearLightSpaceMatrix);
+        depthMapShader->Bind();
+        depthMapShader->SetMatrix4("u_LightSpaceMatrix", nearLightSpaceMatrix);
 
         Matrix4f matrix;
         matrix = glm::translate(matrix, {0,0,0});
         matrix = glm::scale(matrix, { 1.0f,1.0f,1.0f });
         //matrix = glm::scale(matrix, { 1.0f,1.0f,1.0f });
-        depthMapShader.SetMatrix4("u_ModelMatrix", matrix);
+        depthMapShader->SetMatrix4("u_ModelMatrix", matrix);
 
-        testModel->Draw(shader);
+        testModel->Draw(*shader);
 
         /* Draw Far shadows */
         farShadowBuffer.BindAsFrameBuffer();
@@ -262,9 +263,9 @@ int main()
         glm::mat4 farLightSpaceMatrix = (farightProj * lightView);
 
 
-        depthMapShader.SetMatrix4("u_LightSpaceMatrix", farLightSpaceMatrix);
+        depthMapShader->SetMatrix4("u_LightSpaceMatrix", farLightSpaceMatrix);
 
-        testModel->Draw(shader);
+        testModel->Draw(*shader);
 
 
         /* Render Normal */
@@ -272,40 +273,40 @@ int main()
         glClearColor(0, 0.5, 0.8, 1);
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-        shader.Bind();
-        shader.SetMatrix4("u_NearLightSpaceMatrix", nearLightSpaceMatrix);
-        shader.SetMatrix4("u_FarLightSpaceMatrix", farLightSpaceMatrix);
-        shader.SetMatrix4("u_ViewMatrix", camera.GetViewMatrix());
+        shader->Bind();
+        shader->SetMatrix4("u_NearLightSpaceMatrix", nearLightSpaceMatrix);
+        shader->SetMatrix4("u_FarLightSpaceMatrix", farLightSpaceMatrix);
+        shader->SetMatrix4("u_ViewMatrix", camera.GetViewMatrix());
 
 
-        shader.SetMatrix4("u_ProjMatrix",
+        shader->SetMatrix4("u_ProjMatrix",
                           glm::perspective(glm::radians(60.0f), winWidth / (float) winHeight, 0.1f, 10000.0f));
-        shader.SetFloat3("u_ViewPos", camera.Position);
+        shader->SetFloat3("u_ViewPos", camera.Position);
 
-        dirLight.Bind(shader);
+        dirLight.Bind(*shader);
 
-        shader.SetFloat("u_SpecStrength", 0.5f);
-        shader.SetFloat("u_SpecPow", 32);
-        shader.SetFloat2("u_Tiling", {0.4f, 0.4f});
-        shader.SetTexture("u_NearShadowMap", nearShadowBuffer, 0);
-        shader.SetTexture("u_FarShadowMap", farShadowBuffer, 0);
+        shader->SetFloat("u_SpecStrength", 0.5f);
+        shader->SetFloat("u_SpecPow", 32);
+        shader->SetFloat2("u_Tiling", {0.4f, 0.4f});
+        shader->SetTexture("u_NearShadowMap", nearShadowBuffer, 0);
+        shader->SetTexture("u_FarShadowMap", farShadowBuffer, 0);
 
-        shader.SetMatrix4("u_ModelMatrix", matrix);
+        shader->SetMatrix4("u_ModelMatrix", matrix);
 
 
         /* TEMP */
-        testModel->Draw(shader);
+        testModel->Draw(*shader);
 
 
         /* Post Processing */
         bool horizontal = true, first_iteration = true;
         unsigned int amount = 10;
-        blurShader.Bind();
+        blurShader->Bind();
         for (unsigned int i = 0; i < amount; i++)
         {
             pingPongBuffers[horizontal].BindAsFrameBuffer();
-            blurShader.SetInt("u_Horizontal", horizontal);
-            blurShader.SetTexture("u_Image", first_iteration ? screenBuffer : pingPongBuffers[!horizontal],
+            blurShader->SetInt("u_Horizontal", horizontal);
+            blurShader->SetTexture("u_Image", first_iteration ? screenBuffer : pingPongBuffers[!horizontal],
                                   first_iteration ? 1 : 0);  // bind texture of other framebuffer (or screen if first iteration)
             RenderScreenQuad();
             horizontal = !horizontal;
@@ -322,19 +323,36 @@ int main()
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessery actually, since we won't be able to see behind the quad anyways)
         glClear(GL_COLOR_BUFFER_BIT);
 
-        screenShader.Bind();
-        screenShader.SetTexture("u_Scene", screenBuffer, 0);
-        screenShader.SetTexture("u_BloomBlur", pingPongBuffers[!horizontal], 0);
-        screenShader.SetInt("u_Bloom", (int) bloom);
-        screenShader.SetFloat("u_Exposure", exposure);
-        screenShader.SetFloat("u_Gamma", gamma);
+        screenShader->Bind();
+        screenShader->SetTexture("u_Scene", screenBuffer, 0);
+        screenShader->SetTexture("u_BloomBlur", pingPongBuffers[!horizontal], 0);
+        screenShader->SetInt("u_Bloom", (int) bloom);
+        screenShader->SetFloat("u_Exposure", exposure);
+        screenShader->SetFloat("u_Gamma", gamma);
         RenderScreenQuad();
 
-		InputManager::Update();
+
+		/* UI */
+        uiRenderer.NewFrame(window);
+
+        ImGui::Begin("Tool", &show_demo_window, ImGuiWindowFlags_NoNav);
+        {
+            static float f = 0.0f;
+            static int counter = 0;
+            ImGui::SliderFloat("Shadow Half Area", &halfShadowArea, 0.0f, 200.0f);
+            ImGui::SliderFloat3("Light Direction", (float*)&directionalLightDir, 0, 360);
+
+            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        }
+        ImGui::End();
 
 
-		glfwSwapBuffers(window);
-		glfwPollEvents();
+        ImGui::Render();
+        uiRenderer.RenderDrawData(ImGui::GetDrawData());
+
+        InputManager::Update();
+
+        glfwSwapBuffers(window);
 
 	}
 
