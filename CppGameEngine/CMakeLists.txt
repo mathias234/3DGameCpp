@@ -27,6 +27,7 @@ set(CPP_DIR_13 Src/vendor/tinyobjloader)
 set(CPP_DIR_14 Src/vendor/imgui)
 set(CPP_DIR_15 Src/vendor/imgui/misc/freetype)
 set(CPP_DIR_16 Src/vendor/imgui/misc/natvis)
+set(CPP_DIR_17 Src/vendor/tinydir)
 
 
 ############## CMake Project ################
@@ -66,6 +67,7 @@ file(GLOB SRC_FILES
         ${CPP_DIR_14}/*.*
         ${CPP_DIR_15}/*.*
         ${CPP_DIR_16}/*.*
+        ${CPP_DIR_17}/*.*
         )
 
 # Add executable to build.

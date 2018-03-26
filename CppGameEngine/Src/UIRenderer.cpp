@@ -123,7 +123,7 @@ void UIRenderer::Init(GLFWwindow* window) {
     InstallCallbacks(window);
 
 
-    m_FontShader = new Shader("res/FontShader.glsl");
+    m_FontShader = new Shader("res/ImGuiShader.glsl");
 
     glGenBuffers(1, &m_VboHandle);
     glGenBuffers(1, &m_ElementsHandle);

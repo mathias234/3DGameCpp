@@ -28,11 +28,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Model.cpp" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Model.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Src/Model.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="577">
-              <caret line="60" column="25" selection-start-line="60" selection-start-column="25" selection-end-line="60" selection-end-column="25" />
+            <state relative-caret-position="177">
+              <caret line="46" selection-start-line="46" selection-end-line="46" />
             </state>
           </provider>
         </entry>
@@ -40,17 +40,17 @@
       <file leaf-file-name="Model.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Src/Model.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="918">
-              <caret line="54" column="13" selection-start-line="54" selection-start-column="13" selection-end-line="54" selection-end-column="13" />
+            <state relative-caret-position="428">
+              <caret line="56" column="20" selection-start-line="56" selection-start-column="20" selection-end-line="56" selection-end-column="20" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Application.cpp" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Application.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Src/Application.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="109" column="29" selection-start-line="109" selection-start-column="29" selection-end-line="109" selection-end-column="29" />
+            <state relative-caret-position="326">
+              <caret line="404" column="31" selection-start-line="404" selection-start-column="31" selection-end-line="404" selection-end-column="31" />
               <folding>
                 <element signature="e#82#102#0" expanded="true" />
               </folding>
@@ -58,62 +58,102 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BlurShader.glsl" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/res/BlurShader.glsl">
+      <file leaf-file-name="DirectoryInspector.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Src/DirectoryInspector.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="731">
-              <caret line="43" column="29" selection-start-line="43" selection-start-column="29" selection-end-line="43" selection-end-column="29" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UIRenderer.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Src/UIRenderer.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="17" selection-start-line="17" selection-end-line="17" />
+            <state relative-caret-position="461">
+              <caret line="39" column="71" lean-forward="true" selection-start-line="39" selection-start-column="71" selection-end-line="39" selection-end-column="71" />
               <folding>
-                <element signature="e#56#79#0" expanded="true" />
+                <element signature="e#55#72#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UIRenderer.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Src/UIRenderer.cpp">
+      <file leaf-file-name="imgui_internal.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Src/vendor/imgui/imgui_internal.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1394">
-              <caret line="82" selection-start-line="82" selection-end-line="82" />
+            <state relative-caret-position="167">
+              <caret line="1007" column="12" selection-start-line="1007" selection-start-column="12" selection-end-line="1007" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="tinydir.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Src/vendor/tinydir/tinydir.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="13668">
+              <caret line="816" selection-start-line="816" selection-end-line="816" />
               <folding>
-                <element signature="e#42#63#0" expanded="true" />
+                <element signature="e#1511#1526#0" expanded="true" />
+                <element signature="e#1582#1598#0" expanded="true" />
+                <element signature="e#1607#1625#0" expanded="true" />
+                <element signature="e#1682#1809#0" expanded="true" />
+                <element signature="e#1816#1836#0" expanded="true" />
+                <element signature="e#2334#2588#0" expanded="true" />
+                <element signature="e#2726#2960#0" expanded="true" />
+                <element signature="e#2995#3025#0" expanded="true" />
+                <element signature="e#3050#3117#0" expanded="true" />
+                <element signature="e#3297#3335#0" expanded="true" />
+                <element signature="e#3445#3481#0" expanded="true" />
+                <element signature="e#3597#4423#0" expanded="true" />
+                <element signature="e#4592#4758#0" expanded="true" />
+                <element signature="e#5151#5210#0" expanded="true" />
+                <element signature="e#5632#5647#0" expanded="true" />
+                <element signature="e#5838#5869#0" expanded="true" />
+                <element signature="e#5963#5991#0" expanded="true" />
+                <element signature="e#6809#6875#0" expanded="true" />
+                <element signature="e#7040#7082#0" expanded="true" />
+                <element signature="e#7100#7144#0" expanded="true" />
+                <element signature="e#7508#7539#0" expanded="true" />
+                <element signature="e#7599#7615#0" expanded="true" />
+                <element signature="e#7971#8353#0" expanded="true" />
+                <element signature="e#8607#8916#0" expanded="true" />
+                <element signature="e#10694#10791#0" expanded="true" />
+                <element signature="e#10936#10978#0" expanded="true" />
+                <element signature="e#11223#11264#0" expanded="true" />
+                <element signature="e#11350#11459#0" expanded="true" />
+                <element signature="e#11556#11697#0" expanded="true" />
+                <element signature="e#11922#11958#0" expanded="true" />
+                <element signature="e#12146#12163#0" expanded="true" />
+                <element signature="e#12442#12459#0" expanded="true" />
+                <element signature="e#12753#12770#0" expanded="true" />
+                <element signature="e#12942#12951#0" expanded="true" />
+                <element signature="e#13115#13171#0" expanded="true" />
+                <element signature="e#13263#13843#0" expanded="true" />
+                <element signature="e#15663#15845#0" expanded="true" />
+                <element signature="e#16133#16250#0" expanded="true" />
+                <element signature="e#16778#16925#0" expanded="true" />
+                <element signature="e#18265#19561#0" expanded="true" />
+                <element signature="e#19630#19651#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Shader.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Src/Shader.h">
+      <file leaf-file-name="CMakeLists.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="867">
-              <caret line="51" selection-start-line="51" selection-end-line="51" />
+            <state relative-caret-position="484">
+              <caret line="69" column="20" selection-start-line="69" selection-start-column="20" selection-end-line="69" selection-end-column="20" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Shader.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Src/Shader.cpp">
+      <file leaf-file-name="Texture.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Src/Texture.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2652">
-              <caret line="156" column="16" selection-start-line="156" selection-start-column="16" selection-end-line="156" selection-end-column="16" />
+            <state relative-caret-position="51">
+              <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Main.glsl" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/res/Main.glsl">
+      <file leaf-file-name="Texture.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Src/Texture.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1385">
-              <caret line="127" selection-start-line="127" selection-end-line="127" />
+            <state relative-caret-position="716">
+              <caret line="58" column="24" selection-start-line="58" selection-start-column="24" selection-end-line="58" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -167,9 +207,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Src/Player.h" />
-        <option value="$PROJECT_DIR$/Src/InputManager.cpp" />
-        <option value="$PROJECT_DIR$/Src/WindowRenderTarget.h" />
         <option value="$PROJECT_DIR$/Src/WindowRenderTarget.cpp" />
         <option value="$PROJECT_DIR$/res/DepthMap.shader" />
         <option value="$PROJECT_DIR$/Src/RenderTarget.h" />
@@ -197,27 +234,30 @@
         <option value="$PROJECT_DIR$/res/test.mtl" />
         <option value="$PROJECT_DIR$/Src/Raycast.h" />
         <option value="$PROJECT_DIR$/Src/Common.h" />
-        <option value="$PROJECT_DIR$/Src/Texture.cpp" />
         <option value="$PROJECT_DIR$/Src/EnumMapper.h" />
         <option value="$PROJECT_DIR$/Src/vendor/imgui/misc/freetype/imgui_freetype.h" />
         <option value="$PROJECT_DIR$/Src/lighting/DirectionalLight.h" />
         <option value="$PROJECT_DIR$/Src/lighting/DirectionalLight.cpp" />
         <option value="$PROJECT_DIR$/Src/vendor/imgui/misc/freetype/imgui_freetype.cpp" />
         <option value="$PROJECT_DIR$/Src/vendor/imgui/misc/fonts/binary_to_compressed_c.cpp" />
-        <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/Src/Shader.h" />
         <option value="$PROJECT_DIR$/res/FontShader.glsl" />
         <option value="$PROJECT_DIR$/Src/UIRenderer.h" />
         <option value="$PROJECT_DIR$/Src/UIRenderer.cpp" />
         <option value="$PROJECT_DIR$/Src/Shader.cpp" />
-        <option value="$PROJECT_DIR$/Src/Model.h" />
-        <option value="$PROJECT_DIR$/Src/Model.cpp" />
         <option value="$PROJECT_DIR$/Src/FrameBuffer.h" />
         <option value="$PROJECT_DIR$/Src/FrameBuffer.cpp" />
         <option value="$PROJECT_DIR$/res/FinalScreen.glsl" />
         <option value="$PROJECT_DIR$/res/Main.glsl" />
         <option value="$PROJECT_DIR$/res/BlurShader.glsl" />
+        <option value="$PROJECT_DIR$/Src/Texture.h" />
+        <option value="$PROJECT_DIR$/Src/Texture.cpp" />
+        <option value="$PROJECT_DIR$/Src/vendor/tinydir/tinydir.h" />
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/Src/Application.cpp" />
+        <option value="$PROJECT_DIR$/Src/Model.h" />
+        <option value="$PROJECT_DIR$/Src/Model.cpp" />
+        <option value="$PROJECT_DIR$/Src/DirectoryInspector.h" />
       </list>
     </option>
   </component>
@@ -240,6 +280,67 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="3DGameEngine" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CppGameEngine" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="3DGameEngine" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CppGameEngine" type="462c0819:PsiDirectoryNode" />
+              <item name="res" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="3DGameEngine" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CppGameEngine" type="462c0819:PsiDirectoryNode" />
+              <item name="res" type="462c0819:PsiDirectoryNode" />
+              <item name="textures" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="3DGameEngine" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CppGameEngine" type="462c0819:PsiDirectoryNode" />
+              <item name="Src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="3DGameEngine" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CppGameEngine" type="462c0819:PsiDirectoryNode" />
+              <item name="Src" type="462c0819:PsiDirectoryNode" />
+              <item name="lighting" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="3DGameEngine" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CppGameEngine" type="462c0819:PsiDirectoryNode" />
+              <item name="Src" type="462c0819:PsiDirectoryNode" />
+              <item name="vendor" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="3DGameEngine" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CppGameEngine" type="462c0819:PsiDirectoryNode" />
+              <item name="Src" type="462c0819:PsiDirectoryNode" />
+              <item name="vendor" type="462c0819:PsiDirectoryNode" />
+              <item name="Binary-Reader-Writer" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="3DGameEngine" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CppGameEngine" type="462c0819:PsiDirectoryNode" />
+              <item name="Src" type="462c0819:PsiDirectoryNode" />
+              <item name="vendor" type="462c0819:PsiDirectoryNode" />
+              <item name="imgui" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="3DGameEngine" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CppGameEngine" type="462c0819:PsiDirectoryNode" />
+              <item name="Src" type="462c0819:PsiDirectoryNode" />
+              <item name="vendor" type="462c0819:PsiDirectoryNode" />
+              <item name="imgui" type="462c0819:PsiDirectoryNode" />
+              <item name="misc" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="Scope">
         <subPane subId="Project Source Files">
           <expand>
@@ -371,67 +472,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="3DGameEngine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CppGameEngine" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="3DGameEngine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CppGameEngine" type="462c0819:PsiDirectoryNode" />
-              <item name="res" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="3DGameEngine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CppGameEngine" type="462c0819:PsiDirectoryNode" />
-              <item name="res" type="462c0819:PsiDirectoryNode" />
-              <item name="textures" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="3DGameEngine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CppGameEngine" type="462c0819:PsiDirectoryNode" />
-              <item name="Src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="3DGameEngine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CppGameEngine" type="462c0819:PsiDirectoryNode" />
-              <item name="Src" type="462c0819:PsiDirectoryNode" />
-              <item name="lighting" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="3DGameEngine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CppGameEngine" type="462c0819:PsiDirectoryNode" />
-              <item name="Src" type="462c0819:PsiDirectoryNode" />
-              <item name="vendor" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="3DGameEngine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CppGameEngine" type="462c0819:PsiDirectoryNode" />
-              <item name="Src" type="462c0819:PsiDirectoryNode" />
-              <item name="vendor" type="462c0819:PsiDirectoryNode" />
-              <item name="Binary-Reader-Writer" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="3DGameEngine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CppGameEngine" type="462c0819:PsiDirectoryNode" />
-              <item name="Src" type="462c0819:PsiDirectoryNode" />
-              <item name="vendor" type="462c0819:PsiDirectoryNode" />
-              <item name="imgui" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="3DGameEngine" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CppGameEngine" type="462c0819:PsiDirectoryNode" />
-              <item name="Src" type="462c0819:PsiDirectoryNode" />
-              <item name="vendor" type="462c0819:PsiDirectoryNode" />
-              <item name="imgui" type="462c0819:PsiDirectoryNode" />
-              <item name="misc" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -525,45 +565,34 @@
       <workItem from="1521971839929" duration="9213000" />
       <workItem from="1522014423920" duration="419000" />
       <workItem from="1522014954270" duration="6646000" />
+      <workItem from="1522096287045" duration="3051000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="169716000" />
+    <option name="totallyTimeSpent" value="172855000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18854167" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18802084" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Messages" order="7" weight="0.30704522" />
+      <window_info anchor="bottom" id="Messages" order="7" sideWeight="0.49804688" weight="0.30389065" />
       <window_info anchor="bottom" id="CMake" order="11" weight="0.3280757" />
-      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.50208336" side_tool="true" weight="0.3396425" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5019531" side_tool="true" weight="0.3048276" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32597265" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.32948583" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49791667" visible="true" weight="0.3396425" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49791667" weight="0.33859095" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="10" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3922187" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.3911672" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18815105" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="9" weight="0.32948583" />
-      <window_info anchor="bottom" id="CMake" order="11" weight="0.3280757" />
-      <window_info anchor="bottom" id="Terminal" order="10" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39172414" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49791667" weight="0.33931035" />
-      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5019531" side_tool="true" weight="0.3048276" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32689655" />
-      <window_info anchor="bottom" id="Messages" order="7" sideWeight="0.49804688" weight="0.3048276" />
-      <window_info id="Favorites" order="2" side_tool="true" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -583,9 +612,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Src/ObjReader.cpp" />
-    <entry file="file://$PROJECT_DIR$/Src/test.cpp" />
-    <entry file="file://$PROJECT_DIR$/Src/test.h" />
     <entry file="file://$PROJECT_DIR$/Src/vendor/stb_image/stb_image.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-324">
@@ -765,13 +791,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/res/FontShader.glsl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="20" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Src/Shader.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="867">
@@ -779,34 +798,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Src/Texture.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="28" column="9" selection-start-line="28" selection-start-column="9" selection-end-line="28" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Src/UIRenderer.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1394">
-          <caret line="82" selection-start-line="82" selection-end-line="82" />
-          <folding>
-            <element signature="e#42#63#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Src/vendor/imgui/imgui.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="21758">
           <caret line="989" column="25" selection-start-line="989" selection-start-column="25" selection-end-line="989" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1496">
-          <caret line="68" selection-start-line="68" selection-end-line="68" />
         </state>
       </provider>
     </entry>
@@ -824,11 +819,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Src/Texture.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-94" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Src/UIRenderer.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
@@ -836,13 +826,6 @@
           <folding>
             <element signature="e#56#79#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Src/Model.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="918">
-          <caret line="54" column="13" selection-start-line="54" selection-start-column="13" selection-end-line="54" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -867,19 +850,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Src/imgui_memory_editor.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
-          <caret line="305" selection-start-line="305" selection-end-line="305" />
-          <folding>
-            <element signature="e#6897#6921#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Src/imgui_memory_editor.h" />
     <entry file="file://$PROJECT_DIR$/res/Main.glsl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1385">
+        <state relative-caret-position="2159">
           <caret line="127" selection-start-line="127" selection-end-line="127" />
         </state>
       </provider>
@@ -891,20 +865,132 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Src/Model.cpp">
+    <entry file="file://$PROJECT_DIR$/res/ImGuiShader.glsl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="577">
-          <caret line="60" column="25" selection-start-line="60" selection-start-column="25" selection-end-line="60" selection-end-column="25" />
+        <state relative-caret-position="85">
+          <caret line="5" column="20" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Src/Texture.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="716">
+          <caret line="58" column="24" selection-start-line="58" selection-start-column="24" selection-end-line="58" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Src/vendor/tinydir/tinydir.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="13668">
+          <caret line="816" selection-start-line="816" selection-end-line="816" />
+          <folding>
+            <element signature="e#1511#1526#0" expanded="true" />
+            <element signature="e#1582#1598#0" expanded="true" />
+            <element signature="e#1607#1625#0" expanded="true" />
+            <element signature="e#1682#1809#0" expanded="true" />
+            <element signature="e#1816#1836#0" expanded="true" />
+            <element signature="e#2334#2588#0" expanded="true" />
+            <element signature="e#2726#2960#0" expanded="true" />
+            <element signature="e#2995#3025#0" expanded="true" />
+            <element signature="e#3050#3117#0" expanded="true" />
+            <element signature="e#3297#3335#0" expanded="true" />
+            <element signature="e#3445#3481#0" expanded="true" />
+            <element signature="e#3597#4423#0" expanded="true" />
+            <element signature="e#4592#4758#0" expanded="true" />
+            <element signature="e#5151#5210#0" expanded="true" />
+            <element signature="e#5632#5647#0" expanded="true" />
+            <element signature="e#5838#5869#0" expanded="true" />
+            <element signature="e#5963#5991#0" expanded="true" />
+            <element signature="e#6809#6875#0" expanded="true" />
+            <element signature="e#7040#7082#0" expanded="true" />
+            <element signature="e#7100#7144#0" expanded="true" />
+            <element signature="e#7508#7539#0" expanded="true" />
+            <element signature="e#7599#7615#0" expanded="true" />
+            <element signature="e#7971#8353#0" expanded="true" />
+            <element signature="e#8607#8916#0" expanded="true" />
+            <element signature="e#10694#10791#0" expanded="true" />
+            <element signature="e#10936#10978#0" expanded="true" />
+            <element signature="e#11223#11264#0" expanded="true" />
+            <element signature="e#11350#11459#0" expanded="true" />
+            <element signature="e#11556#11697#0" expanded="true" />
+            <element signature="e#11922#11958#0" expanded="true" />
+            <element signature="e#12146#12163#0" expanded="true" />
+            <element signature="e#12442#12459#0" expanded="true" />
+            <element signature="e#12753#12770#0" expanded="true" />
+            <element signature="e#12942#12951#0" expanded="true" />
+            <element signature="e#13115#13171#0" expanded="true" />
+            <element signature="e#13263#13843#0" expanded="true" />
+            <element signature="e#15663#15845#0" expanded="true" />
+            <element signature="e#16133#16250#0" expanded="true" />
+            <element signature="e#16778#16925#0" expanded="true" />
+            <element signature="e#18265#19561#0" expanded="true" />
+            <element signature="e#19630#19651#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="484">
+          <caret line="69" column="20" selection-start-line="69" selection-start-column="20" selection-end-line="69" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Src/UIRenderer.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="316">
+          <caret line="256" column="17" selection-start-line="256" selection-start-column="17" selection-end-line="256" selection-end-column="17" />
+          <folding>
+            <element signature="e#42#63#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Src/vendor/imgui/imgui_internal.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="167">
+          <caret line="1007" column="12" selection-start-line="1007" selection-start-column="12" selection-end-line="1007" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Src/Texture.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Src/Model.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="428">
+          <caret line="56" column="20" selection-start-line="56" selection-start-column="20" selection-end-line="56" selection-end-column="20" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Src/Application.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="109" column="29" selection-start-line="109" selection-start-column="29" selection-end-line="109" selection-end-column="29" />
+        <state relative-caret-position="326">
+          <caret line="404" column="31" selection-start-line="404" selection-start-column="31" selection-end-line="404" selection-end-column="31" />
           <folding>
             <element signature="e#82#102#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Src/DirectoryInspector.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="461">
+          <caret line="39" column="71" lean-forward="true" selection-start-line="39" selection-start-column="71" selection-end-line="39" selection-end-column="71" />
+          <folding>
+            <element signature="e#55#72#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Src/Model.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="46" selection-start-line="46" selection-end-line="46" />
         </state>
       </provider>
     </entry>

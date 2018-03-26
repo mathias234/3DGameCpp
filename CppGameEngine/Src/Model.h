@@ -31,6 +31,7 @@ public:
 
 struct Submesh {
 public:
+    std::string name;
     unsigned int m_Vbo, m_Ibo, m_IndexCount;
     Material* Material;
     std::vector<Vertex> Vertices;
@@ -53,6 +54,8 @@ public:
     void Draw(Shader& shader) const;
 
     Material* GetMaterial(int submesh);
+    Submesh* GetSubmesh(int submesh);
+
     int SubmeshCount();
 };
 

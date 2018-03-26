@@ -13,6 +13,9 @@
 #include "Renderer.h"
 #include "Model.h"
 #include "UIRenderer.h"
+#include "vendor/tinydir/tinydir.h"
+#include "DirectoryInspector.h"
+#include <experimental/filesystem>
 
 q3Scene scene(1.0f / 60.0f);
 
@@ -187,6 +190,8 @@ int main() {
     float directionalLightStrength = 1;
     float ambientStrength = 0.6f;
 
+    DirectoryInspector dirInspec;
+
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
@@ -353,7 +358,7 @@ int main() {
         /* UI */
         uiRenderer.NewFrame(window);
 
-        ImGui::Begin("Tool", &show_demo_window, ImGuiWindowFlags_NoNav);
+        ImGui::Begin("Settings", &show_demo_window, ImGuiWindowFlags_NoNav);
         {
             ImGui::Text("Device info: ");
             ImGui::Text(("    Version: " + glVersion).c_str());
@@ -390,6 +395,8 @@ int main() {
                         ImGui::GetIO().Framerate);
         }
         ImGui::End();
+
+        dirInspec.Draw(testModel);
 
 
         ImGui::Render();

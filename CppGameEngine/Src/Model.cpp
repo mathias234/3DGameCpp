@@ -57,6 +57,8 @@ Model *Model::GetModel(const std::string &filepath) {
 
             model->Material = new Material();
 
+            model->name = shapes[s].name;
+
             if(materials[shapes[s].mesh.material_ids[0]].diffuse_texname != "") {
                 model->Material->Diffuse = new Texture("res/" + material.diffuse_texname);
             }
@@ -156,6 +158,10 @@ Material *Model::GetMaterial(int submesh) {
 
 int Model::SubmeshCount() {
     return m_Submeshes.size();
+}
+
+Submesh *Model::GetSubmesh(int submesh) {
+    return m_Submeshes[submesh];
 }
 
 void Submesh::RecalculateTangents(){
