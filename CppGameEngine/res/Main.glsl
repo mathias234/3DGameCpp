@@ -179,7 +179,7 @@ void main()
 
 	outColor = vec4(lighting, 1.0);
 
-    float brightness = dot(outColor.rgb, vec3(0.2126, 0.7152, 0.0722));
+    float brightness = dot(outColor.rgb, vec3(0.2126, 0.7152, 0.0722)) / 2;
 
     if(brightness > 0.5)
         brightColor = vec4(outColor.rgb, 1.0);

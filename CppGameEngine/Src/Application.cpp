@@ -66,6 +66,7 @@ int main()
     int multiSampleCount = 4;
 
     bool bloom = true;
+    int bloomAmount = 2;
     float exposure = 1.0f;
     float gamma = 1.4f;
 
@@ -318,12 +319,12 @@ int main()
 
         bool horizontal = true, first_iteration = true;
         if(usePostProcessing) {
-            unsigned int amount = 10;
             blurShader->Bind();
-            for (unsigned int i = 0; i < amount; i++)
+            for (unsigned int i = 0; i < 2; i++)
             {
                 pingPongBuffers[horizontal].BindAsFrameBuffer();
                 blurShader->SetInt("u_Horizontal", horizontal);
+                blurShader->SetInt("u_BlurAmount", bloomAmount);
                 blurShader->SetTexture("u_Image", first_iteration ? screenBuffer : pingPongBuffers[!horizontal],
                                       first_iteration ? 1 : 0);  // bind texture of other framebuffer (or screen if first iteration)
                 RenderScreenQuad();
@@ -378,10 +379,13 @@ int main()
                     nearShadowBuffer.FrameBufferSettings.Height = shadowQuality;
                     nearShadowBuffer.Reload();
                 }
-
-                ImGui::Checkbox("Use Post Processing", &usePostProcessing);
-
             }
+
+            ImGui::Checkbox("Use Post Processing", &usePostProcessing);
+            if(usePostProcessing) {
+                ImGui::SliderInt("Bloom amount", &bloomAmount, 0, 50);
+            }
+
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         }
         ImGui::End();

@@ -33,6 +33,7 @@ void main()
     vec3 bloomColor = texture(u_BloomBlur, texCoords).rgb;
     if(u_Bloom)
         hdrColor += bloomColor; // additive blending
+
     // tone mapping
     vec3 result = vec3(1.0) - exp(-hdrColor * u_Exposure);
     // also gamma correct while we're at it
