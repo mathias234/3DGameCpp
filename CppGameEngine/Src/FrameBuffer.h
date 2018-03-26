@@ -42,9 +42,7 @@ public:
     void BindAsFrameBuffer();
     void BindAsTexture(int frameBufferId, int slot);
 
-
     void Reload();
-
 };
 
 

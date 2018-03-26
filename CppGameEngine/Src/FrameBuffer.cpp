@@ -169,13 +169,19 @@ void FrameBuffer::BindAsTexture(int frameBufferId, int slot)
         glBindFramebuffer(GL_READ_FRAMEBUFFER, m_FrameBuffer);
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_IntermediateFrameBuffer);
 
-        glBlitFramebuffer(0, 0,
-                          FrameBufferSettings.Width,
-                          FrameBufferSettings.Height,
-                          0, 0,
-                          FrameBufferSettings.Width,
-                          FrameBufferSettings.Height,
-                          GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        for (int i = 0; i < FrameBufferSettings.RenderTargetCount; ++i) {
+            glReadBuffer(GL_COLOR_ATTACHMENT0 + i);
+            glDrawBuffer(GL_COLOR_ATTACHMENT0 + i);
+            glBlitFramebuffer(0, 0,
+                              FrameBufferSettings.Width,
+                              FrameBufferSettings.Height,
+                              0, 0,
+                              FrameBufferSettings.Width,
+                              FrameBufferSettings.Height,
+                              GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        }
+
+
 
         glBindFramebuffer(GL_FRAMEBUFFER, static_cast<GLuint>(currentFbo));
         GLCall(glActiveTexture(GL_TEXTURE0 + slot));

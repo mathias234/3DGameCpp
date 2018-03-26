@@ -72,7 +72,8 @@ int main()
     float halfShadowArea = 50;
 
     int shadowQuality = 1024;
-
+    bool useShadows = true;
+    bool usePostProcessing = false;
 
     GLFWwindow* window;
 
@@ -89,7 +90,6 @@ int main()
 	}
 
 	glfwMakeContextCurrent(window);
-	glfwSwapInterval(1);
 
 	if (glewInit() != GLEW_OK)
 		std::cout << "ERROR!" << std::endl;
@@ -233,11 +233,10 @@ int main()
 
         Renderer::Start3D();
 
-        /* Render Depth buffer */
-        glEnable(GL_DEPTH_TEST);
-
-        nearShadowBuffer.BindAsFrameBuffer();
-        glClear(GL_DEPTH_BUFFER_BIT);
+        Matrix4f testModelMatrix;
+        testModelMatrix = glm::translate(testModelMatrix, {0,0,0});
+        testModelMatrix = glm::scale(testModelMatrix, { 1.0f,1.0f,1.0f });
+        //matrix = glm::scale(matrix, { 1.0f,1.0f,1.0f });
 
 
         glm::mat4 nearLightProj = glm::ortho(-halfShadowArea, halfShadowArea, -halfShadowArea, halfShadowArea, -halfShadowArea, halfShadowArea);
@@ -248,31 +247,35 @@ int main()
         lightView = glm::translate(lightView, -camera.Position);
 
         glm::mat4 nearLightSpaceMatrix = (nearLightProj * lightView);
-
-        /* Draw Near shadows */
-        depthMapShader->Bind();
-        depthMapShader->SetMatrix4("u_LightSpaceMatrix", nearLightSpaceMatrix);
-
-        Matrix4f matrix;
-        matrix = glm::translate(matrix, {0,0,0});
-        matrix = glm::scale(matrix, { 1.0f,1.0f,1.0f });
-        //matrix = glm::scale(matrix, { 1.0f,1.0f,1.0f });
-        depthMapShader->SetMatrix4("u_ModelMatrix", matrix);
-
-        testModel->Draw(*shader);
-
-        /* Draw Far shadows */
-        farShadowBuffer.BindAsFrameBuffer();
-        glClear(GL_DEPTH_BUFFER_BIT);
-
         glm::mat4 farightProj = glm::ortho(-halfShadowArea * 5, halfShadowArea* 5, -halfShadowArea*5, halfShadowArea* 5, -halfShadowArea*5, halfShadowArea* 5);
         glm::mat4 farLightSpaceMatrix = (farightProj * lightView);
 
+        glEnable(GL_DEPTH_TEST);
 
-        depthMapShader->SetMatrix4("u_LightSpaceMatrix", farLightSpaceMatrix);
+        // Render shadow buffers
+        if(useShadows) {
+            /* Render Depth buffer */
+            nearShadowBuffer.BindAsFrameBuffer();
+            glClear(GL_DEPTH_BUFFER_BIT);
 
-        testModel->Draw(*shader);
+            /* Draw Near shadows */
+            depthMapShader->Bind();
+            depthMapShader->SetMatrix4("u_LightSpaceMatrix", nearLightSpaceMatrix);
 
+
+            depthMapShader->SetMatrix4("u_ModelMatrix", testModelMatrix);
+
+            testModel->Draw(*shader);
+
+            /* Draw Far shadows */
+            farShadowBuffer.BindAsFrameBuffer();
+            glClear(GL_DEPTH_BUFFER_BIT);
+
+
+            depthMapShader->SetMatrix4("u_LightSpaceMatrix", farLightSpaceMatrix);
+
+            testModel->Draw(*shader);
+        }
 
         /* Render Normal */
         screenBuffer.BindAsFrameBuffer();
@@ -294,10 +297,11 @@ int main()
         shader->SetFloat("u_SpecStrength", 0.5f);
         shader->SetFloat("u_SpecPow", 32);
         shader->SetFloat2("u_Tiling", {0.4f, 0.4f});
+        shader->SetInt("u_UseShadows", useShadows);
         shader->SetTexture("u_NearShadowMap", nearShadowBuffer, 0);
         shader->SetTexture("u_FarShadowMap", farShadowBuffer, 0);
 
-        shader->SetMatrix4("u_ModelMatrix", matrix);
+        shader->SetMatrix4("u_ModelMatrix", testModelMatrix);
 
 
         /* TEMP */
@@ -305,21 +309,29 @@ int main()
 
 
         /* Post Processing */
-        bool horizontal = true, first_iteration = true;
-        unsigned int amount = 10;
-        blurShader->Bind();
-        for (unsigned int i = 0; i < amount; i++)
-        {
-            pingPongBuffers[horizontal].BindAsFrameBuffer();
-            blurShader->SetInt("u_Horizontal", horizontal);
-            blurShader->SetTexture("u_Image", first_iteration ? screenBuffer : pingPongBuffers[!horizontal],
-                                  first_iteration ? 1 : 0);  // bind texture of other framebuffer (or screen if first iteration)
-            RenderScreenQuad();
-            horizontal = !horizontal;
-            if (first_iteration)
-                first_iteration = false;
-        }
+        pingPongBuffers[0].BindAsFrameBuffer();
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        pingPongBuffers[1].BindAsFrameBuffer();
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
 
+        bool horizontal = true, first_iteration = true;
+        if(usePostProcessing) {
+            unsigned int amount = 10;
+            blurShader->Bind();
+            for (unsigned int i = 0; i < amount; i++)
+            {
+                pingPongBuffers[horizontal].BindAsFrameBuffer();
+                blurShader->SetInt("u_Horizontal", horizontal);
+                blurShader->SetTexture("u_Image", first_iteration ? screenBuffer : pingPongBuffers[!horizontal],
+                                      first_iteration ? 1 : 0);  // bind texture of other framebuffer (or screen if first iteration)
+                RenderScreenQuad();
+                horizontal = !horizontal;
+                if (first_iteration)
+                    first_iteration = false;
+            }
+        }
 
         /* draw on screen */
         glDisable(GL_DEPTH_TEST);
@@ -351,16 +363,24 @@ int main()
 
             ImGui::SliderFloat("Shadow Half Area", &halfShadowArea, 0.0f, 200.0f);
             ImGui::SliderFloat3("Light Direction", (float*)&directionalLightDir, 0, 360);
-            ImGui::SliderInt("Shadow quality", &shadowQuality, 64, 8192);
-            if(ImGui::Button("Apply shadow quality"))
-            {
-                farShadowBuffer.FrameBufferSettings.Width = shadowQuality;
-                farShadowBuffer.FrameBufferSettings.Height = shadowQuality;
-                farShadowBuffer.Reload();
 
-                nearShadowBuffer.FrameBufferSettings.Width = shadowQuality;
-                nearShadowBuffer.FrameBufferSettings.Height = shadowQuality;
-                nearShadowBuffer.Reload();
+            ImGui::Checkbox("Use Shadows", &useShadows);
+            if(useShadows)
+            {
+                ImGui::SliderInt("Shadow quality", &shadowQuality, 64, 8192);
+                if(ImGui::Button("Apply shadow quality"))
+                {
+                    farShadowBuffer.FrameBufferSettings.Width = shadowQuality;
+                    farShadowBuffer.FrameBufferSettings.Height = shadowQuality;
+                    farShadowBuffer.Reload();
+
+                    nearShadowBuffer.FrameBufferSettings.Width = shadowQuality;
+                    nearShadowBuffer.FrameBufferSettings.Height = shadowQuality;
+                    nearShadowBuffer.Reload();
+                }
+
+                ImGui::Checkbox("Use Post Processing", &usePostProcessing);
+
             }
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         }

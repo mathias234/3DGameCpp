@@ -57,6 +57,7 @@ struct DirectionalLight {
 uniform DirectionalLight u_DirectionalLight;
 uniform sampler2D u_NearShadowMap;
 uniform sampler2D u_FarShadowMap;
+uniform bool u_UseShadows;
 
 uniform sampler2D u_Diffuse;
 
@@ -166,14 +167,20 @@ void main()
     vec3 specular = (u_SpecStrength * spec) * vec3(specTex);
 
     // calc shadows
-    float shadow = ShadowCalculation(fragPosNearLightSpace, u_NearShadowMap);
+
+
+    float shadow = 0;
+    if(u_UseShadows)
+    {
+        shadow = ShadowCalculation(fragPosNearLightSpace, u_NearShadowMap);
+    }
 
     vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;
 
 	outColor = vec4(lighting, 1.0);
 
-
     float brightness = dot(outColor.rgb, vec3(0.2126, 0.7152, 0.0722));
+
     if(brightness > 0.5)
         brightColor = vec4(outColor.rgb, 1.0);
     else
