@@ -15,6 +15,7 @@
 #include "UIRenderer.h"
 #include "vendor/tinydir/tinydir.h"
 #include "DirectoryInspector.h"
+#include "GameObject.h"
 #include <experimental/filesystem>
 
 q3Scene scene(1.0f / 60.0f);
@@ -59,6 +60,8 @@ void RenderScreenQuad() {
     GLCall(glDisableVertexAttribArray(0));
     GLCall(glDisableVertexAttribArray(1));
 }
+
+std::vector<GameObject*> gameObjects;
 
 int main() {
     /* Settings */
@@ -123,12 +126,16 @@ int main() {
 
     Model *testModel = Model::GetModel("res/test.obj");
 
-    Texture *texture = new Texture("res/textures/bricks_diff.jpg");
+    Texture *texture = Texture::GetTexture("res/textures/bricks_diff.jpg");
 
     for (int j = 0; j < testModel->SubmeshCount(); ++j) {
         testModel->GetMaterial(j)->Diffuse = texture;
     }
 
+
+
+    GameObject* TestObj = new GameObject({0,0,0}, {1,1,1}, Quaternion(Vector3f(0,0,0)), testModel);
+    gameObjects.push_back(TestObj);
 
     InputManager::Init(window);
 
@@ -234,13 +241,6 @@ int main() {
 
         scene.Step();
 
-        Renderer::Start3D();
-
-        Matrix4f testModelMatrix;
-        testModelMatrix = glm::translate(testModelMatrix, {0, 0, 0});
-        testModelMatrix = glm::scale(testModelMatrix, {1.0f, 1.0f, 1.0f});
-        //matrix = glm::scale(matrix, { 1.0f,1.0f,1.0f });
-
 
         glm::mat4 nearLightProj = glm::ortho(-halfShadowArea, halfShadowArea, -halfShadowArea, halfShadowArea,
                                              -halfShadowArea, halfShadowArea);
@@ -267,11 +267,9 @@ int main() {
             depthMapShader->Bind();
             depthMapShader->SetMatrix4("u_LightSpaceMatrix", nearLightSpaceMatrix);
 
-
-            depthMapShader->SetMatrix4("u_ModelMatrix", testModelMatrix);
-
-            testModel->Draw(*shader);
-
+            for (int j = 0; j < gameObjects.size(); ++j) {
+                gameObjects[j]->Draw(*depthMapShader);
+            }
             /* Draw Far shadows */
             farShadowBuffer.BindAsFrameBuffer();
             glClear(GL_DEPTH_BUFFER_BIT);
@@ -279,7 +277,9 @@ int main() {
 
             depthMapShader->SetMatrix4("u_LightSpaceMatrix", farLightSpaceMatrix);
 
-            testModel->Draw(*shader);
+            for (int j = 0; j < gameObjects.size(); ++j) {
+                gameObjects[j]->Draw(*depthMapShader);
+            }
         }
 
         /* Render Normal */
@@ -306,12 +306,10 @@ int main() {
         shader->SetTexture("u_NearShadowMap", nearShadowBuffer, 0);
         shader->SetTexture("u_FarShadowMap", farShadowBuffer, 0);
 
-        shader->SetMatrix4("u_ModelMatrix", testModelMatrix);
 
-
-        /* TEMP */
-        testModel->Draw(*shader);
-
+        for (int j = 0; j < gameObjects.size(); ++j) {
+            gameObjects[j]->Draw(*shader);
+        }
 
         /* Post Processing */
         pingPongBuffers[0].BindAsFrameBuffer();
@@ -396,7 +394,7 @@ int main() {
         }
         ImGui::End();
 
-        dirInspec.Draw(testModel);
+        dirInspec.Draw(gameObjects);
 
 
         ImGui::Render();

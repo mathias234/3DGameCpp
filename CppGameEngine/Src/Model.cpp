@@ -60,24 +60,24 @@ Model *Model::GetModel(const std::string &filepath) {
             model->name = shapes[s].name;
 
             if(materials[shapes[s].mesh.material_ids[0]].diffuse_texname != "") {
-                model->Material->Diffuse = new Texture("res/" + material.diffuse_texname);
+                model->Material->Diffuse = Texture::GetTexture("res/" + material.diffuse_texname);
             }
             else {
-                model->Material->Diffuse = new Texture("res/defaultDiffuse.png");
+                model->Material->Diffuse =Texture::GetTexture("res/defaultDiffuse.png");
             }
 
             if(materials[shapes[s].mesh.material_ids[0]].normal_texname != "") {
-                model->Material->NormalMap = new Texture("res/" + material.normal_texname);
+                model->Material->NormalMap = Texture::GetTexture("res/" + material.normal_texname);
             }
             else {
-                model->Material->NormalMap = new Texture("res/defaultNormal.png");
+                model->Material->NormalMap = Texture::GetTexture("res/defaultNormal.png");
             }
 
             if(materials[shapes[s].mesh.material_ids[0]].specular_texname != "") {
-                model->Material->SpecMap = new Texture("res/" + material.specular_texname);
+                model->Material->SpecMap = Texture::GetTexture("res/" + material.specular_texname);
             }
             else {
-                model->Material->SpecMap = new Texture("res/defaultSpec.png");
+                model->Material->SpecMap = Texture::GetTexture("res/defaultSpec.png");
             }
 
 
@@ -203,4 +203,8 @@ Vertex::Vertex(Vector3f position, Vector3f normal, Vector2f texCoord, Vector3f t
     Normal = normal;
     TexCoord = texCoord;
     Tangent = tangent;
+}
+
+Material::Material() {
+
 }
