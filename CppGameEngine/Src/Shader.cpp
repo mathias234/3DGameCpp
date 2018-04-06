@@ -156,7 +156,6 @@ unsigned int Shader::CreateShader(const std::string& vertexShader, const std::st
 
 void Shader::SetTexture(const std::string &uniformName, Texture &texture) {
 	if(m_SamplerIdsMap.find(uniformName) == m_SamplerIdsMap.end()){
-		std::cout << "Unable to find sampler with name: " << uniformName << std::endl;
 		return;
 	}
 
@@ -166,7 +165,6 @@ void Shader::SetTexture(const std::string &uniformName, Texture &texture) {
 
 void Shader::SetTexture(const std::string &uniformName, FrameBuffer &texture, int targetId) {
 	if(m_SamplerIdsMap.find(uniformName) == m_SamplerIdsMap.end()){
-		std::cout << "Unable to find sampler with name: " << uniformName << std::endl;
 		return;
 	}
 

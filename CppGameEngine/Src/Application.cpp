@@ -3,7 +3,6 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <glm/gtc/matrix_transform.hpp>
 #include "Common.h"
 #include "Camera.h"
 #include "Shader.h"
@@ -21,6 +20,68 @@
 q3Scene scene(1.0f / 60.0f);
 
 unsigned int quadVAO, quadVBO;
+
+int winWidth = 1920;
+int winHeight = 1080;
+int shadowQuality = 8192;
+
+int multiSampleCount = 4;
+
+FrameBuffer* nearShadowBuffer;
+FrameBuffer* farShadowBuffer;
+FrameBuffer* screenBuffer;
+FrameBuffer* pingPongBuffers;
+
+void SetupFramebuffers() {
+    FrameBufferCreateInfo nearShadowBufferCreateInfo;
+    nearShadowBufferCreateInfo.Width = shadowQuality;
+    nearShadowBufferCreateInfo.Height = shadowQuality;
+    nearShadowBufferCreateInfo.UseDepthRenderBuffer = false;
+    nearShadowBufferCreateInfo.Borders = new bool[1]{true};
+    nearShadowBufferCreateInfo.InternalFormats = new GLenum[1]{GL_DEPTH_COMPONENT};
+    nearShadowBufferCreateInfo.Formats = new GLenum[1]{GL_DEPTH_COMPONENT};
+    nearShadowBufferCreateInfo.Types = new GLenum[1]{GL_FLOAT};
+    nearShadowBufferCreateInfo.Attachments = new GLenum[1]{GL_DEPTH_ATTACHMENT};
+    nearShadowBuffer = new FrameBuffer(nearShadowBufferCreateInfo);
+
+    FrameBufferCreateInfo farShadowBufferCreateInfo;
+    farShadowBufferCreateInfo.Width = shadowQuality;
+    farShadowBufferCreateInfo.Height = shadowQuality;
+    farShadowBufferCreateInfo.UseDepthRenderBuffer = false;
+    farShadowBufferCreateInfo.Borders = new bool[1]{true};
+    farShadowBufferCreateInfo.InternalFormats = new GLenum[1]{GL_DEPTH_COMPONENT};
+    farShadowBufferCreateInfo.Formats = new GLenum[1]{GL_DEPTH_COMPONENT};
+    farShadowBufferCreateInfo.Types = new GLenum[1]{GL_FLOAT};
+    farShadowBufferCreateInfo.Attachments = new GLenum[1]{GL_DEPTH_ATTACHMENT};
+    farShadowBuffer = new FrameBuffer(farShadowBufferCreateInfo);
+
+    FrameBufferCreateInfo screenBufferCreateInfo;
+    screenBufferCreateInfo.Width = winWidth;
+    screenBufferCreateInfo.Height = winHeight;
+    screenBufferCreateInfo.UseDepthRenderBuffer = true;
+    screenBufferCreateInfo.MultiSampleCount = multiSampleCount;
+    screenBufferCreateInfo.RenderTargetCount = 2;
+    screenBufferCreateInfo.Borders = new bool[2]{false, false};
+    screenBufferCreateInfo.InternalFormats = new GLenum[2]{GL_RGBA16F, GL_RGBA16F};
+    screenBufferCreateInfo.Formats = new GLenum[2]{GL_RGB, GL_RGB};
+    screenBufferCreateInfo.Types = new GLenum[2]{GL_UNSIGNED_BYTE, GL_UNSIGNED_BYTE};
+    screenBufferCreateInfo.Attachments = new GLenum[2]{GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
+    screenBuffer = new FrameBuffer(screenBufferCreateInfo);
+
+    FrameBufferCreateInfo pingPongBuffersCreateInfo;
+    pingPongBuffersCreateInfo.Width = winWidth;
+    pingPongBuffersCreateInfo.Height = winHeight;
+    pingPongBuffersCreateInfo.UseDepthRenderBuffer = false;
+    pingPongBuffersCreateInfo.InternalFormats = new GLenum[1]{GL_RGB16F};
+    pingPongBuffersCreateInfo.Formats = new GLenum[1]{GL_RGB};
+    pingPongBuffersCreateInfo.Types = new GLenum[1]{GL_FLOAT};
+    pingPongBuffersCreateInfo.Attachments = new GLenum[1]{GL_COLOR_ATTACHMENT0};
+
+    pingPongBuffers = new FrameBuffer[2]{
+            FrameBuffer(pingPongBuffersCreateInfo),
+            FrameBuffer(pingPongBuffersCreateInfo),
+    };
+}
 
 void RenderScreenQuad() {
     if (quadVAO == 0) {
@@ -65,10 +126,7 @@ std::vector<GameObject*> gameObjects;
 
 int main() {
     /* Settings */
-    int winWidth = 1920;
-    int winHeight = 1080;
 
-    int multiSampleCount = 4;
 
     bool bloom = true;
     int bloomAmount = 15;
@@ -77,7 +135,6 @@ int main() {
 
     float halfShadowArea = 20;
 
-    int shadowQuality = 8192;
     bool useShadows = true;
     bool usePostProcessing = true;
 
@@ -108,13 +165,18 @@ int main() {
 
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
-    (void) io;
+
     UIRenderer uiRenderer{};
     uiRenderer.Init(window);
 
     // Setup style
     ImGui::StyleColorsDark();
 
+    ImGuiStyle& style = ImGui::GetStyle();
+
+    style.WindowRounding = 0;
+
+    SetupFramebuffers();
 
     Camera camera;
     camera.Position = {0, 3, 0};
@@ -138,55 +200,6 @@ int main() {
     gameObjects.push_back(TestObj);
 
     InputManager::Init(window);
-
-
-    FrameBufferCreateInfo nearShadowBufferCreateInfo;
-    nearShadowBufferCreateInfo.Width = shadowQuality;
-    nearShadowBufferCreateInfo.Height = shadowQuality;
-    nearShadowBufferCreateInfo.UseDepthRenderBuffer = false;
-    nearShadowBufferCreateInfo.Borders = new bool[1]{true};
-    nearShadowBufferCreateInfo.InternalFormats = new GLenum[1]{GL_DEPTH_COMPONENT};
-    nearShadowBufferCreateInfo.Formats = new GLenum[1]{GL_DEPTH_COMPONENT};
-    nearShadowBufferCreateInfo.Types = new GLenum[1]{GL_FLOAT};
-    nearShadowBufferCreateInfo.Attachments = new GLenum[1]{GL_DEPTH_ATTACHMENT};
-    FrameBuffer nearShadowBuffer = FrameBuffer(nearShadowBufferCreateInfo);
-
-    FrameBufferCreateInfo farShadowBufferCreateInfo;
-    farShadowBufferCreateInfo.Width = shadowQuality;
-    farShadowBufferCreateInfo.Height = shadowQuality;
-    farShadowBufferCreateInfo.UseDepthRenderBuffer = false;
-    farShadowBufferCreateInfo.Borders = new bool[1]{true};
-    farShadowBufferCreateInfo.InternalFormats = new GLenum[1]{GL_DEPTH_COMPONENT};
-    farShadowBufferCreateInfo.Formats = new GLenum[1]{GL_DEPTH_COMPONENT};
-    farShadowBufferCreateInfo.Types = new GLenum[1]{GL_FLOAT};
-    farShadowBufferCreateInfo.Attachments = new GLenum[1]{GL_DEPTH_ATTACHMENT};
-    FrameBuffer farShadowBuffer = FrameBuffer(farShadowBufferCreateInfo);
-
-    FrameBufferCreateInfo screenBufferCreateInfo;
-    screenBufferCreateInfo.Width = winWidth;
-    screenBufferCreateInfo.Height = winHeight;
-    screenBufferCreateInfo.UseDepthRenderBuffer = true;
-    screenBufferCreateInfo.MultiSampleCount = multiSampleCount;
-    screenBufferCreateInfo.RenderTargetCount = 2;
-    screenBufferCreateInfo.Borders = new bool[2]{false, false};
-    screenBufferCreateInfo.InternalFormats = new GLenum[2]{GL_RGBA16F, GL_RGBA16F};
-    screenBufferCreateInfo.Formats = new GLenum[2]{GL_RGB, GL_RGB};
-    screenBufferCreateInfo.Types = new GLenum[2]{GL_UNSIGNED_BYTE, GL_UNSIGNED_BYTE};
-    screenBufferCreateInfo.Attachments = new GLenum[2]{GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
-    FrameBuffer screenBuffer = FrameBuffer(screenBufferCreateInfo);
-
-    FrameBufferCreateInfo pingPongBuffersCreateInfo;
-    pingPongBuffersCreateInfo.Width = winWidth;
-    pingPongBuffersCreateInfo.Height = winHeight;
-    pingPongBuffersCreateInfo.UseDepthRenderBuffer = false;
-    pingPongBuffersCreateInfo.InternalFormats = new GLenum[1]{GL_RGB16F};
-    pingPongBuffersCreateInfo.Formats = new GLenum[1]{GL_RGB};
-    pingPongBuffersCreateInfo.Types = new GLenum[1]{GL_FLOAT};
-    pingPongBuffersCreateInfo.Attachments = new GLenum[1]{GL_COLOR_ATTACHMENT0};
-    FrameBuffer *pingPongBuffers = new FrameBuffer[2]{
-            FrameBuffer(pingPongBuffersCreateInfo),
-            FrameBuffer(pingPongBuffersCreateInfo),
-    };
 
     glEnable(GL_MULTISAMPLE);
 
@@ -244,10 +257,8 @@ int main() {
 
         glm::mat4 nearLightProj = glm::ortho(-halfShadowArea, halfShadowArea, -halfShadowArea, halfShadowArea,
                                              -halfShadowArea, halfShadowArea);
-        Matrix4f lightView;
-        lightView = glm::rotate(lightView, dirLight.GetRotation().x, {1, 0, 0});
-        lightView = glm::rotate(lightView, dirLight.GetRotation().y, {0, 1, 0});
-        lightView = glm::rotate(lightView, dirLight.GetRotation().z, {0, 0, 1});
+
+        Matrix4f lightView = dirLight.GetLightMatrix();
         lightView = glm::translate(lightView, -camera.Position);
 
         glm::mat4 nearLightSpaceMatrix = (nearLightProj * lightView);
@@ -260,7 +271,7 @@ int main() {
         // Render shadow buffers
         if (useShadows) {
             /* Render Depth buffer */
-            nearShadowBuffer.BindAsFrameBuffer();
+            nearShadowBuffer->BindAsFrameBuffer();
             glClear(GL_DEPTH_BUFFER_BIT);
 
             /* Draw Near shadows */
@@ -271,7 +282,7 @@ int main() {
                 gameObjects[j]->Draw(*depthMapShader);
             }
             /* Draw Far shadows */
-            farShadowBuffer.BindAsFrameBuffer();
+            farShadowBuffer->BindAsFrameBuffer();
             glClear(GL_DEPTH_BUFFER_BIT);
 
 
@@ -283,7 +294,7 @@ int main() {
         }
 
         /* Render Normal */
-        screenBuffer.BindAsFrameBuffer();
+        screenBuffer->BindAsFrameBuffer();
         glClearColor(0, 0.5, 0.8, 1);
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
@@ -294,17 +305,18 @@ int main() {
 
 
         shader->SetMatrix4("u_ProjMatrix",
-                           glm::perspective(glm::radians(60.0f), winWidth / (float) winHeight, 0.1f, 10000.0f));
+                           glm::perspective(glm::radians(60.0f), winWidth / (float) winHeight, 0.1f, 1000.0f));
+
         shader->SetFloat3("u_ViewPos", camera.Position);
 
         dirLight.Bind(*shader);
 
-        shader->SetFloat("u_SpecStrength", 0.5f);
+        shader->SetFloat("u_SpecStrength", 4.5f);
         shader->SetFloat("u_SpecPow", 32);
         shader->SetFloat2("u_Tiling", {1.0f, 1.0f});
         shader->SetInt("u_UseShadows", useShadows);
-        shader->SetTexture("u_NearShadowMap", nearShadowBuffer, 0);
-        shader->SetTexture("u_FarShadowMap", farShadowBuffer, 0);
+        shader->SetTexture("u_NearShadowMap", *nearShadowBuffer, 0);
+        shader->SetTexture("u_FarShadowMap", *farShadowBuffer, 0);
 
 
         for (int j = 0; j < gameObjects.size(); ++j) {
@@ -325,7 +337,7 @@ int main() {
             for (unsigned int i = 0; i < bloomAmount; i++) {
                 pingPongBuffers[horizontal].BindAsFrameBuffer();
                 blurShader->SetInt("u_Horizontal", horizontal);
-                blurShader->SetTexture("u_Image", first_iteration ? screenBuffer : pingPongBuffers[!horizontal],
+                blurShader->SetTexture("u_Image", first_iteration ? *screenBuffer : pingPongBuffers[!horizontal],
                                        first_iteration ? 1
                                                        : 0);  // bind texture of other framebuffer (or screen if first iteration)
                 RenderScreenQuad();
@@ -345,7 +357,7 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         screenShader->Bind();
-        screenShader->SetTexture("u_Scene", screenBuffer, 0);
+        screenShader->SetTexture("u_Scene", *screenBuffer, 0);
         screenShader->SetTexture("u_BloomBlur", pingPongBuffers[!horizontal], 0);
         screenShader->SetInt("u_Bloom", (int) bloom);
         screenShader->SetFloat("u_Exposure", exposure);
@@ -374,13 +386,13 @@ int main() {
             if (useShadows) {
                 ImGui::SliderInt("Shadow quality", &shadowQuality, 64, 8192);
                 if (ImGui::Button("Apply shadow quality")) {
-                    farShadowBuffer.FrameBufferSettings.Width = shadowQuality;
-                    farShadowBuffer.FrameBufferSettings.Height = shadowQuality;
-                    farShadowBuffer.Reload();
+                    farShadowBuffer->FrameBufferSettings.Width = shadowQuality;
+                    farShadowBuffer->FrameBufferSettings.Height = shadowQuality;
+                    farShadowBuffer->Reload();
 
-                    nearShadowBuffer.FrameBufferSettings.Width = shadowQuality;
-                    nearShadowBuffer.FrameBufferSettings.Height = shadowQuality;
-                    nearShadowBuffer.Reload();
+                    nearShadowBuffer->FrameBufferSettings.Width = shadowQuality;
+                    nearShadowBuffer->FrameBufferSettings.Height = shadowQuality;
+                    nearShadowBuffer->Reload();
                 }
             }
 
@@ -395,7 +407,6 @@ int main() {
         ImGui::End();
 
         dirInspec.Draw(gameObjects);
-
 
         ImGui::Render();
         uiRenderer.RenderDrawData(ImGui::GetDrawData());

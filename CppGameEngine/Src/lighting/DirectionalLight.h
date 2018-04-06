@@ -29,6 +29,8 @@ public:
     float GetDiffuseIntensity() const;
     void SetDiffuseIntensity(float m_DiffuseIntensity);
 
+    Matrix4f GetLightMatrix() const;
+
 
 
 private:

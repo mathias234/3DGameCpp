@@ -3,8 +3,7 @@
 //
 
 #include "../Common.h"
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
+
 #include "DirectionalLight.h"
 
 DirectionalLight::DirectionalLight(Vector3f color, Vector3f rotation, float ambientIntensity, float diffuseIntensity) {
@@ -65,5 +64,14 @@ float DirectionalLight::GetDiffuseIntensity() const {
 
 void DirectionalLight::SetDiffuseIntensity(float m_DiffuseIntensity) {
     DirectionalLight::m_DiffuseIntensity = m_DiffuseIntensity;
+}
+
+Matrix4f DirectionalLight::GetLightMatrix() const {
+    Matrix4f lightMatrix;
+    lightMatrix = glm::rotate(lightMatrix, GetRotation().x, {1, 0, 0});
+    lightMatrix = glm::rotate(lightMatrix, GetRotation().y, {0, 1, 0});
+    lightMatrix = glm::rotate(lightMatrix, GetRotation().z, {0, 0, 1});
+
+    return lightMatrix;
 }
 

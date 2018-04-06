@@ -161,6 +161,11 @@ void FrameBuffer::BindAsFrameBuffer() {
 
 void FrameBuffer::BindAsTexture(int frameBufferId, int slot)
 {
+    if(frameBufferId > FrameBufferSettings.RenderTargetCount)
+    {
+        printf("[ERROR:FrameBuffer::BindAsTexture]: frameBufferId is greater then render target count");
+        return;
+    }
 
     if(FrameBufferSettings.MultiSampleCount > 1)
     {
