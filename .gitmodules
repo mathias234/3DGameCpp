@@ -1,6 +1,12 @@
-[submodule "Dependencies/GLFW"]
-	path = Dependencies/GLFW
+[submodule "Dependencies/glfw"]
+	path = Dependencies/glfw
 	url = https://github.com/glfw/glfw
 [submodule "Dependencies/glm"]
 	path = Dependencies/glm
 	url = https://github.com/g-truc/glm
+[submodule "Dependencies/glew"]
+	path = Dependencies/glew
+	url = https://github.com/nigels-com/glew
+[submodule "Dependencies/freetype2"]
+	path = Dependencies/freetype2
+	url = https://git.sv.nongnu.org/r/freetype/freetype2.git
