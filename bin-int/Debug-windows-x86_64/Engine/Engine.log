@@ -1,7 +1,0 @@
-﻿  Application.cpp
-F:\dev\_CPP\3DGameCpp\Engine\Src\vendor\tinydir\tinydir.h(48,1): warning C4005:  'WIN32_LEAN_AND_MEAN': macro redefinition
-F:\dev\_CPP\3DGameCpp\Dependencies\Glad\include\glad\glad.h(33): message :  see previous definition of 'WIN32_LEAN_AND_MEAN'
-F:\dev\_CPP\3DGameCpp\Engine\Src\DirectoryInspector.h(61,1): warning C4312:  'type cast': conversion from 'unsigned int' to 'ImTextureID' of greater size
-F:\dev\_CPP\3DGameCpp\Engine\Src\Application.cpp(300,36): warning C4305:  'argument': truncation from 'double' to 'GLfloat'
-F:\dev\_CPP\3DGameCpp\Engine\Src\Application.cpp(339,40): warning C4018:  '<': signed/unsigned mismatch
-  Engine.vcxproj -> F:\dev\_CPP\3DGameCpp\Engine\..\bin\Debug-windows-x86_64\Engine\Engine.exe
