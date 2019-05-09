@@ -1,26 +1,7 @@
-CppGameEngine/build
+# Directories
+.vs/
+bin/
+bin-int/
 
-
-# Prerequisites
-*.d
-
-# Compiled Object files
-*.slo
-*.lo
-*.o
-
-# Precompiled Headers
-*.gch
-*.pch
-
-
-
-# Fortran module files
-*.mod
-*.smod
-
-
-# Executables
-*.exe
-*.out
-*.app
+# Files
+*.user

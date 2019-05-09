@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="lighting">
+      <UniqueIdentifier>{7BBAFAB1-6787-55BD-90A0-43657CCC8A4B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor">
+      <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\Binary-Reader-Writer">
+      <UniqueIdentifier>{B12850F5-1D36-7EDB-A61C-7AC612294A92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\imgui">
+      <UniqueIdentifier>{5D3BD0F0-499E-5F95-F223-984BDE652B18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\imgui\misc">
+      <UniqueIdentifier>{58F0AC6F-C406-AB05-0D7E-362779D37B8D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\imgui\misc\fonts">
+      <UniqueIdentifier>{B1CCBC04-1D04-059C-260E-69BF92C42B95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\imgui\misc\freetype">
+      <UniqueIdentifier>{0BD25DDC-F7E1-09AD-609B-6ECB4CCAF845}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\physics">
+      <UniqueIdentifier>{45123F76-31E0-327C-1A74-A3A206E10EE1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\physics\broadphase">
+      <UniqueIdentifier>{6DC24873-D984-7CFD-2235-0B8A8E3655DB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\physics\collision">
+      <UniqueIdentifier>{C0C181BF-ACE6-D03F-D531-B6CFC1B5CF5D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\physics\common">
+      <UniqueIdentifier>{FD530B79-69C0-C673-32B4-5ED19EDFE8DB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\physics\debug">
+      <UniqueIdentifier>{9B0C24B6-879B-AD7F-30BA-C17A1C28BE25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\physics\dynamics">
+      <UniqueIdentifier>{6C5DB3D8-D894-FB6F-E19E-5F934D552269}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\physics\math">
+      <UniqueIdentifier>{5E36FED6-CA97-DBE4-5305-2297BF6512A4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\physics\scene">
+      <UniqueIdentifier>{426F32B7-2EFE-BB80-D71C-D07BC38ACC26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\stb_image">
+      <UniqueIdentifier>{0DA0BA59-F998-D9AB-22CB-BE300E23B9B7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\tinydir">
+      <UniqueIdentifier>{2556B9AB-1124-ADB1-FAB7-1DD8E6248916}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\tinyobjloader">
+      <UniqueIdentifier>{386CC32A-24FB-4CF4-CD19-61EFB9875D9A}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Src\Camera.h" />
+    <ClInclude Include="Src\Common.h" />
+    <ClInclude Include="Src\DirectoryInspector.h" />
+    <ClInclude Include="Src\FrameBuffer.h" />
+    <ClInclude Include="Src\GameObject.h" />
+    <ClInclude Include="Src\InputManager.h" />
+    <ClInclude Include="Src\Model.h" />
+    <ClInclude Include="Src\Raycast.h" />
+    <ClInclude Include="Src\Renderer.h" />
+    <ClInclude Include="Src\Shader.h" />
+    <ClInclude Include="Src\Texture.h" />
+    <ClInclude Include="Src\UIRenderer.h" />
+    <ClInclude Include="Src\lighting\DirectionalLight.h">
+      <Filter>lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\Binary-Reader-Writer\BinaryRW.h">
+      <Filter>vendor\Binary-Reader-Writer</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\imgui\imconfig.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\imgui\imgui.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\imgui\imgui_internal.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\imgui\misc\freetype\imgui_freetype.h">
+      <Filter>vendor\imgui\misc\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\imgui\stb_rect_pack.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\imgui\stb_textedit.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\imgui\stb_truetype.h">
+      <Filter>vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\physics\broadphase\q3BroadPhase.h">
+      <Filter>vendor\physics\broadphase</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\physics\broadphase\q3DynamicAABBTree.h">
+      <Filter>vendor\physics\broadphase</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\physics\collision\q3Box.h">
+      <Filter>vendor\physics\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\physics\collision\q3Collide.h">
+      <Filter>vendor\physics\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\physics\common\q3Geometry.h">
+      <Filter>vendor\physics\common</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\physics\common\q3Memory.h">
+      <Filter>vendor\physics\common</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\physics\common\q3Settings.h">
+      <Filter>vendor\physics\common</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\physics\common\q3Types.h">
+      <Filter>vendor\physics\common</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\physics\debug\q3Render.h">
+      <Filter>vendor\physics\debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\physics\dynamics\q3Body.h">
+      <Filter>vendor\physics\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\physics\dynamics\q3Contact.h">
+      <Filter>vendor\physics\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\physics\dynamics\q3ContactManager.h">
+      <Filter>vendor\physics\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\physics\dynamics\q3ContactSolver.h">
+      <Filter>vendor\physics\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\physics\dynamics\q3Island.h">
+      <Filter>vendor\physics\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\physics\math\q3Mat3.h">
+      <Filter>vendor\physics\math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\physics\math\q3Math.h">
+      <Filter>vendor\physics\math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\physics\math\q3Quaternion.h">
+      <Filter>vendor\physics\math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\physics\math\q3Transform.h">
+      <Filter>vendor\physics\math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\physics\math\q3Vec3.h">
+      <Filter>vendor\physics\math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\physics\q3.h">
+      <Filter>vendor\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\physics\scene\q3Scene.h">
+      <Filter>vendor\physics\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\stb_image\stb_image.h">
+      <Filter>vendor\stb_image</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\tinydir\tinydir.h">
+      <Filter>vendor\tinydir</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vendor\tinyobjloader\tiny_obj_loader.h">
+      <Filter>vendor\tinyobjloader</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Src\Application.cpp" />
+    <ClCompile Include="Src\Camera.cpp" />
+    <ClCompile Include="Src\FrameBuffer.cpp" />
+    <ClCompile Include="Src\GameObject.cpp" />
+    <ClCompile Include="Src\InputManager.cpp" />
+    <ClCompile Include="Src\Model.cpp" />
+    <ClCompile Include="Src\Renderer.cpp" />
+    <ClCompile Include="Src\Shader.cpp" />
+    <ClCompile Include="Src\Texture.cpp" />
+    <ClCompile Include="Src\UIRenderer.cpp" />
+    <ClCompile Include="Src\lighting\DirectionalLight.cpp">
+      <Filter>lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\Binary-Reader-Writer\BinaryRW.cpp">
+      <Filter>vendor\Binary-Reader-Writer</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\imgui\imgui.cpp">
+      <Filter>vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\imgui\imgui_demo.cpp">
+      <Filter>vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\imgui\imgui_draw.cpp">
+      <Filter>vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\imgui\misc\fonts\binary_to_compressed_c.cpp">
+      <Filter>vendor\imgui\misc\fonts</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\imgui\misc\freetype\imgui_freetype.cpp">
+      <Filter>vendor\imgui\misc\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\physics\broadphase\q3BroadPhase.cpp">
+      <Filter>vendor\physics\broadphase</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\physics\broadphase\q3DynamicAABBTree.cpp">
+      <Filter>vendor\physics\broadphase</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\physics\collision\q3Box.cpp">
+      <Filter>vendor\physics\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\physics\collision\q3Collide.cpp">
+      <Filter>vendor\physics\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\physics\common\q3Geometry.cpp">
+      <Filter>vendor\physics\common</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\physics\common\q3Memory.cpp">
+      <Filter>vendor\physics\common</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\physics\dynamics\q3Body.cpp">
+      <Filter>vendor\physics\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\physics\dynamics\q3Contact.cpp">
+      <Filter>vendor\physics\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\physics\dynamics\q3ContactManager.cpp">
+      <Filter>vendor\physics\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\physics\dynamics\q3ContactSolver.cpp">
+      <Filter>vendor\physics\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\physics\dynamics\q3Island.cpp">
+      <Filter>vendor\physics\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\physics\math\q3Mat3.cpp">
+      <Filter>vendor\physics\math</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\physics\math\q3Quaternion.cpp">
+      <Filter>vendor\physics\math</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\physics\math\q3Vec3.cpp">
+      <Filter>vendor\physics\math</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\physics\scene\q3Scene.cpp">
+      <Filter>vendor\physics\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\stb_image\stb_image.cpp">
+      <Filter>vendor\stb_image</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\vendor\tinyobjloader\tiny_obj_loader.cpp">
+      <Filter>vendor\tinyobjloader</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
