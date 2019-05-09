@@ -151,7 +151,6 @@
     <ClInclude Include="Src\vendor\imgui\imconfig.h" />
     <ClInclude Include="Src\vendor\imgui\imgui.h" />
     <ClInclude Include="Src\vendor\imgui\imgui_internal.h" />
-    <ClInclude Include="Src\vendor\imgui\misc\freetype\imgui_freetype.h" />
     <ClInclude Include="Src\vendor\imgui\stb_rect_pack.h" />
     <ClInclude Include="Src\vendor\imgui\stb_textedit.h" />
     <ClInclude Include="Src\vendor\imgui\stb_truetype.h" />
@@ -196,8 +195,6 @@
     <ClCompile Include="Src\vendor\imgui\imgui.cpp" />
     <ClCompile Include="Src\vendor\imgui\imgui_demo.cpp" />
     <ClCompile Include="Src\vendor\imgui\imgui_draw.cpp" />
-    <ClCompile Include="Src\vendor\imgui\misc\fonts\binary_to_compressed_c.cpp" />
-    <ClCompile Include="Src\vendor\imgui\misc\freetype\imgui_freetype.cpp" />
     <ClCompile Include="Src\vendor\physics\broadphase\q3BroadPhase.cpp" />
     <ClCompile Include="Src\vendor\physics\broadphase\q3DynamicAABBTree.cpp" />
     <ClCompile Include="Src\vendor\physics\collision\q3Box.cpp" />

@@ -13,15 +13,6 @@
     <Filter Include="vendor\imgui">
       <UniqueIdentifier>{5D3BD0F0-499E-5F95-F223-984BDE652B18}</UniqueIdentifier>
     </Filter>
-    <Filter Include="vendor\imgui\misc">
-      <UniqueIdentifier>{58F0AC6F-C406-AB05-0D7E-362779D37B8D}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="vendor\imgui\misc\fonts">
-      <UniqueIdentifier>{B1CCBC04-1D04-059C-260E-69BF92C42B95}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="vendor\imgui\misc\freetype">
-      <UniqueIdentifier>{0BD25DDC-F7E1-09AD-609B-6ECB4CCAF845}</UniqueIdentifier>
-    </Filter>
     <Filter Include="vendor\physics">
       <UniqueIdentifier>{45123F76-31E0-327C-1A74-A3A206E10EE1}</UniqueIdentifier>
     </Filter>
@@ -83,9 +74,6 @@
     </ClInclude>
     <ClInclude Include="Src\vendor\imgui\imgui_internal.h">
       <Filter>vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\vendor\imgui\misc\freetype\imgui_freetype.h">
-      <Filter>vendor\imgui\misc\freetype</Filter>
     </ClInclude>
     <ClInclude Include="Src\vendor\imgui\stb_rect_pack.h">
       <Filter>vendor\imgui</Filter>
@@ -194,12 +182,6 @@
     </ClCompile>
     <ClCompile Include="Src\vendor\imgui\imgui_draw.cpp">
       <Filter>vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\vendor\imgui\misc\fonts\binary_to_compressed_c.cpp">
-      <Filter>vendor\imgui\misc\fonts</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\vendor\imgui\misc\freetype\imgui_freetype.cpp">
-      <Filter>vendor\imgui\misc\freetype</Filter>
     </ClCompile>
     <ClCompile Include="Src\vendor\physics\broadphase\q3BroadPhase.cpp">
       <Filter>vendor\physics\broadphase</Filter>
