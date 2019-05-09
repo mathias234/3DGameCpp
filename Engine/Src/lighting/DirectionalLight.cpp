@@ -67,7 +67,12 @@ void DirectionalLight::SetDiffuseIntensity(float m_DiffuseIntensity) {
 }
 
 Matrix4f DirectionalLight::GetLightMatrix() const {
-    Matrix4f lightMatrix;
+    Matrix4f lightMatrix = Matrix4f(
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f);
+
     lightMatrix = glm::rotate(lightMatrix, GetRotation().x, {1, 0, 0});
     lightMatrix = glm::rotate(lightMatrix, GetRotation().y, {0, 1, 0});
     lightMatrix = glm::rotate(lightMatrix, GetRotation().z, {0, 0, 1});

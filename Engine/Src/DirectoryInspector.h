@@ -24,16 +24,16 @@ public:
         std::string texturesPath = "res/textures";
 
         tinydir_dir dir;
-        tinydir_open(&dir, (const TCHAR*)texturesPath.c_str());
+        tinydir_open(&dir, texturesPath.c_str());
 
         while(dir.has_next) {
             tinydir_file file;
             tinydir_readfile(&dir, &file);
 
 			// FIXME
-        /*    if(strstr(file.extension, "png") || strstr(file.extension, "jpg"))
+            if(strstr(file.extension, "png") || strstr(file.extension, "jpg"))
             files.emplace_back(Texture::GetTexture(file.path));
-*/
+
             tinydir_next(&dir);
         }
 

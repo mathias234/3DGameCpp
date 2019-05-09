@@ -7,6 +7,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/type_ptr.hpp>
 #include "Common.h"
+#include <glm/gtx/string_cast.hpp>
 
 Shader::Shader() {
     m_Loaded = false;
@@ -189,12 +190,16 @@ void Shader::SetMatrix4(const std::string &name, Matrix4f value)
 {
 	auto uniformLoc = GetUniformLocation(name);
 
+	//std::cout << m_FilePath << ":" <<  name << std::endl << glm::to_string(value) << std::endl;
+
 	GLCall(glUniformMatrix4fv(uniformLoc, 1, GL_FALSE, glm::value_ptr(value)));
 }
 
 void Shader::SetMatrix4(const std::string &name, float* value)
 {
 	auto uniformLoc = GetUniformLocation(name);
+
+	
 
 	GLCall(glUniformMatrix4fv(uniformLoc, 1, GL_FALSE, value));
 }

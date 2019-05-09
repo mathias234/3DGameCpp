@@ -16,6 +16,8 @@
 #include "DirectoryInspector.h"
 #include "GameObject.h"
 #include <experimental/filesystem>
+#include <glm/gtx/string_cast.hpp>
+
 
 q3Scene scene(1.0f / 60.0f);
 
@@ -181,7 +183,8 @@ int main() {
     SetupFramebuffers();
 
     Camera camera;
-    camera.Position = {0, 3, 0};
+    camera.Position = {0, 5, 0};
+	camera.Rotation = {0, 0, 0};
 
     Shader *shader = new Shader("res/Main.glsl");
     Shader *screenShader = new Shader("res/FinalScreen.glsl");
@@ -195,8 +198,6 @@ int main() {
     for (int j = 0; j < testModel->SubmeshCount(); ++j) {
         testModel->GetMaterial(j)->Diffuse = texture;
     }
-
-
 
     GameObject* TestObj = new GameObject({0,0,0}, {1,1,1}, Quaternion(Vector3f(0,0,0)), testModel);
     gameObjects.push_back(TestObj);
@@ -233,7 +234,7 @@ int main() {
             shader->Reload();
         }
 
-        Vector3f change;
+        Vector3f change = { 0.0f, 0.0f, 0.0f };
         float speed = 0.2f;
 
         if (InputManager::GetKey(GLFW_KEY_W)) {
@@ -252,10 +253,14 @@ int main() {
             change.x += cos(glm::radians(camera.Rotation.y)) * speed;
             change.z += sin(glm::radians(camera.Rotation.y)) * speed;
         }
+
+
         camera.Position += change;
 
-        scene.Step();
+		//std::cout << glm::to_string(camera.Rotation) << std::endl;
 
+
+        scene.Step();
 
         glm::mat4 nearLightProj = glm::ortho(-halfShadowArea, halfShadowArea, -halfShadowArea, halfShadowArea,
                                              -halfShadowArea, halfShadowArea);
@@ -269,6 +274,7 @@ int main() {
         glm::mat4 farLightSpaceMatrix = (farightProj * lightView);
 
         glEnable(GL_DEPTH_TEST);
+
 
         // Render shadow buffers
         if (useShadows) {
@@ -304,10 +310,11 @@ int main() {
         shader->SetMatrix4("u_NearLightSpaceMatrix", nearLightSpaceMatrix);
         shader->SetMatrix4("u_FarLightSpaceMatrix", farLightSpaceMatrix);
         shader->SetMatrix4("u_ViewMatrix", camera.GetViewMatrix());
+		
 
+		Matrix4f projMat = glm::perspective(glm::radians(60.0f), ((float)winWidth) / ((float)winHeight), 0.1f, 1000.0f);
 
-        shader->SetMatrix4("u_ProjMatrix",
-                           glm::perspective(glm::radians(60.0f), winWidth / (float) winHeight, 0.1f, 1000.0f));
+		shader->SetMatrix4("u_ProjMatrix", projMat);
 
         shader->SetFloat3("u_ViewPos", camera.Position);
 

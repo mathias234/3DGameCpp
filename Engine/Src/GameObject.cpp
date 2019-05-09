@@ -21,7 +21,7 @@ void GameObject::Draw(Shader& shader) {
 }
 
 void GameObject::RecalculateModelMatrix() {
-    Matrix4f modelMatrix;
+    Matrix4f modelMatrix = Matrix4f();
     modelMatrix = glm::mat4_cast(m_Rotation);
     modelMatrix = glm::translate(modelMatrix, m_Position);
     modelMatrix = glm::scale(modelMatrix, m_Scale);

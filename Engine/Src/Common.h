@@ -10,7 +10,7 @@
 #define ASSERT(x) Assert(x)
 #define GLCall(x) GLClearError();\
 	x;\
-    ASSERT(GLLogCall(#x, "", 0))
+    ASSERT(GLLogCall(#x, __FILE__, __LINE__))
 
 typedef glm::mat4 Matrix4f;
 typedef glm::vec4 Vector4f;

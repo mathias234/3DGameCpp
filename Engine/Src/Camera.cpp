@@ -22,10 +22,16 @@ void Camera::Input(GLFWwindow* window)
 Matrix4f Camera::GetViewMatrix()
 {
 
-	Matrix4f matrix;
-	matrix = glm::rotate(matrix, glm::radians(20.0f), { 1, 0, 0 });
-	matrix = glm::rotate(matrix, glm::radians(Rotation.y), { 0, 1, 0 });
-	matrix = glm::rotate(matrix, glm::radians(Rotation.z), { 0, 0, 1 });
+	Matrix4f matrix = Matrix4f(
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f);
+	
+
+	matrix = glm::rotate(matrix, glm::radians(20.0f),	   { 1.0f, 0.0f, 0.0f });
+	matrix = glm::rotate(matrix, glm::radians(Rotation.y), { 0.0f, 1.0f, 0.0f });
+	matrix = glm::rotate(matrix, glm::radians(Rotation.z), { 0.0f, 0.0f, 1.0f });
 
 	matrix = glm::translate(matrix, -Position);
 
